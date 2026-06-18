@@ -1,0 +1,10 @@
+{
+  "slug": "serum_scan",
+  "slides": [
+    {"kind": "hook", "kicker": "wait what", "text": "I scanned my $60 serum\nand it's basically water."},
+    {"kind": "body", "text": "GloSkin reads the ingredient label\nand ranks what actually does anything."},
+    {"kind": "body", "text": "Turns out 4 of my 7 \"actives\"\nwere fillers and fragrance."},
+    {"kind": "body", "text": "It rebuilt my routine using\nstuff that actually works for my skin."},
+    {"kind": "cta", "text": "Scan before you buy.", "button": "Get GloSkin", "subtext": "Free on the App Store"}
+  ]
+}

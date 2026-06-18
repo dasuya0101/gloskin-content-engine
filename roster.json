@@ -1,0 +1,11 @@
+{
+  "template": "scan_results",
+  "characters": [
+    {"spec": "woman, early 20s, East Asian", "before_score": 49, "after_score": 88, "hook": "Hormonal acne ruined my\nconfidence for 2 years."},
+    {"spec": "man, late 20s, Black", "before_score": 57, "after_score": 84, "hook": "Razor bumps and breakouts.\nI gave up trying."},
+    {"spec": "woman, late 20s, White", "before_score": 52, "after_score": 90, "hook": "I tried every $$$ serum.\nNothing worked."},
+    {"spec": "woman, early 20s, South Asian", "before_score": 45, "after_score": 86, "hook": "My skin tanked after college\nstress and bad habits."},
+    {"spec": "man, 30s, Hispanic/Latino", "before_score": 60, "after_score": 83, "hook": "Adult acne at 32?\nNobody warned me."},
+    {"spec": "woman, late teens, Middle Eastern", "before_score": 48, "after_score": 89, "hook": "Teenage acne wrecked\nmy self-esteem."}
+  ]
+}

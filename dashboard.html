@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GloSkin content console</title>
+<style>
+  :root{
+    --bg:#111318;
+    --band:#171a21;
+    --panel:#1f232c;
+    --panel2:#252b35;
+    --line:#343a46;
+    --ink:#f0f2f6;
+    --dim:#9aa2b2;
+    --muted:#697080;
+    --accent:#b7e861;
+    --accent2:#5cc3b6;
+    --warn:#f0c15a;
+    --bad:#ef6d6d;
+    --good:#72d18a;
+    --mono:"SF Mono",Consolas,"Cascadia Mono",Menlo,monospace;
+    --sans:Inter,Segoe UI,system-ui,-apple-system,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14px}
+  header{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;padding:22px 28px 16px;border-bottom:1px solid var(--line);background:#101217}
+  h1{margin:0;font-size:22px;font-weight:700;letter-spacing:0}
+  .sub{color:var(--dim);font-family:var(--mono);font-size:12px}
+  .shell{padding:20px 28px 32px}
+  .toolbar{display:grid;grid-template-columns:minmax(440px,1.1fr) minmax(360px,.9fr);gap:16px;align-items:stretch;margin-bottom:18px}
+  .lab{display:grid;grid-template-columns:minmax(480px,1fr) minmax(360px,.8fr);gap:16px;margin-bottom:18px}
+  .ops{display:grid;grid-template-columns:minmax(440px,1fr) minmax(360px,1fr);gap:16px;margin-bottom:18px}
+  .section{background:var(--band);border:1px solid var(--line);border-radius:8px;padding:16px}
+  .section h2{margin:0 0 14px;font-size:13px;font-weight:700;color:var(--dim);font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em}
+  .run-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;align-items:end}
+  label{display:block;color:var(--dim);font-size:11px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
+  input,select,button,textarea{font:inherit}
+  input,select,textarea{width:100%;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:7px;padding:9px 10px;min-height:38px}
+  input[type="checkbox"]{width:auto;min-height:0;margin-right:7px;accent-color:var(--accent)}
+  button{background:var(--panel2);color:var(--ink);border:1px solid var(--line);border-radius:7px;padding:8px 11px;cursor:pointer;min-height:36px}
+  button:hover{border-color:var(--accent);color:var(--accent)}
+  button.primary{background:#26321f;border-color:#5e7935;color:#e9ffd0;font-weight:700}
+  button.small{padding:5px 8px;min-height:28px;font-size:12px}
+  button.icon{width:34px;padding:5px}
+  button.on{border-color:var(--accent);color:var(--accent)}
+  button:disabled{opacity:.48;cursor:not-allowed}
+  .checkline{display:flex;align-items:center;height:38px;color:var(--ink)}
+  .run-log{background:#0b0d11;border:1px solid var(--line);border-radius:7px;min-height:102px;max-height:180px;overflow:auto;padding:10px;color:#c5ccd8;font-family:var(--mono);font-size:11px;white-space:pre-wrap}
+  .metrics-grid{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;align-items:end}
+  .prompt-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+  .prompt-grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .prompt-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  textarea.prompt{min-height:118px;resize:vertical;font-family:var(--mono);font-size:12px;line-height:1.35}
+  .asset-list{display:grid;gap:8px}
+  .asset{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:9px}
+  .asset .name{font-weight:700}
+  .asset .meta{color:var(--dim);font-size:12px}
+  .badge{font-family:var(--mono);font-size:10px;border:1px solid var(--line);border-radius:999px;padding:3px 7px;color:var(--dim)}
+  .badge.ok{border-color:#477a52;color:var(--good)}
+  .badge.missing{border-color:#7a4949;color:var(--bad)}
+  .pill-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+  .pill{background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:9px;font-family:var(--mono);font-size:11px;color:var(--dim)}
+  .pill strong{display:block;color:var(--ink);font-family:var(--sans);font-size:13px;margin-bottom:3px}
+  .stats{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin-bottom:14px}
+  .stat{background:var(--band);border:1px solid var(--line);border-radius:8px;padding:12px}
+  .stat .k{font-family:var(--mono);font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.07em}
+  .stat .v{font-family:var(--mono);font-size:22px;margin-top:6px;color:var(--ink)}
+  .filters{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:6px 0 14px}
+  .filters .spacer{flex:1}
+  .search{max-width:280px}
+  table{width:100%;border-collapse:collapse;background:var(--band);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+  thead{background:#151820}
+  th,td{text-align:left;padding:10px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+  th{font-family:var(--mono);font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.06em;user-select:none;white-space:nowrap}
+  th.sort{cursor:pointer}
+  th.sort:hover{color:var(--accent)}
+  tr:hover td{background:#1a1e27}
+  tr.win td:first-child{box-shadow:inset 3px 0 0 var(--warn)}
+  video{width:64px;height:114px;object-fit:cover;border-radius:6px;background:#000;border:1px solid var(--line)}
+  .hook{max-width:320px;line-height:1.3}
+  .spec,.path,.caption{color:var(--dim);font-size:12px}
+  .path{font-family:var(--mono);max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .status{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--muted)}
+  .s-ready_to_post .dot{background:var(--warn)}
+  .s-posted .dot{background:var(--good)}
+  .s-failed .dot,.s-needs_edit .dot{background:var(--bad)}
+  .actions{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+  .row-status{min-width:130px}
+  .num{text-align:right;font-family:var(--mono)}
+  .empty{display:none;padding:40px;color:var(--dim);font-family:var(--mono);background:var(--band);border:1px solid var(--line);border-radius:8px}
+  dialog{width:min(1120px,calc(100vw - 40px));border:1px solid var(--line);border-radius:8px;background:var(--band);color:var(--ink);padding:0}
+  dialog::backdrop{background:rgba(0,0,0,.55)}
+  .modal-head{display:flex;justify-content:space-between;gap:16px;padding:16px 18px;border-bottom:1px solid var(--line)}
+  .modal-body{padding:18px;display:grid;grid-template-columns:220px 1fr;gap:18px;max-height:calc(100vh - 110px);overflow:auto}
+  .modal-body video{width:180px;height:320px}
+  .slides{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-top:10px}
+  .slide{background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:8px;min-height:92px}
+  .slide .kind{font-family:var(--mono);font-size:10px;color:var(--accent2);text-transform:uppercase;margin-bottom:7px}
+  .preview-block{margin-top:14px}
+  .preview-title{font-family:var(--mono);font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+  .thumb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(108px,1fr));gap:8px}
+  .thumb{display:block;background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:7px;text-decoration:none;color:var(--ink)}
+  .thumb:hover{border-color:var(--accent)}
+  .thumb img{width:100%;aspect-ratio:9/16;object-fit:cover;border-radius:5px;background:#0b0d11;display:block}
+  .thumb .label{display:block;margin-top:6px;font-family:var(--mono);font-size:10px;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .caption-box{white-space:pre-wrap;background:#0b0d11;border:1px solid var(--line);border-radius:7px;padding:10px;color:#d8dde6;line-height:1.35}
+  a{color:var(--accent)}
+  @media (max-width:980px){
+    .toolbar{grid-template-columns:1fr}
+    .lab{grid-template-columns:1fr}
+    .ops{grid-template-columns:1fr}
+    .prompt-grid{grid-template-columns:1fr}
+    .prompt-grid.three{grid-template-columns:1fr}
+    .metrics-grid{grid-template-columns:1fr}
+    .pill-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .run-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .modal-body{grid-template-columns:1fr}
+    table{font-size:12px}
+    .hide-sm{display:none}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>GloSkin content console</h1>
+    <div class="sub" id="stamp">loading</div>
+  </div>
+  <div class="sub" id="apiState">api pending</div>
+</header>
+
+<main class="shell">
+  <div class="toolbar">
+    <section class="section">
+      <h2>Batch Generator</h2>
+      <div class="run-grid">
+        <div>
+          <label for="avatars">Avatars</label>
+          <input id="avatars" type="number" min="1" max="100" value="2">
+        </div>
+        <div>
+          <label for="postsPerAvatar">Posts / avatar</label>
+          <input id="postsPerAvatar" type="number" min="1" max="50" value="2">
+        </div>
+        <div>
+          <label for="provider">Image API</label>
+          <select id="provider">
+            <option value="openai">openai</option>
+            <option value="dreamina">dreamina</option>
+            <option value="custom">custom</option>
+          </select>
+        </div>
+        <div>
+          <label for="account">Account</label>
+          <input id="account" value="gloskin_main">
+        </div>
+        <div>
+          <label>Mode</label>
+          <div class="checkline"><input id="placeholder" type="checkbox"> placeholder</div>
+        </div>
+        <div>
+          <label>&nbsp;</label>
+          <button class="primary" id="startRun">Start batch</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Latest Run</h2>
+      <div class="run-log" id="runLog">No runs yet.</div>
+    </section>
+  </div>
+
+  <div class="lab">
+    <section class="section">
+      <h2>Prompt Lab</h2>
+      <div class="prompt-grid">
+        <div>
+          <label for="promptSpec">Test spec</label>
+          <input id="promptSpec" value="woman, early 20s, East Asian">
+        </div>
+        <div>
+          <label for="promptHook">Test hook</label>
+          <input id="promptHook" value="I let AI score my skin. The number hurt.">
+        </div>
+      </div>
+      <div class="prompt-grid three">
+        <div>
+          <label for="openingStyle">Opening image</label>
+          <select id="openingStyle"></select>
+        </div>
+        <div>
+          <label for="productStyle">Product prop slide</label>
+          <select id="productStyle"></select>
+        </div>
+        <div>
+          <label for="productCaption">Product slide copy</label>
+          <input id="productCaption" value="I had products. Not a plan.">
+        </div>
+      </div>
+      <div class="prompt-grid three">
+        <div>
+          <label for="beforeTemplate">Before identity template</label>
+          <textarea class="prompt" id="beforeTemplate"></textarea>
+        </div>
+        <div>
+          <label for="openingPrompt">Opening image prompt</label>
+          <textarea class="prompt" id="openingPrompt"></textarea>
+        </div>
+        <div>
+          <label for="scanPrompt">Scan selfie prompt</label>
+          <textarea class="prompt" id="scanPrompt"></textarea>
+        </div>
+      </div>
+      <div class="prompt-grid">
+        <div>
+          <label for="afterPrompt">After edit prompt</label>
+          <textarea class="prompt" id="afterPrompt"></textarea>
+        </div>
+        <div>
+          <label for="productPropPrompt">Product prop prompt</label>
+          <textarea class="prompt" id="productPropPrompt"></textarea>
+        </div>
+      </div>
+      <div class="prompt-grid three">
+        <div>
+          <label>Rendered before prompt</label>
+          <textarea class="prompt" id="renderedBeforePrompt" readonly></textarea>
+        </div>
+        <div>
+          <label>Rendered opening prompt</label>
+          <textarea class="prompt" id="renderedOpeningPrompt" readonly></textarea>
+        </div>
+        <div>
+          <label>Rendered scan prompt</label>
+          <textarea class="prompt" id="renderedScanPrompt" readonly></textarea>
+        </div>
+      </div>
+      <div class="prompt-grid">
+        <div>
+          <label>Rendered after prompt</label>
+          <textarea class="prompt" id="renderedAfterPrompt" readonly></textarea>
+        </div>
+        <div>
+          <label>Rendered product prompt</label>
+          <textarea class="prompt" id="renderedProductPrompt" readonly></textarea>
+        </div>
+      </div>
+      <div class="prompt-actions" style="margin-top:10px">
+        <button id="previewPrompt">Preview</button>
+        <button id="savePrompt">Save prompts</button>
+        <button class="primary" id="runPromptTest">Run 1-post test</button>
+        <label class="checkline"><input id="promptPlaceholder" type="checkbox" checked> placeholder</label>
+      </div>
+      <div class="sub" id="promptResult" style="margin-top:10px"></div>
+    </section>
+
+    <section class="section">
+      <h2>App Screenshot Assets</h2>
+      <div class="asset-list" id="assetStatus"></div>
+    </section>
+  </div>
+
+  <div class="ops">
+    <section class="section">
+      <h2>Metrics Import</h2>
+      <div class="metrics-grid">
+        <div>
+          <label for="metricsPath">CSV path</label>
+          <input id="metricsPath" placeholder="metrics.csv">
+        </div>
+        <div>
+          <label for="metricsMap">Column map</label>
+          <input id="metricsMap" placeholder="views=Video Views,ctr=CTR">
+        </div>
+        <div>
+          <label>&nbsp;</label>
+          <button id="importMetrics">Import</button>
+        </div>
+      </div>
+      <div class="sub" id="metricsResult" style="margin-top:10px"></div>
+    </section>
+
+    <section class="section">
+      <h2>Integration Path</h2>
+      <div class="pill-grid" id="integrationStatus"></div>
+    </section>
+  </div>
+
+  <div class="stats" id="stats"></div>
+
+  <div class="filters">
+    <button id="f-all" class="on">All</button>
+    <button id="f-ready">Ready</button>
+    <button id="f-posted">Posted</button>
+    <button id="f-needs">Needs edit</button>
+    <button id="f-win">Winners</button>
+    <button id="f-pub">Published URL</button>
+    <div class="spacer"></div>
+    <input class="search" id="search" placeholder="Search hook, character, id">
+    <span class="sub" id="count"></span>
+  </div>
+
+  <table id="tbl">
+    <thead></thead>
+    <tbody></tbody>
+  </table>
+  <div class="empty" id="empty">No posts yet.</div>
+</main>
+
+<dialog id="detail">
+  <div class="modal-head">
+    <div>
+      <strong id="detailTitle">Post</strong>
+      <div class="sub" id="detailSub"></div>
+    </div>
+    <button class="small" onclick="detail.close()">Close</button>
+  </div>
+  <div class="modal-body">
+    <div id="detailMedia"></div>
+    <div>
+      <div class="caption-box" id="detailCaption"></div>
+      <div class="preview-block">
+        <div class="preview-title">Source assets</div>
+        <div class="thumb-grid" id="detailAssets"></div>
+      </div>
+      <div class="preview-block">
+        <div class="preview-title">Rendered slide PNGs</div>
+        <div class="thumb-grid" id="detailSlideImages"></div>
+      </div>
+      <div class="preview-block">
+        <div class="preview-title">Slide copy</div>
+        <div class="slides" id="detailSlides"></div>
+      </div>
+      <p class="path" id="detailPackage"></p>
+    </div>
+  </div>
+</dialog>
+
+<script>
+const METRIC_COLS = ["views","likes","shares","saves","ctr","installs"];
+const QUEUE_STATUSES = ["draft","ready_to_post","posted","needs_edit","skipped","failed"];
+const OPENING_LABELS = {
+  selfie:"Selfie",
+  close_up_acne:"Close-up acne",
+  forehead_texture:"Forehead texture"
+};
+const PRODUCT_LABELS = {
+  none:"None",
+  common_products:"Common products",
+  niche_products:"Niche products",
+  random_products:"Random mix"
+};
+let posts = [];
+let runs = [];
+let sortKey = "created_at";
+let sortDir = -1;
+let filter = "all";
+let selectedPost = null;
+let configData = null;
+let assetRows = [];
+let openingPresets = {};
+let productPropPresets = {};
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const clean = s => String(s ?? "").replace(/\n/g," / ");
+const metric = (p,k) => p.metrics && p.metrics[k] != null ? p.metrics[k] : null;
+const queue = p => p.publish_queue || {status:"draft",target_account:"gloskin_main"};
+const pkg = p => p.package || {};
+function fileUrl(path){
+  if(!path) return "";
+  return "/files/" + String(path).replace(/\\/g,"/").split("/").map(encodeURIComponent).join("/");
+}
+function imageThumb(label,path){
+  if(!path) return "";
+  return `<a class="thumb" href="${fileUrl(path)}" target="_blank" title="${esc(path)}">
+    <img src="${fileUrl(path)}" loading="lazy" alt="${esc(label)}">
+    <span class="label">${esc(label)}</span>
+  </a>`;
+}
+function fillOptions(id, presets, labels, selected){
+  const select = $(id);
+  const previous = select.value;
+  const keys = Object.keys(presets || {});
+  select.innerHTML = keys.map(k => `<option value="${esc(k)}">${esc(labels[k] || k)}</option>`).join("");
+  select.value = keys.includes(previous) ? previous : (keys.includes(selected) ? selected : (keys[0] || ""));
+}
+function fmtNum(n){
+  if(n == null) return "-";
+  return Number(n) >= 1000 ? (Number(n)/1000).toFixed(1)+"k" : n;
+}
+function val(p,k){
+  if(k === "created_at") return p.created_at || "";
+  if(k === "spec") return (p.character||{}).spec || "";
+  if(k === "hook") return p.hook || "";
+  if(k === "queue") return queue(p).status || "";
+  if(k === "format") return p.format || "";
+  if(METRIC_COLS.includes(k)) return metric(p,k) ?? -1;
+  return "";
+}
+async function api(path, opts={}){
+  const res = await fetch(path, {
+    cache:"no-store",
+    headers:{"Content-Type":"application/json", ...(opts.headers||{})},
+    ...opts
+  });
+  if(!res.ok) throw new Error(await res.text());
+  return res.json();
+}
+
+async function load(){
+  try{
+    const [config, postRows, runRows] = await Promise.all([
+      api("/api/config"),
+      api("/api/posts"),
+      api("/api/runs")
+    ]);
+    configData = config;
+    posts = postRows;
+    runs = runRows;
+    $("apiState").textContent = `${config.roster_count} roster characters / ${config.image_provider}`;
+    $("provider").value = config.image_provider || "openai";
+    $("account").value = config.default_account || "gloskin_main";
+    assetRows = await api("/api/assets/status");
+    await previewPrompt();
+  }catch(err){
+    $("apiState").textContent = "api offline";
+    $("empty").style.display = "block";
+    $("empty").textContent = "Start the local API with: python api_server.py";
+    throw err;
+  }
+  $("stamp").textContent = `${posts.length} posts / ${new Date().toLocaleString()}`;
+  renderStats();
+  renderIntegrations();
+  renderAssets();
+  renderHead();
+  render();
+  renderRuns();
+}
+
+function renderAssets(){
+  $("assetStatus").innerHTML = assetRows.map(a => `
+    <div class="asset">
+      <span class="badge ${a.exists ? "ok" : "missing"}">${a.exists ? "ok" : "missing"}</span>
+      <div>
+        <div class="name">${esc(a.key)} <span class="meta">/ ${esc(a.priority)}</span></div>
+        <div class="meta">${esc(a.mode || "static")} / ${esc(a.use)}</div>
+        <div class="meta">${esc((a.editable_fields || []).join(", "))}</div>
+        <div class="path">${esc(a.path)}</div>
+      </div>
+      <span class="meta">${a.size_bytes ? esc(Math.round(a.size_bytes/1024)+"kb") : ""}</span>
+    </div>
+  `).join("");
+}
+
+async function previewPrompt(){
+  const spec = $("promptSpec").value.trim() || "woman, early 20s, East Asian";
+  const data = await api("/api/prompts/character/preview", {
+    method:"POST",
+      body:JSON.stringify({
+      spec,
+      opening_style:$("openingStyle").value,
+      before_template:$("beforeTemplate").value,
+      opening_prompt:$("openingPrompt").value,
+      scan_prompt:$("scanPrompt").value,
+      after_prompt:$("afterPrompt").value,
+      product_style:$("productStyle").value,
+      product_prop_prompt:$("productPropPrompt").value,
+      product_slide_caption:$("productCaption").value
+    })
+  });
+  openingPresets = data.opening_presets || openingPresets;
+  productPropPresets = data.product_prop_presets || productPropPresets;
+  fillOptions("openingStyle", openingPresets, OPENING_LABELS, data.opening_style || "selfie");
+  fillOptions("productStyle", productPropPresets, PRODUCT_LABELS, data.product_style || "none");
+  if(!$("beforeTemplate").value) $("beforeTemplate").value = data.before_template;
+  if(!$("openingPrompt").value) $("openingPrompt").value = data.opening_prompt || "";
+  if(!$("scanPrompt").value) $("scanPrompt").value = data.scan_prompt;
+  if(!$("afterPrompt").value) $("afterPrompt").value = data.after_prompt;
+  if(!$("productPropPrompt").value) $("productPropPrompt").value = data.product_prop_prompt || "";
+  if(!$("productCaption").value) $("productCaption").value = data.product_slide_caption || "";
+  $("renderedBeforePrompt").value = data.before_prompt;
+  $("renderedOpeningPrompt").value = data.rendered_opening_prompt || "";
+  $("renderedScanPrompt").value = data.rendered_scan_prompt || data.scan_prompt;
+  $("renderedAfterPrompt").value = data.rendered_after_prompt || data.after_prompt;
+  $("renderedProductPrompt").value = data.rendered_product_prop_prompt || "";
+  $("promptResult").textContent = `parsed: ${data.age} / ${data.gender} / ${data.ethnicity || "unspecified"}`;
+  return data;
+}
+
+async function savePrompt(){
+  const payload = {
+    spec: $("promptSpec").value.trim(),
+    opening_style: $("openingStyle").value,
+    before_template: $("beforeTemplate").value,
+    opening_prompt: $("openingPrompt").value,
+    scan_prompt: $("scanPrompt").value,
+    after_prompt: $("afterPrompt").value,
+    product_style: $("productStyle").value,
+    product_prop_prompt: $("productPropPrompt").value,
+    product_slide_caption: $("productCaption").value,
+  };
+  const data = await api("/api/prompts/character", {method:"PATCH", body:JSON.stringify(payload)});
+  $("renderedBeforePrompt").value = data.before_prompt;
+  $("renderedOpeningPrompt").value = data.opening_prompt || "";
+  $("renderedScanPrompt").value = data.scan_prompt;
+  $("renderedAfterPrompt").value = data.after_prompt;
+  $("renderedProductPrompt").value = data.product_prop_prompt || "";
+  $("promptResult").textContent = "saved prompt templates";
+}
+
+function renderIntegrations(){
+  const metrics = configData && configData.metrics_integrations ? configData.metrics_integrations : {};
+  const publish = configData && configData.publish_integrations ? configData.publish_integrations : {};
+  const items = [
+    ...Object.entries(publish).map(([name, plan]) => [`publish:${name}`, plan.status, (plan.requires||[]).length]),
+    ...Object.entries(metrics).map(([name, plan]) => [`metrics:${name}`, plan.status, (plan.requires||[]).length])
+  ];
+  $("integrationStatus").innerHTML = items.map(([name,status,count]) => `
+    <div class="pill"><strong>${esc(name)}</strong>${esc(status)} / ${esc(count)} env</div>
+  `).join("");
+}
+
+function renderStats(){
+  const totals = {
+    posts: posts.length,
+    ready: posts.filter(p => queue(p).status === "ready_to_post").length,
+    posted: posts.filter(p => queue(p).status === "posted").length,
+    needs: posts.filter(p => queue(p).status === "needs_edit").length,
+    views: posts.reduce((a,p)=>a+(Number(metric(p,"views"))||0),0),
+    winners: posts.filter(p=>p.is_winner).length,
+  };
+  const rows = [
+    ["posts", totals.posts],
+    ["ready", totals.ready],
+    ["posted", totals.posted],
+    ["needs edit", totals.needs],
+    ["views", fmtNum(totals.views)],
+    ["winners", totals.winners],
+  ];
+  $("stats").innerHTML = rows.map(([k,v]) => `<div class="stat"><div class="k">${esc(k)}</div><div class="v">${esc(v)}</div></div>`).join("");
+}
+
+function renderRuns(){
+  if(!runs.length){
+    $("runLog").textContent = "No runs yet.";
+    return;
+  }
+  const r = runs[0];
+  const cfg = r.config || {};
+  $("runLog").textContent =
+    `${r.run_id} / ${r.status}\n` +
+    `avatars=${cfg.avatars} posts_per_avatar=${cfg.posts_per_avatar} provider=${cfg.provider} placeholder=${cfg.placeholder}\n` +
+    `opening=${cfg.opening_style || "saved"} product=${cfg.product_style || "saved"}\n\n` +
+    (r.tail || "");
+}
+
+function renderHead(){
+  const cols = [
+    ["","Clip"],["queue","Queue"],["spec","Character"],["hook","Hook"],["format","Format"],
+    ...METRIC_COLS.map(m=>[m,m]),["","Package"],["","Actions"]
+  ];
+  $("tbl").querySelector("thead").innerHTML = "<tr>"+cols.map(([k,label]) => {
+    const sort = k ? "sort" : "";
+    const arrow = k === sortKey ? (sortDir < 0 ? " down" : " up") : "";
+    return `<th class="${sort}" data-k="${esc(k)}">${esc(label)}${arrow}</th>`;
+  }).join("")+"</tr>";
+  document.querySelectorAll("th[data-k]").forEach(th => th.onclick = () => {
+    const k = th.dataset.k;
+    if(!k) return;
+    if(k === sortKey) sortDir *= -1;
+    else { sortKey = k; sortDir = -1; }
+    renderHead();
+    render();
+  });
+}
+
+function filteredRows(){
+  const q = $("search").value.trim().toLowerCase();
+  let rows = posts.slice();
+  if(filter === "ready") rows = rows.filter(p => queue(p).status === "ready_to_post");
+  if(filter === "posted") rows = rows.filter(p => queue(p).status === "posted");
+  if(filter === "needs") rows = rows.filter(p => queue(p).status === "needs_edit");
+  if(filter === "win") rows = rows.filter(p => p.is_winner);
+  if(filter === "pub") rows = rows.filter(p => p.publish && p.publish.url);
+  if(q){
+    rows = rows.filter(p => [
+      p.post_id,
+      p.hook,
+      p.format,
+      (p.character||{}).spec,
+      (p.character||{}).slug,
+      queue(p).status,
+      pkg(p).dir
+    ].some(v => String(v||"").toLowerCase().includes(q)));
+  }
+  rows.sort((a,b) => {
+    const x = val(a,sortKey), y = val(b,sortKey);
+    return (x < y ? -1 : x > y ? 1 : 0) * sortDir;
+  });
+  return rows;
+}
+
+function statusSelect(p){
+  const st = queue(p).status || "draft";
+  return `<select class="row-status" onchange="setQueue('${esc(p.post_id)}', this.value)">
+    ${QUEUE_STATUSES.map(s => `<option value="${s}" ${s===st?"selected":""}>${s}</option>`).join("")}
+  </select>`;
+}
+
+function render(){
+  const rows = filteredRows();
+  $("count").textContent = `${rows.length} shown`;
+  $("empty").style.display = rows.length ? "none" : "block";
+  $("tbl").style.display = rows.length ? "table" : "none";
+  $("tbl").querySelector("tbody").innerHTML = rows.map(p => {
+    const video = pkg(p).video || (p.outputs||{}).video;
+    const pdir = pkg(p).dir || "";
+    const st = queue(p).status || "draft";
+    return `<tr class="${p.is_winner ? "win" : ""}">
+      <td>${video ? `<video src="${fileUrl(video)}" muted preload="metadata" onmouseover="this.play()" onmouseout="this.pause()"></video>` : "-"}</td>
+      <td>
+        <div class="status s-${esc(st)}"><span class="dot"></span>${statusSelect(p)}</div>
+      </td>
+      <td>
+        <div>${esc((p.character||{}).slug || "-")}</div>
+        <div class="spec">${esc((p.character||{}).spec || "-")}</div>
+      </td>
+      <td class="hook">${esc(clean(p.hook || "-"))}</td>
+      <td class="spec">${esc(p.format || "-")}</td>
+      ${METRIC_COLS.map(m => `<td class="num hide-sm">${esc(fmtNum(metric(p,m)))}</td>`).join("")}
+      <td><div class="path" title="${esc(pdir)}">${esc(pdir || "-")}</div></td>
+      <td>
+        <div class="actions">
+          <button class="small" onclick="showDetail('${esc(p.post_id)}')">View</button>
+          <button class="small" onclick="copyCaption('${esc(p.post_id)}')">Caption</button>
+          <button class="small" onclick="openFolder('${esc(p.post_id)}')">Folder</button>
+          <button class="small" onclick="markPosted('${esc(p.post_id)}')">Posted</button>
+          <button class="icon" title="Toggle winner" onclick="toggleWinner('${esc(p.post_id)}')">${p.is_winner ? "★" : "☆"}</button>
+        </div>
+      </td>
+    </tr>`;
+  }).join("");
+}
+
+async function refresh(){
+  const [postRows, runRows] = await Promise.all([api("/api/posts"), api("/api/runs")]);
+  posts = postRows;
+  runs = runRows;
+  $("stamp").textContent = `${posts.length} posts / ${new Date().toLocaleString()}`;
+  renderStats();
+  render();
+  renderRuns();
+  if(selectedPost) showDetail(selectedPost, false);
+}
+
+async function startRun(){
+  $("startRun").disabled = true;
+  try{
+    await savePrompt();
+    await api("/api/runs", {
+      method:"POST",
+      body:JSON.stringify({
+        avatars:Number($("avatars").value || 1),
+        posts_per_avatar:Number($("postsPerAvatar").value || 1),
+        provider:$("provider").value,
+        account:$("account").value,
+        placeholder:$("placeholder").checked,
+        opening_style:$("openingStyle").value,
+        product_style:$("productStyle").value,
+        product_slide_caption:$("productCaption").value
+      })
+    });
+    await refresh();
+  }catch(err){
+    alert("Run failed to start: " + err.message);
+  }finally{
+    $("startRun").disabled = false;
+  }
+}
+
+async function runPromptTest(){
+  $("runPromptTest").disabled = true;
+  try{
+    await savePrompt();
+    await api("/api/runs", {
+      method:"POST",
+      body:JSON.stringify({
+        avatars:1,
+        posts_per_avatar:1,
+        provider:$("provider").value,
+        account:$("account").value,
+        placeholder:$("promptPlaceholder").checked,
+        spec:$("promptSpec").value.trim(),
+        hook:$("promptHook").value.trim(),
+        before_score:54,
+        after_score:87,
+        opening_style:$("openingStyle").value,
+        product_style:$("productStyle").value,
+        product_slide_caption:$("productCaption").value
+      })
+    });
+    $("promptResult").textContent = "started 1-post prompt test";
+    await refresh();
+  }catch(err){
+    $("promptResult").textContent = err.message;
+  }finally{
+    $("runPromptTest").disabled = false;
+  }
+}
+
+function applyOpeningPreset(){
+  $("openingPrompt").value = openingPresets[$("openingStyle").value] || "";
+  previewPrompt();
+}
+
+function applyProductPreset(){
+  $("productPropPrompt").value = productPropPresets[$("productStyle").value] || "";
+  previewPrompt();
+}
+
+async function setQueue(postId,status){
+  const p = posts.find(x => x.post_id === postId);
+  await api(`/api/posts/${postId}/queue`, {
+    method:"PATCH",
+    body:JSON.stringify({status, target_account: queue(p).target_account || $("account").value})
+  });
+  await refresh();
+}
+
+async function toggleWinner(postId){
+  const p = posts.find(x => x.post_id === postId);
+  await api(`/api/posts/${postId}/winner`, {
+    method:"PATCH",
+    body:JSON.stringify({is_winner: !p.is_winner})
+  });
+  await refresh();
+}
+
+async function openFolder(postId){
+  await api(`/api/posts/${postId}/open-folder`, {method:"POST", body:"{}"});
+}
+
+async function copyCaption(postId){
+  const p = posts.find(x => x.post_id === postId);
+  const text = p.caption || `${clean(p.hook)}\n\nWhat's your Glo Score?\n\nResults vary. Not medical advice.\n\nTracking: ${p.tracking_code || p.post_id}`;
+  await navigator.clipboard.writeText(text);
+}
+
+async function markPosted(postId){
+  const p = posts.find(x => x.post_id === postId);
+  const platform = prompt("Platform", "manual");
+  if(platform == null) return;
+  const url = prompt("Post URL", (p.publish||{}).url || "");
+  if(url == null) return;
+  await api(`/api/posts/${postId}/publish`, {
+    method:"PATCH",
+    body:JSON.stringify({platform, account: queue(p).target_account || $("account").value, url})
+  });
+  await refresh();
+}
+
+async function importMetricsCsv(){
+  const rawMap = $("metricsMap").value.trim();
+  const map = rawMap ? rawMap.split(",").map(s => s.trim()).filter(Boolean) : [];
+  $("importMetrics").disabled = true;
+  try{
+    const result = await api("/api/metrics/import-csv", {
+      method:"POST",
+      body:JSON.stringify({path:$("metricsPath").value.trim(), map})
+    });
+    $("metricsResult").textContent = `matched=${result.matched} unmatched=${result.unmatched}`;
+    await refresh();
+  }catch(err){
+    $("metricsResult").textContent = err.message;
+  }finally{
+    $("importMetrics").disabled = false;
+  }
+}
+
+async function showDetail(postId, open=true){
+  selectedPost = postId;
+  const p = posts.find(x => x.post_id === postId);
+  if(!p) return;
+  let payload = {};
+  try{
+    payload = await api(`/api/posts/${postId}/payload`);
+  }catch(err){
+    payload = {};
+  }
+  const video = payload.video || pkg(p).video || (p.outputs||{}).video;
+  const sourceAssets = payload.assets || p.assets || {};
+  const packagedAssets = payload.packaged_assets || {};
+  const assetMap = Object.keys(packagedAssets).length ? packagedAssets : sourceAssets;
+  const assetOrder = ["opening","before","scan","after","product_prop","shot_before","shot_after"];
+  const assetItems = [
+    ...assetOrder.filter(k => assetMap[k]).map(k => [k, assetMap[k]]),
+    ...Object.entries(assetMap).filter(([k]) => !assetOrder.includes(k))
+  ];
+  const slideImages = payload.slides || [];
+  $("detailTitle").textContent = `${p.post_id} / ${queue(p).status || "draft"}`;
+  $("detailSub").textContent = `${(p.character||{}).spec || ""} / ${p.tracking_code || ""}`;
+  $("detailMedia").innerHTML = video ? `<video src="${fileUrl(video)}" muted controls></video>` : "";
+  $("detailCaption").textContent = payload.caption || p.caption || "";
+  $("detailAssets").innerHTML = assetItems.length
+    ? assetItems.map(([k,path]) => imageThumb(k, path)).join("")
+    : `<div class="sub">No source assets recorded for this post.</div>`;
+  $("detailSlideImages").innerHTML = slideImages.length
+    ? slideImages.map((path,i) => imageThumb(`slide ${i + 1}`, path)).join("")
+    : `<div class="sub">No rendered slide PNGs found.</div>`;
+  $("detailSlides").innerHTML = (p.slides || []).map((s,i) => `
+    <div class="slide"><div class="kind">${esc(i+1)} / ${esc(s.kind)}</div>${esc(s.text || "")}</div>
+  `).join("");
+  $("detailPackage").textContent = payload.package_dir || pkg(p).dir || "";
+  if(open) $("detail").showModal();
+}
+
+function setFilter(f){
+  filter = f;
+  document.querySelectorAll(".filters button").forEach(b => b.classList.remove("on"));
+  const id = f === "all" ? "f-all" : f === "ready" ? "f-ready" : f === "posted" ? "f-posted" : f === "needs" ? "f-needs" : f === "win" ? "f-win" : "f-pub";
+  $(id).classList.add("on");
+  render();
+}
+
+$("startRun").onclick = startRun;
+$("previewPrompt").onclick = previewPrompt;
+$("savePrompt").onclick = savePrompt;
+$("runPromptTest").onclick = runPromptTest;
+$("promptSpec").onchange = previewPrompt;
+$("openingStyle").onchange = applyOpeningPreset;
+$("productStyle").onchange = applyProductPreset;
+$("importMetrics").onclick = importMetricsCsv;
+$("search").oninput = render;
+$("f-all").onclick = () => setFilter("all");
+$("f-ready").onclick = () => setFilter("ready");
+$("f-posted").onclick = () => setFilter("posted");
+$("f-needs").onclick = () => setFilter("needs");
+$("f-win").onclick = () => setFilter("win");
+$("f-pub").onclick = () => setFilter("pub");
+load();
+setInterval(refresh, 5000);
+</script>
+</body>
+</html>

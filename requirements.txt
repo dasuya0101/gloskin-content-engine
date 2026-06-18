@@ -1,0 +1,4 @@
+pillow>=10
+openai>=1.40        # gpt-image-1 faces + OpenRouter (OpenAI-compatible) routing
+anthropic>=0.34     # premium copy / analysis
+flask>=3            # local dashboard API and batch controls

@@ -1,0 +1,10 @@
+{
+  "before_template": "Front-facing iPhone selfie of a {age} {ethnicity} {gender}, bare face with visible moderate acne and redness on cheeks and forehead, no makeup, neutral to slightly unhappy expression, plain soft-lit bathroom background, natural skin texture, realistic, not airbrushed, vertical 9:16 framing.",
+  "opening_style": "selfie",
+  "opening_prompt": "",
+  "scan_prompt": "Same person, same face and hair, front-facing neutral app scan selfie, bare skin, centered face, even soft bathroom lighting, no makeup, realistic natural skin texture, vertical 9:16 framing.",
+  "after_prompt": "Same person, same face and hair, now with clear healthy glowing skin and a warm genuine smile, acne resolved, even tone, same lighting and framing, realistic natural skin texture.",
+  "product_style": "none",
+  "product_prop_prompt": "",
+  "product_slide_caption": "I had products. Not a plan."
+}

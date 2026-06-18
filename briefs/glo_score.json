@@ -1,0 +1,10 @@
+{
+  "slug": "glo_score",
+  "slides": [
+    {"kind": "hook", "kicker": "be honest", "text": "I let an AI rate\nmy skin. Brutal."},
+    {"kind": "body", "text": "One selfie. It analyzed texture,\ntone, pores, hydration."},
+    {"kind": "body", "text": "My Glo Score: 61.\nReality check accepted."},
+    {"kind": "body", "text": "30 days later, same lighting,\nsame app: 78."},
+    {"kind": "cta", "text": "What's your Glo Score?", "button": "Find out free", "subtext": "Download GloSkin"}
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "slug": "testimonial_acne",
+  "slides": [
+    {"kind": "hook", "layout": "image_top", "label": "before",
+     "image": "assets/hispanic_latino_woman_early_20s_860/before.png",
+     "text": "I had cystic acne for 3 years.\nNothing worked."},
+    {"kind": "screenshot", "image": "screenshots/hispanic_latino_woman_early_20s_860_scan_before.png",
+     "caption": "So I scanned my face.\nGlo Score: 54."},
+    {"kind": "screenshot", "image": "screenshots/hispanic_latino_woman_early_20s_860_scan_after.png",
+     "caption": "8 weeks on Glo's routine."},
+    {"kind": "body", "layout": "image_top", "label": "after",
+     "image": "assets/hispanic_latino_woman_early_20s_860/after.png",
+     "text": "Score 87. Same face,\nsame lighting. No filter."},
+    {"kind": "cta", "text": "What's your Glo Score?",
+     "button": "Get GloSkin", "subtext": "Free on the App Store"}
+  ]
+}

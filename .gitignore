@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+
+# Local secrets
+.env
+.env.*
+!.env.example
+
+# Local server/runtime logs
+*.log
+*.err
+runs/
+
+# Generated review/output artifacts
+assets/
+output/
+posts/
+screenshots/
+posts.json
+*.mp4
+
+# Metrics/import scratch files
+metrics*.csv
+*.tmp
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
