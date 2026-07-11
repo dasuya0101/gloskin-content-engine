@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>GloSkin content console</title>
+<title>Content console</title>
 <style>
   :root{
     --bg:#111318;
@@ -33,7 +33,7 @@
   .ops{display:grid;grid-template-columns:minmax(440px,1fr) minmax(360px,1fr);gap:16px;margin-bottom:18px}
   .section{background:var(--band);border:1px solid var(--line);border-radius:8px;padding:16px}
   .section h2{margin:0 0 14px;font-size:13px;font-weight:700;color:var(--dim);font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em}
-  .run-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;align-items:end}
+  .run-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:10px;align-items:end}
   label{display:block;color:var(--dim);font-size:11px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
   input,select,button,textarea{font:inherit}
   input,select,textarea{width:100%;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:7px;padding:9px 10px;min-height:38px}
@@ -126,7 +126,7 @@
 <body>
 <header>
   <div>
-    <h1>GloSkin content console</h1>
+    <h1>Content console</h1>
     <div class="sub" id="stamp">loading</div>
   </div>
   <div class="sub" id="apiState">api pending</div>
@@ -137,6 +137,10 @@
     <section class="section">
       <h2>Batch Generator</h2>
       <div class="run-grid">
+        <div>
+          <label for="brand">Brand</label>
+          <select id="brand"></select>
+        </div>
         <div>
           <label for="avatars">Avatars</label>
           <input id="avatars" type="number" min="1" max="100" value="2">
@@ -155,7 +159,7 @@
         </div>
         <div>
           <label for="account">Account</label>
-          <input id="account" value="gloskin_main">
+          <input id="account" value="">
         </div>
         <div>
           <label>Mode</label>
@@ -361,6 +365,7 @@ let sortDir = -1;
 let filter = "all";
 let selectedPost = null;
 let configData = null;
+let selectedBrand = "";
 let assetRows = [];
 let openingPresets = {};
 let productPropPresets = {};
@@ -369,7 +374,12 @@ const $ = id => document.getElementById(id);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const clean = s => String(s ?? "").replace(/\n/g," / ");
 const metric = (p,k) => p.metrics && p.metrics[k] != null ? p.metrics[k] : null;
-const queue = p => p.publish_queue || {status:"draft",target_account:"gloskin_main"};
+const queue = p => p.publish_queue || {status:"draft",target_account:""};
+const brandParam = () => encodeURIComponent($("brand").value || selectedBrand || "");
+function activeBrandInfo(){
+  const brands = configData && configData.brands ? configData.brands : [];
+  return brands.find(b => b.brand_id === ($("brand").value || selectedBrand)) || (configData && configData.active_brand) || {};
+}
 const pkg = p => p.package || {};
 function fileUrl(path){
   if(!path) return "";
@@ -389,6 +399,13 @@ function fillOptions(id, presets, labels, selected){
   select.innerHTML = keys.map(k => `<option value="${esc(k)}">${esc(labels[k] || k)}</option>`).join("");
   select.value = keys.includes(previous) ? previous : (keys.includes(selected) ? selected : (keys[0] || ""));
 }
+function populateBrands(config){
+  const brands = config.brands || [];
+  selectedBrand = selectedBrand || (config.active_brand && config.active_brand.brand_id) || config.default_brand || "";
+  $("brand").innerHTML = brands.map(b => `<option value="${esc(b.brand_id)}">${esc(b.display_name)}</option>`).join("");
+  $("brand").value = brands.some(b => b.brand_id === selectedBrand) ? selectedBrand : (brands[0] ? brands[0].brand_id : "");
+  selectedBrand = $("brand").value;
+}
 function fmtNum(n){
   if(n == null) return "-";
   return Number(n) >= 1000 ? (Number(n)/1000).toFixed(1)+"k" : n;
@@ -396,6 +413,7 @@ function fmtNum(n){
 function val(p,k){
   if(k === "created_at") return p.created_at || "";
   if(k === "spec") return (p.character||{}).spec || "";
+  if(k === "brand") return p.brand || "";
   if(k === "hook") return p.hook || "";
   if(k === "queue") return queue(p).status || "";
   if(k === "format") return p.format || "";
@@ -420,12 +438,14 @@ async function load(){
       api("/api/runs")
     ]);
     configData = config;
+    populateBrands(config);
     posts = postRows;
     runs = runRows;
-    $("apiState").textContent = `${config.roster_count} roster characters / ${config.image_provider}`;
+    $("apiState").textContent = `${activeBrandInfo().display_name || "brand"} / ${config.roster_count} roster characters / ${config.image_provider}`;
     $("provider").value = config.image_provider || "openai";
-    $("account").value = config.default_account || "gloskin_main";
-    assetRows = await api("/api/assets/status");
+    $("account").value = activeBrandInfo().default_account || config.default_account || "";
+    $("savePrompt").disabled = !activeBrandInfo().has_image_prompts;
+    assetRows = await api(`/api/assets/status?brand=${brandParam()}`);
     await previewPrompt();
   }catch(err){
     $("apiState").textContent = "api offline";
@@ -459,9 +479,10 @@ function renderAssets(){
 
 async function previewPrompt(){
   const spec = $("promptSpec").value.trim() || "woman, early 20s, East Asian";
-  const data = await api("/api/prompts/character/preview", {
+  const data = await api(`/api/prompts/character/preview?brand=${brandParam()}`, {
     method:"POST",
       body:JSON.stringify({
+      brand:$("brand").value,
       spec,
       opening_style:$("openingStyle").value,
       before_template:$("beforeTemplate").value,
@@ -494,6 +515,7 @@ async function previewPrompt(){
 
 async function savePrompt(){
   const payload = {
+    brand: $("brand").value,
     spec: $("promptSpec").value.trim(),
     opening_style: $("openingStyle").value,
     before_template: $("beforeTemplate").value,
@@ -504,7 +526,7 @@ async function savePrompt(){
     product_prop_prompt: $("productPropPrompt").value,
     product_slide_caption: $("productCaption").value,
   };
-  const data = await api("/api/prompts/character", {method:"PATCH", body:JSON.stringify(payload)});
+  const data = await api(`/api/prompts/character?brand=${brandParam()}`, {method:"PATCH", body:JSON.stringify(payload)});
   $("renderedBeforePrompt").value = data.before_prompt;
   $("renderedOpeningPrompt").value = data.opening_prompt || "";
   $("renderedScanPrompt").value = data.scan_prompt;
@@ -554,14 +576,14 @@ function renderRuns(){
   const cfg = r.config || {};
   $("runLog").textContent =
     `${r.run_id} / ${r.status}\n` +
-    `avatars=${cfg.avatars} posts_per_avatar=${cfg.posts_per_avatar} provider=${cfg.provider} placeholder=${cfg.placeholder}\n` +
+    `brand=${cfg.brand || "-"} avatars=${cfg.avatars} posts_per_avatar=${cfg.posts_per_avatar} provider=${cfg.provider} placeholder=${cfg.placeholder}\n` +
     `opening=${cfg.opening_style || "saved"} product=${cfg.product_style || "saved"}\n\n` +
     (r.tail || "");
 }
 
 function renderHead(){
   const cols = [
-    ["","Clip"],["queue","Queue"],["spec","Character"],["hook","Hook"],["format","Format"],
+    ["","Clip"],["queue","Queue"],["brand","Brand"],["spec","Character"],["hook","Hook"],["format","Format"],
     ...METRIC_COLS.map(m=>[m,m]),["","Package"],["","Actions"]
   ];
   $("tbl").querySelector("thead").innerHTML = "<tr>"+cols.map(([k,label]) => {
@@ -590,6 +612,7 @@ function filteredRows(){
   if(q){
     rows = rows.filter(p => [
       p.post_id,
+      p.brand,
       p.hook,
       p.format,
       (p.character||{}).spec,
@@ -626,6 +649,7 @@ function render(){
       <td>
         <div class="status s-${esc(st)}"><span class="dot"></span>${statusSelect(p)}</div>
       </td>
+      <td class="spec">${esc(p.brand || "-")}</td>
       <td>
         <div>${esc((p.character||{}).slug || "-")}</div>
         <div class="spec">${esc((p.character||{}).spec || "-")}</div>
@@ -658,13 +682,31 @@ async function refresh(){
   if(selectedPost) showDetail(selectedPost, false);
 }
 
+async function changeBrand(){
+  selectedBrand = $("brand").value;
+  const info = activeBrandInfo();
+  $("account").value = info.default_account || "";
+  $("savePrompt").disabled = !info.has_image_prompts;
+  $("apiState").textContent = `${info.display_name || "brand"} / ${configData.roster_count} roster characters / ${configData.image_provider}`;
+  assetRows = await api(`/api/assets/status?brand=${brandParam()}`);
+  renderAssets();
+  $("beforeTemplate").value = "";
+  $("openingPrompt").value = "";
+  $("scanPrompt").value = "";
+  $("afterPrompt").value = "";
+  $("productPropPrompt").value = "";
+  await previewPrompt();
+}
+
 async function startRun(){
   $("startRun").disabled = true;
   try{
-    await savePrompt();
+    if(activeBrandInfo().has_image_prompts) await savePrompt();
+    else await previewPrompt();
     await api("/api/runs", {
       method:"POST",
       body:JSON.stringify({
+        brand:$("brand").value,
         avatars:Number($("avatars").value || 1),
         posts_per_avatar:Number($("postsPerAvatar").value || 1),
         provider:$("provider").value,
@@ -686,10 +728,12 @@ async function startRun(){
 async function runPromptTest(){
   $("runPromptTest").disabled = true;
   try{
-    await savePrompt();
+    if(activeBrandInfo().has_image_prompts) await savePrompt();
+    else await previewPrompt();
     await api("/api/runs", {
       method:"POST",
       body:JSON.stringify({
+        brand:$("brand").value,
         avatars:1,
         posts_per_avatar:1,
         provider:$("provider").value,
@@ -747,7 +791,7 @@ async function openFolder(postId){
 
 async function copyCaption(postId){
   const p = posts.find(x => x.post_id === postId);
-  const text = p.caption || `${clean(p.hook)}\n\nWhat's your Glo Score?\n\nResults vary. Not medical advice.\n\nTracking: ${p.tracking_code || p.post_id}`;
+  const text = p.caption || `${clean(p.hook)}\n\nTracking: ${p.tracking_code || p.post_id}`;
   await navigator.clipboard.writeText(text);
 }
 
@@ -828,6 +872,7 @@ function setFilter(f){
 }
 
 $("startRun").onclick = startRun;
+$("brand").onchange = changeBrand;
 $("previewPrompt").onclick = previewPrompt;
 $("savePrompt").onclick = savePrompt;
 $("runPromptTest").onclick = runPromptTest;

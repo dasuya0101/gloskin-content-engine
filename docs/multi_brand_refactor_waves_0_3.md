@@ -41,8 +41,7 @@ the next agents.
   uses AI avatars plus composited screenshots must carry an illustrative /
   AI-generated label once Wave 3 compliance is active.
 
-Suggested execution: Wave 1 first as a single agent, then Waves 2 and 3 can run
-in parallel after Wave 1 lands.
+Suggested execution: Wave 2 and Wave 3 can run in parallel after Wave 1 lands.
 
 ## Wave 0 - Completed Hygiene
 
@@ -66,10 +65,12 @@ Wave 0 acceptance for future checks:
 - Docs identify `content_job.py` as the generation entrypoint plus the copy-only
   brief flow.
 
-## Wave 1 - Brand-As-Config Refactor
+## Wave 1 - Completed Brand-As-Config Refactor
 
 Objective: all brand identity moves into YAML config, brand prompt folders, and
 brand asset folders.
+
+Status: complete. Current implementation is summarized in `BUILD_SPEC.md`.
 
 New files:
 

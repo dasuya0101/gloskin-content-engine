@@ -14,28 +14,43 @@ import time
 import uuid
 from pathlib import Path
 
+from brand_loader import DEFAULT_BRAND
+
 POSTS_FILE = "posts.json"
+
+
+def normalize_post(record):
+    record.setdefault("brand", DEFAULT_BRAND)
+    record.setdefault("publish", {"platform": None, "account": None, "url": None, "posted_at": None})
+    record.setdefault("publish_queue", {"status": "draft", "target_account": None,
+                                        "notes": None, "updated_at": None})
+    record.setdefault("metrics", {"views": None, "likes": None, "shares": None,
+                                  "saves": None, "ctr": None, "installs": None,
+                                  "updated_at": None})
+    return record
 
 
 def _load(path):
     p = Path(path)
     if p.exists():
-        return json.loads(p.read_text())
+        return [normalize_post(r) for r in json.loads(p.read_text(encoding="utf-8"))]
     return []
 
 
 def _save(records, path):
-    Path(path).write_text(json.dumps(records, indent=2))
+    Path(path).write_text(json.dumps(records, indent=2), encoding="utf-8")
 
 
 def record_post(*, character, fmt, hook, slides, assets, outputs,
                 variant_of=None, tracking_code=None, caption=None,
-                package=None, publish_queue=None, path=POSTS_FILE):
+                package=None, publish_queue=None, brand=DEFAULT_BRAND,
+                path=POSTS_FILE):
     """Append a new post record. Returns the post_id."""
     records = _load(path)
     post_id = uuid.uuid4().hex[:12]
     records.append({
         "post_id": post_id,
+        "brand": brand,
         "created_at": time.strftime("%Y-%m-%dT%H:%M:%S"),
         "format": fmt,                      # e.g. testimonial_beforeafter / macro_faceless
         "character": character,             # {slug, spec, before_score, after_score}
@@ -112,6 +127,7 @@ def update_metrics(post_id, metrics, path=POSTS_FILE):
     records = _load(path)
     for r in records:
         if r["post_id"] == post_id:
+            r.setdefault("metrics", {})
             r["metrics"].update(metrics)
             r["metrics"]["updated_at"] = time.strftime("%Y-%m-%dT%H:%M:%S")
     _save(records, path)

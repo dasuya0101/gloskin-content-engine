@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-publish.py - local publishing bridge for GloSkin posts
-======================================================
+publish.py - local publishing bridge
+====================================
 
 The current production-safe default is manual publishing: prepare posts in the
 dashboard, upload them in-app, then mark the platform URL here or in the UI.
@@ -20,11 +20,11 @@ import json
 import os
 from pathlib import Path
 
+from brand_loader import DEFAULT_BRAND, load_brand
 import manifest
 
 
 POSTS_FILE = "posts.json"
-DEFAULT_ACCOUNT = "gloskin_main"
 VALID_QUEUE_STATUSES = {"draft", "ready_to_post", "posted", "skipped", "failed", "needs_edit"}
 
 
@@ -41,9 +41,10 @@ def load_post(post_id, posts_path):
 
 def queue(post):
     q = post.get("publish_queue") or {}
+    brand = load_brand(post.get("brand") or DEFAULT_BRAND)
     return {
         "status": q.get("status", "draft"),
-        "target_account": q.get("target_account") or DEFAULT_ACCOUNT,
+        "target_account": q.get("target_account") or brand.default_account,
         "notes": q.get("notes"),
         "updated_at": q.get("updated_at"),
     }
@@ -65,13 +66,14 @@ def file_list(path):
 def caption_for(post):
     if post.get("caption"):
         return post["caption"]
+    brand = load_brand(post.get("brand") or DEFAULT_BRAND)
     hook = " ".join((post.get("hook") or "").replace("\n", " ").split())
     return "\n\n".join([
         hook,
-        "What's your Glo Score?",
-        "Results vary. Not medical advice.",
+        brand.caption.get("secondary_cta") or brand.cta.get("text", ""),
+        brand.caption.get("disclaimer", ""),
         f"Tracking: {post.get('tracking_code') or post.get('post_id')}",
-    ])
+    ]).strip()
 
 
 def payload_for(post):
@@ -83,8 +85,9 @@ def payload_for(post):
         slides_dir = str(candidate).replace("\\", "/")
     return {
         "post_id": post["post_id"],
+        "brand": post.get("brand") or DEFAULT_BRAND,
         "format": post.get("format"),
-        "target_account": queue(post).get("target_account") or DEFAULT_ACCOUNT,
+        "target_account": queue(post).get("target_account"),
         "tracking_code": post.get("tracking_code"),
         "caption": caption_for(post),
         "package_dir": pkg.get("dir"),
@@ -146,6 +149,8 @@ def list_ready(posts_path):
 
 
 def mark(post_id, platform, account, url, posts_path):
+    existing = load_post(post_id, posts_path)
+    account = account or queue(existing)["target_account"]
     post = manifest.set_publish(post_id, platform, account, url, posts_path)
     if not post:
         raise PublishError(f"post not found: {post_id}")
@@ -156,6 +161,8 @@ def mark(post_id, platform, account, url, posts_path):
 def set_queue(post_id, status, account, notes, posts_path):
     if status not in VALID_QUEUE_STATUSES:
         raise PublishError(f"invalid status: {status}")
+    existing = load_post(post_id, posts_path)
+    account = account or queue(existing)["target_account"]
     post = manifest.set_publish_queue(post_id, status, account, notes, posts_path)
     if not post:
         raise PublishError(f"post not found: {post_id}")
@@ -175,13 +182,13 @@ def main():
     mark_p = sub.add_parser("mark")
     mark_p.add_argument("--post-id", required=True)
     mark_p.add_argument("--platform", default="manual")
-    mark_p.add_argument("--account", default=DEFAULT_ACCOUNT)
+    mark_p.add_argument("--account", default=None)
     mark_p.add_argument("--url", default="")
 
     queue_p = sub.add_parser("queue")
     queue_p.add_argument("--post-id", required=True)
     queue_p.add_argument("--status", required=True, choices=sorted(VALID_QUEUE_STATUSES))
-    queue_p.add_argument("--account", default=DEFAULT_ACCOUNT)
+    queue_p.add_argument("--account", default=None)
     queue_p.add_argument("--notes", default=None)
 
     api_p = sub.add_parser("api-plan")

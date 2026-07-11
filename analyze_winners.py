@@ -6,7 +6,7 @@ Ranks posts by a chosen metric, flags the top performers as winners, then diffs
 what the winners share vs everyone else (hook length, first word, slide order,
 character demographics, score gap, format). Emits:
   - winners_report.md   human-readable summary
-  - a suggested block you can paste/append into prompts/learned_rules.md
+  - a suggested block you can paste/append into the brand learned_rules prompt
 
 This is the v1 heuristic version. The BUILD_SPEC describes upgrading the "what's
 different about winners" step to an LLM analysis (routed via llm_router task=analysis)
@@ -19,6 +19,7 @@ import statistics as st
 from collections import Counter
 
 import manifest
+from brand_loader import DEFAULT_BRAND, load_brand
 
 
 def attr(p):
@@ -64,10 +65,13 @@ def main():
     ap.add_argument("--metric", default="views")
     ap.add_argument("--top-frac", type=float, default=0.25)
     ap.add_argument("--posts", default="posts.json")
+    ap.add_argument("--brand", default=DEFAULT_BRAND)
     args = ap.parse_args()
+    brand = load_brand(args.brand)
 
     posts = [p for p in manifest.all_posts(args.posts)
-             if (p["metrics"] or {}).get(args.metric) is not None]
+             if (p.get("brand") or DEFAULT_BRAND) == brand.brand_id
+             and (p["metrics"] or {}).get(args.metric) is not None]
     if len(posts) < 4:
         print(f"Need at least 4 posts with '{args.metric}' metrics; have {len(posts)}.")
         return
@@ -92,7 +96,9 @@ def main():
     open("winners_report.md", "w").write(report)
     print(report)
     print("\n-> wrote winners_report.md")
-    print("-> review the 'suggested rules' and append worthwhile ones to prompts/learned_rules.md")
+    learned_path = brand.prompt_path("learned_rules")
+    target = str(learned_path) if learned_path else f"{brand.brand_id} learned_rules prompt"
+    print(f"-> review the 'suggested rules' and append worthwhile ones to {target}")
 
 
 def _fmt(s):

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-GloSkin Slideshow Content Maker (v1)
-====================================
+Slideshow Content Maker
+=======================
 
 Turns a JSON "brief" into ready-to-post short-form content:
   1. A folder of 1080x1920 PNG slides  -> upload to TikTok Photo Mode (attach
@@ -11,7 +11,7 @@ Turns a JSON "brief" into ready-to-post short-form content:
 
 Design goals:
   - One brief in, two formats out.
-  - Brand-consistent (GloSkin rose/pink palette, baked-in but overridable).
+  - Brand-consistent palette and chrome loaded from config, but overridable.
   - Batch a whole folder of briefs in one run so you can test 15 angles at once.
   - No paid APIs required to render. Backgrounds can be (a) your own AI-gen
     persona images / app screenshots dropped in a folder, or (b) auto-generated
@@ -51,6 +51,8 @@ from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFilter, ImageFont, ImageEnhance
 
+from brand_loader import DEFAULT_BRAND, load_brand
+
 # ----------------------------------------------------------------------------
 # Constants / defaults
 # ----------------------------------------------------------------------------
@@ -78,17 +80,18 @@ FONT_REG = os.environ.get("GLO_FONT_REG") or _first_font([
 ])
 FPS = 30
 
-# GloSkin brand defaults — measured from the real app (purple / lavender).
-# Override per-brief via "palette".
-DEFAULT_PALETTE = {
-    "bg1": "#ECE5F8",      # light lavender (gradient top)
-    "bg2": "#F3E7EF",      # warm lavender-pink (gradient bottom)
-    "accent": "#773CED",   # real app purple (Share button / active nav)
-    "text": "#16131F",     # near-black, matches in-app text
-}
-
 # Per-slide default durations (seconds) used in the video render.
 KIND_DURATION = {"hook": 2.8, "body": 2.4, "cta": 3.2, "screenshot": 3.0}
+
+
+def palette_for(brand, overrides=None):
+    palette = dict(brand.palette or {})
+    palette.setdefault("bg1", palette.get("bg") or "#F5F0E6")
+    palette.setdefault("bg2", palette.get("surface") or palette["bg1"])
+    palette.setdefault("accent", palette.get("primary") or "#111111")
+    palette.setdefault("text", palette.get("fg") or "#111111")
+    palette.update(overrides or {})
+    return palette
 
 
 # ----------------------------------------------------------------------------
@@ -304,13 +307,22 @@ def render_screenshot_slide(slide, palette):
     return base.convert("RGB")
 
 
-def _draw_chrome(bg, palette, idx, total, on_image=False):
+def _draw_chrome(bg, palette, idx, total, brand, on_image=False):
     """Brand wordmark (top-left) + slide progress dots (top-right)."""
     accent = hex_to_rgb(palette["accent"])
     draw = ImageDraw.Draw(bg)
     brand_font = load_font(FONT_BOLD, 40)
-    draw.text((70, 72), "GloSkin", font=brand_font,
-              fill=(255, 255, 255) if on_image else accent)
+    wordmark = brand.assets.get("wordmark")
+    if wordmark and Path(wordmark).exists():
+        mark = Image.open(wordmark).convert("RGBA")
+        max_w, max_h = 220, 56
+        scale = min(max_w / mark.width, max_h / mark.height)
+        mark = mark.resize((int(mark.width * scale), int(mark.height * scale)), Image.LANCZOS)
+        bg.paste(mark, (70, 62), mark)
+    else:
+        label = brand.slideshow.get("wordmark_text") or brand.display_name
+        draw.text((70, 72), label, font=brand_font,
+                  fill=(255, 255, 255) if on_image else accent)
     dot_r, gap = 9, 30
     start_x = W - 70 - (total - 1) * gap
     for i in range(total):
@@ -325,17 +337,17 @@ def _draw_chrome(bg, palette, idx, total, on_image=False):
 # ----------------------------------------------------------------------------
 # Slide rendering
 # ----------------------------------------------------------------------------
-def render_slide(slide, palette, idx, total):
+def render_slide(slide, palette, idx, total, brand):
     kind = slide.get("kind", "body")
 
     # dedicated renderers
     if slide.get("layout") == "image_top":
         bg = render_image_top(slide, palette)
-        _draw_chrome(bg, palette, idx, total, on_image=True)
+        _draw_chrome(bg, palette, idx, total, brand, on_image=True)
         return bg
     if kind == "screenshot":
         bg = render_screenshot_slide(slide, palette)
-        _draw_chrome(bg, palette, idx, total, on_image=False)
+        _draw_chrome(bg, palette, idx, total, brand, on_image=False)
         return bg
 
     accent = hex_to_rgb(palette["accent"])
@@ -353,7 +365,7 @@ def render_slide(slide, palette, idx, total):
         body_stroke = None
 
     draw = ImageDraw.Draw(bg)
-    _draw_chrome(bg, palette, idx, total, on_image=has_img)
+    _draw_chrome(bg, palette, idx, total, brand, on_image=has_img)
 
     text = slide.get("text", "")
     max_w = W - 200
@@ -361,7 +373,7 @@ def render_slide(slide, palette, idx, total):
     if kind == "hook":
         font = load_font(FONT_BOLD, 104)
         # accent kicker chip
-        kicker = slide.get("kicker", "POV")
+        kicker = slide.get("kicker", brand.slideshow.get("hook_kicker", "POV"))
         rounded_chip(draw, W // 2, H * 0.30, kicker.upper(),
                      load_font(FONT_BOLD, 44), accent)
         draw_wrapped(draw, text, font, max_w, W // 2, int(H * 0.52),
@@ -373,12 +385,13 @@ def render_slide(slide, palette, idx, total):
                      body_fill, stroke=body_stroke, line_spacing=1.15)
         # CTA button
         rounded_chip(draw, W // 2, int(H * 0.66),
-                     slide.get("button", "Download GloSkin"),
+                     slide.get("button") or brand.cta.get("button") or brand.cta.get("text", "Learn more"),
                      load_font(FONT_BOLD, 52), accent, pad_x=70, pad_y=34)
-        sub = slide.get("subtext", "Free on the App Store")
-        draw.text((W // 2 - draw.textlength(sub, font=load_font(FONT_REG, 40)) / 2,
-                   int(H * 0.72)), sub, font=load_font(FONT_REG, 40),
-                  fill=body_fill)
+        sub = slide.get("subtext") or brand.cta.get("subtext", "")
+        if sub:
+            draw.text((W // 2 - draw.textlength(sub, font=load_font(FONT_REG, 40)) / 2,
+                       int(H * 0.72)), sub, font=load_font(FONT_REG, 40),
+                      fill=body_fill)
     else:  # body
         font = load_font(FONT_BOLD, 86)
         draw_wrapped(draw, text, font, max_w, W // 2, int(H * 0.48),
@@ -435,9 +448,10 @@ def build_video(slide_paths, durations, out_path):
 # ----------------------------------------------------------------------------
 # Orchestration
 # ----------------------------------------------------------------------------
-def make_content(brief, out_root):
+def make_content(brief, out_root, brand=None):
     slug = brief["slug"]
-    palette = {**DEFAULT_PALETTE, **brief.get("palette", {})}
+    active_brand = brand or load_brand(brief.get("brand") or DEFAULT_BRAND)
+    palette = palette_for(active_brand, brief.get("palette", {}))
     slides = brief["slides"]
     total = len(slides)
 
@@ -447,7 +461,7 @@ def make_content(brief, out_root):
 
     slide_paths, durations = [], []
     for i, slide in enumerate(slides):
-        img = render_slide(slide, palette, i, total)
+        img = render_slide(slide, palette, i, total, active_brand)
         p = slides_dir / f"{slug}_{i+1:02d}.png"
         img.save(p, "PNG")
         slide_paths.append(str(p))

@@ -37,6 +37,8 @@ import re
 import json
 from pathlib import Path
 
+from brand_loader import DEFAULT_BRAND, load_brand
+
 AGES = ["late teens", "early 20s", "late 20s", "30s"]
 GENDERS = ["woman", "man", "non-binary person"]
 ETHNICITIES = ["East Asian", "South Asian", "Black", "Hispanic/Latino",
@@ -116,7 +118,14 @@ PRODUCT_PROP_PRESETS = {
     ),
 }
 PRODUCT_SLIDE_CAPTION = "I had products. Not a plan."
-PROMPT_CONFIG = Path(__file__).parent / "prompts" / "image_character.json"
+DEFAULT_PROMPT_CONFIG = object()
+
+
+def default_prompt_config_path():
+    try:
+        return load_brand(DEFAULT_BRAND).prompt_path("image_character")
+    except Exception:
+        return Path(__file__).parent / "prompts" / DEFAULT_BRAND / "image_character.json"
 
 
 def slugify(s):
@@ -139,8 +148,15 @@ def parse_spec(spec):
     return age, gender, eth
 
 
-def load_prompt_config(path=PROMPT_CONFIG):
-    if Path(path).exists():
+def _resolve_prompt_config(path):
+    if path is DEFAULT_PROMPT_CONFIG:
+        return default_prompt_config_path()
+    return path
+
+
+def load_prompt_config(path=DEFAULT_PROMPT_CONFIG):
+    path = _resolve_prompt_config(path)
+    if path and Path(path).exists():
         data = json.loads(Path(path).read_text(encoding="utf-8"))
     else:
         data = {}
@@ -165,7 +181,10 @@ def load_prompt_config(path=PROMPT_CONFIG):
 def save_prompt_config(before_template, after_prompt, scan_prompt=None,
                        opening_style=None, opening_prompt=None,
                        product_style=None, product_prop_prompt=None,
-                       product_slide_caption=None, path=PROMPT_CONFIG):
+                       product_slide_caption=None, path=DEFAULT_PROMPT_CONFIG):
+    path = _resolve_prompt_config(path)
+    if not path:
+        raise ValueError("this brand does not define an editable image_character prompt path")
     Path(path).parent.mkdir(parents=True, exist_ok=True)
     cfg = load_prompt_config(path)
     data = {
@@ -188,7 +207,7 @@ def fill_prompt(template, age, gender, eth):
     return template.format(age=age, ethnicity=eth, gender=gender)
 
 
-def character_prompts(spec, path=PROMPT_CONFIG, opening_style=None, product_style=None):
+def character_prompts(spec, path=DEFAULT_PROMPT_CONFIG, opening_style=None, product_style=None):
     age, gender, eth = parse_spec(spec)
     cfg = load_prompt_config(path)
     active_opening_style = opening_style or cfg["opening_style"]
@@ -224,14 +243,19 @@ def character_prompts(spec, path=PROMPT_CONFIG, opening_style=None, product_styl
 
 
 # ---- API path (provider-pluggable via image_router) ------------------------
-def gen_pair_api(spec, out_dir, opening_style=None, product_style=None):
+def gen_pair_api(spec, out_dir, opening_style=None, product_style=None, prompt_config_path=DEFAULT_PROMPT_CONFIG):
     import image_router
     age, gender, eth = parse_spec(spec)
     slug = slugify(f"{eth}_{gender}_{age}_{random.randint(100,999)}")
     d = Path(out_dir) / slug
     d.mkdir(parents=True, exist_ok=True)
 
-    prompts = character_prompts(spec, opening_style=opening_style, product_style=product_style)
+    prompts = character_prompts(
+        spec,
+        path=prompt_config_path,
+        opening_style=opening_style,
+        product_style=product_style,
+    )
     before_prompt = prompts["before_prompt"]
     before_bytes = image_router.generate(before_prompt, size="1024x1536")
     (d / "before.png").write_bytes(before_bytes)
@@ -261,10 +285,16 @@ gen_pair_openai = gen_pair_api
 
 
 # ---- Offline placeholder path ---------------------------------------------
-def gen_pair_placeholder(spec, out_dir, opening_style=None, product_style=None):
+def gen_pair_placeholder(spec, out_dir, opening_style=None, product_style=None,
+                         prompt_config_path=DEFAULT_PROMPT_CONFIG):
     from PIL import Image, ImageDraw, ImageFont
     age, gender, eth = parse_spec(spec)
-    prompts = character_prompts(spec, opening_style=opening_style, product_style=product_style)
+    prompts = character_prompts(
+        spec,
+        path=prompt_config_path,
+        opening_style=opening_style,
+        product_style=product_style,
+    )
     slug = slugify(f"{eth}_{gender}_{age}_{random.randint(100,999)}")
     d = Path(out_dir) / slug
     d.mkdir(parents=True, exist_ok=True)

@@ -17,8 +17,8 @@ The current runtime/status handoff is in `BUILD_SPEC.md`. The active refactor
 roadmap is in `docs/multi_brand_refactor_waves_0_3.md`.
 
 Short version: `content_job.py` is the generation entrypoint, generated posts are
-stored locally under `posts/YYYY-MM-DD/<post_id>/`, publishing is manual for now,
-and the next build wave moves GloSkin/VendraRx identity into brand config files.
+stored locally under `posts/<brand>/YYYY-MM-DD/<post_id>/`, publishing is manual
+for now, and brand identity lives in `brands/<brand_id>.yaml`.
 
 ## The 3-step loop
 
@@ -59,7 +59,7 @@ folder, and marks it ready for manual posting.
 
 Default packaged-post folder:
 ```
-posts/YYYY-MM-DD/<post_id>/
+posts/<brand>/YYYY-MM-DD/<post_id>/
   slides/        # TikTok Photo Mode / IG carousel PNGs
   video.mp4      # Reel/Short/ads-ready render
   source_assets/ # before, scan, after, and composited app screenshots
@@ -73,10 +73,15 @@ Run a no-API placeholder test:
 python content_job.py --roster roster.json --avatars 2 --posts-per-avatar 2 --placeholder
 ```
 
+Run the VendraRx stub path without screenshot templates:
+```
+python content_job.py --brand vendrarx --spec "founder, 30s, White" --placeholder
+```
+
 Run a real OpenAI image batch:
 ```
 set OPENAI_API_KEY=sk-...
-python content_job.py --roster roster.json --avatars 6 --posts-per-avatar 2
+python content_job.py --brand gloskin --roster roster.json --avatars 6 --posts-per-avatar 2
 ```
 
 Batch sizing has two separate knobs:
@@ -101,7 +106,8 @@ long as it is a real documented API, not browser automation against a consumer
 website.
 
 For now, generated posts are queued for manual publishing with
-`publish_queue.status = "ready_to_post"` and target account `gloskin_main`.
+`publish_queue.status = "ready_to_post"` and the selected brand's configured
+target account.
 This is intentional: TikTok Photo Mode and trend audio are often best handled
 in-app while the GloSkin account is still warming up. Later, `publish.py` can
 add official TikTok/Instagram/Facebook API adapters.
@@ -120,6 +126,7 @@ http://127.0.0.1:5055
 
 The dashboard can:
 - start `content_job.py` with dashboard-controlled `avatars` and `posts / avatar`
+- select `gloskin` or `vendrarx`
 - preview and save the actual character image prompt templates
 - run a 1-post prompt test from an ad-hoc character spec
 - show which real app screenshots are present or missing
@@ -301,8 +308,10 @@ To add a provider, copy the `custom` template, adapt the request/response shape,
 optional for older folders; `before.png` is used as the fallback scan selfie.
 
 ## Tuning
-- **Palette** — defaults to the real app purple/lavender (`#773CED`). Override with a
-  `"palette"` block per brief.
+- **Brand config** - edit `brands/<brand_id>.yaml` for palette, CTA, accounts,
+  prompts, screenshot inventory, and compliance seed rules.
+- **Palette** - brand config is the default. Override with a `"palette"` block
+  per brief.
 - **Pacing** — add `"duration"` (seconds) to any slide.
 - **Fonts** — swap `FONT_BOLD` / `FONT_REG` at the top of `slideshow_maker.py`.
 
@@ -312,8 +321,6 @@ Before/after acne creative is heavily scrutinized. Keep copy cosmetic/educationa
 visible "results vary · not medical advice" line in captions/bio.
 
 ## Where this is going (next builds)
-- **Brand-as-config**: move GloSkin and VendraRx voice, prompts, styling, CTAs,
-  accounts, and compliance rules into `brands/<brand_id>.yaml`.
 - **Text-native formats**: generate Reddit posts, X threads, and TikTok scripts
   alongside slideshows.
 - **Compliance gate**: lint copy before it can enter the manual publish queue.

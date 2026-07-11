@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-api_server.py - local dashboard API for the GloSkin content engine
-==================================================================
+api_server.py - local dashboard API for the content engine
+==========================================================
 
 Run:
   python api_server.py
@@ -30,6 +30,7 @@ import metrics_refresh
 import publish as publish_bridge
 import app_assets
 import character_factory
+from brand_loader import DEFAULT_BRAND, BrandConfigError, available_brands, brand_summary, load_brand
 
 
 ROOT = Path(__file__).resolve().parent
@@ -37,7 +38,6 @@ POSTS_FILE = ROOT / "posts.json"
 RUNS_DIR = ROOT / "runs"
 OUTPUT_DIR = ROOT / "output"
 PACKAGE_DIR = ROOT / "posts"
-DEFAULT_ACCOUNT = "gloskin_main"
 
 app = Flask(__name__)
 
@@ -82,8 +82,25 @@ def write_json(path, data):
     Path(path).write_text(json.dumps(data, indent=2), encoding="utf-8")
 
 
+def requested_brand(default=DEFAULT_BRAND):
+    data = request.get_json(force=True, silent=True) if request.method in {"POST", "PATCH"} else None
+    brand_id = request.args.get("brand") or ((data or {}).get("brand")) or default
+    try:
+        return load_brand(brand_id)
+    except BrandConfigError as exc:
+        abort(400, description=str(exc))
+
+
+def default_account_for(brand_id):
+    try:
+        return load_brand(brand_id or DEFAULT_BRAND).default_account
+    except BrandConfigError:
+        return "TODO"
+
+
 def normalize_post(post):
     p = dict(post)
+    p.setdefault("brand", DEFAULT_BRAND)
     p.setdefault("caption", None)
     p.setdefault("package", {
         "dir": None,
@@ -95,10 +112,12 @@ def normalize_post(post):
     })
     p.setdefault("publish_queue", {
         "status": "draft",
-        "target_account": DEFAULT_ACCOUNT,
+        "target_account": default_account_for(p.get("brand")),
         "notes": None,
         "updated_at": None,
     })
+    if not p["publish_queue"].get("target_account"):
+        p["publish_queue"]["target_account"] = default_account_for(p.get("brand"))
     p.setdefault("publish", {"platform": None, "account": None, "url": None, "posted_at": None})
     p.setdefault("metrics", {})
     return p
@@ -164,9 +183,13 @@ def files(rel_path):
 
 @app.get("/api/config")
 def config():
+    brand = requested_brand()
     roster = read_json(ROOT / "roster.json", {"characters": []})
     return jsonify({
-        "default_account": DEFAULT_ACCOUNT,
+        "default_brand": DEFAULT_BRAND,
+        "active_brand": brand_summary(brand),
+        "brands": [brand_summary(b) for b in available_brands()],
+        "default_account": brand.default_account,
         "image_provider": os.environ.get("IMAGE_PROVIDER", "openai"),
         "roster_count": len(roster.get("characters", [])),
         "publish_integrations": {
@@ -182,20 +205,23 @@ def config():
 
 @app.get("/api/assets/status")
 def asset_status():
-    return jsonify(app_assets.status(ROOT))
+    return jsonify(app_assets.status(ROOT, requested_brand()))
 
 
 @app.get("/api/prompts/character")
 def character_prompt():
+    brand = requested_brand()
     spec = request.args.get("spec") or "woman, early 20s, East Asian"
-    return jsonify(character_factory.character_prompts(spec))
+    return jsonify(character_factory.character_prompts(spec, path=brand.prompt_path("image_character")))
 
 
 @app.post("/api/prompts/character/preview")
 def preview_character_prompt():
     data = request.get_json(force=True, silent=True) or {}
+    brand = requested_brand()
+    prompt_config_path = brand.prompt_path("image_character")
     spec = data.get("spec") or "woman, early 20s, East Asian"
-    cfg = character_factory.load_prompt_config()
+    cfg = character_factory.load_prompt_config(prompt_config_path)
     before_template = data.get("before_template") or cfg["before_template"]
     opening_style = data.get("opening_style") or cfg["opening_style"]
     opening_prompt = data.get("opening_prompt")
@@ -242,6 +268,10 @@ def preview_character_prompt():
 @app.patch("/api/prompts/character")
 def save_character_prompt():
     data = request.get_json(force=True, silent=True) or {}
+    brand = requested_brand()
+    prompt_config_path = brand.prompt_path("image_character")
+    if not prompt_config_path:
+        abort(400, description=f"{brand.display_name} does not define editable image prompts")
     before_template = (data.get("before_template") or "").strip()
     opening_style = (data.get("opening_style") or "selfie").strip()
     opening_prompt = (data.get("opening_prompt") or "").strip()
@@ -265,10 +295,11 @@ def save_character_prompt():
         product_style=product_style,
         product_prop_prompt=product_prop_prompt,
         product_slide_caption=product_slide_caption,
+        path=prompt_config_path,
     )
     spec = data.get("spec") or "woman, early 20s, East Asian"
     return jsonify({**saved, **character_factory.character_prompts(
-        spec, opening_style=opening_style, product_style=product_style)})
+        spec, path=prompt_config_path, opening_style=opening_style, product_style=product_style)})
 
 
 @app.get("/api/posts")
@@ -307,8 +338,11 @@ def queue(post_id):
 @app.patch("/api/posts/<post_id>/publish")
 def publish(post_id):
     data = request.get_json(force=True, silent=True) or {}
+    existing = manifest.get_post(post_id, str(POSTS_FILE))
+    if not existing:
+        abort(404)
     platform = data.get("platform") or "manual"
-    account = data.get("account") or DEFAULT_ACCOUNT
+    account = data.get("account") or default_account_for(existing.get("brand"))
     url = data.get("url") or ""
     post = manifest.set_publish(post_id, platform, account, url, str(POSTS_FILE))
     if not post:
@@ -369,10 +403,11 @@ def open_folder(post_id):
 @app.post("/api/runs")
 def create_run():
     data = request.get_json(force=True, silent=True) or {}
+    brand = requested_brand()
     avatars = max(1, min(100, int(data.get("avatars") or 1)))
     posts_per_avatar = max(1, min(50, int(data.get("posts_per_avatar") or 1)))
     provider = data.get("provider") or os.environ.get("IMAGE_PROVIDER", "openai")
-    account = data.get("account") or DEFAULT_ACCOUNT
+    account = data.get("account") or brand.default_account
     placeholder = bool(data.get("placeholder"))
     spec = (data.get("spec") or "").strip()
     hook = (data.get("hook") or "").strip()
@@ -390,6 +425,7 @@ def create_run():
     cmd = [
         sys.executable,
         str(ROOT / "content_job.py"),
+        "--brand", brand.brand_id,
         "--roster", "roster.json",
         "--avatars", str(avatars),
         "--posts-per-avatar", str(posts_per_avatar),
@@ -427,6 +463,7 @@ def create_run():
             "avatars": avatars,
             "posts_per_avatar": posts_per_avatar,
             "provider": provider,
+            "brand": brand.brand_id,
             "account": account,
             "placeholder": placeholder,
             "spec": spec or None,

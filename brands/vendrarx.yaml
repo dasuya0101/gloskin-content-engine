@@ -1,0 +1,98 @@
+brand_id: vendrarx
+display_name: VendraRx
+
+voice:
+  tone: [evidence-forward, direct, operator]
+  audience: "optimization/longevity crowd; Reddit/X-native; skeptical of marketing"
+  pov: founder
+
+pillars:
+  - peptide_explainers
+  - research_summaries
+  - telehealth_logistics
+  - build_in_public
+
+cta:
+  text: "Take the 60-second quiz"
+  button: "Take the quiz"
+  subtext: "Founding-member access"
+  url: "https://vendrarx.com/"
+
+palette:
+  bg1: "#F5F0E6"
+  bg2: "#FAF7EF"
+  accent: "#B8542C"
+  text: "#0E1410"
+  muted: "#5C6A63"
+  primary: "#1B2A24"
+  secondary: "#3F5A4E"
+  accent_2: "#D26A3F"
+  surface: "#FAF7EF"
+
+fonts:
+  heading: "Inter Tight"
+  body: "Inter"
+  accent: "Instrument Serif"
+  mono: "JetBrains Mono"
+
+assets:
+  wordmark: null
+
+accounts:
+  default: TODO
+  tiktok: TODO
+  x: TODO
+  reddit: TODO
+
+formats: [reddit_longform, x_thread, tiktok_script, slideshow]
+
+templates: {}
+
+prompts:
+  copy_system: prompts/vendrarx/copy_system.md
+  learned_rules: null
+  image_character: null
+  compliance_policy: null
+
+slideshow:
+  wordmark_text: VendraRx
+  hook_kicker: Clinician-led
+
+testimonial:
+  score_label: clinical review
+  scan_caption: ""
+  mid_text: "Physician review before any protocol."
+  cta_text: "Peptides, taken seriously."
+  cta_button: "Take the quiz"
+  cta_subtext: "Founding-member access"
+  fallback_hooks:
+    - "Peptide therapy without the grey-market guessing."
+    - "Not a research peptide order.\nA clinician-reviewed protocol."
+    - "Physician-prescribed.\n503A-compounded."
+  after_texts:
+    - "Assessment first. Protocol second."
+    - "No slogans. Just clinical review."
+    - "Built around care, not checkout."
+  no_screenshot_slides:
+    - kind: body
+      text: "US-licensed physician review before any protocol."
+    - kind: body
+      text: "503A-compounded when clinically appropriate."
+    - kind: body
+      text: "No research-peptide sourcing. No outcome guarantees."
+
+caption:
+  secondary_cta: "Take the 60-second quiz."
+  disclaimer: "Educational only. Not medical advice. Compounded medications are not FDA-approved. Suitability is determined by a licensed clinician."
+
+tracking:
+  prefix: vendra
+
+compliance:
+  banned_patterns:
+    - "\\b(cure|cures|treat|treats|prevent|prevents)\\b"
+    - "\\bguaranteed (prescription|results|outcome)\\b"
+  required_disclaimers:
+    - id: compounded
+      applies_to: [reddit_longform, tiktok_script]
+      text: "Compounded medications are prepared by licensed pharmacies and are not FDA-approved. Individual suitability is determined by a licensed clinician."

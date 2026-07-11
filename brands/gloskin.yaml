@@ -1,0 +1,121 @@
+brand_id: gloskin
+display_name: GloSkin
+
+voice:
+  tone: [punchy, self-aware, skincare-native]
+  audience: "Gen-Z and millennial skincare users who are tired of guessing"
+  pov: brand
+
+pillars:
+  - face_scan
+  - ai_skin_coach
+  - product_scanner
+  - personalized_routine
+  - progress_tracking
+
+cta:
+  text: "What's your Glo Score?"
+  button: "Get GloSkin"
+  subtext: "Free on the App Store"
+  url: "https://gloskin.app"
+
+palette:
+  bg1: "#ECE5F8"
+  bg2: "#F3E7EF"
+  accent: "#773CED"
+  text: "#16131F"
+  muted: "#967F9D"
+  chip_bg: "#FCE6EF"
+
+fonts:
+  heading: null
+  body: null
+
+assets:
+  wordmark: null
+
+accounts:
+  default: gloskin_main
+  tiktok: gloskin_main
+  instagram: gloskin_main
+  facebook: gloskin_main
+
+formats: [slideshow]
+
+templates:
+  scan_results:
+    path: templates/scan_results.webp
+    priority: required
+    mode: personalized
+    editable_fields: [face, score, score_progress_bar, optional_text_patches]
+    use: Personalized score before/after slides
+    notes: Existing templatized screenshot. Re-export at 722x1568 if geometry changes.
+  today_routine:
+    path: templates/today_routine.webp
+    priority: recommended
+    mode: static_or_text_patch
+    editable_fields: [routine_title, routine_steps, optional_name]
+    use: Routine/protocol proof slide
+    notes: Reusable static screenshot from the app.
+  guru_chat:
+    path: templates/guru_chat.webp
+    priority: recommended
+    mode: static_or_text_patch
+    editable_fields: [chat_question, chat_answer, optional_name]
+    use: AI skincare coach/chat proof slide
+    notes: Capture a believable, compliant skincare Q&A.
+  product_scan:
+    path: templates/product_scan.webp
+    priority: recommended
+    mode: static_or_text_patch
+    editable_fields: [product_name, ingredient_callouts, rating]
+    use: Ingredient/product scanner proof slide
+    notes: Useful for serum/moisturizer audit posts.
+  skin_diary:
+    path: templates/skin_diary.webp
+    priority: optional
+    mode: mostly_static
+    editable_fields: [date_range, progress_note]
+    use: Progress tracking / diary proof slide
+    notes: Useful for habit, progress, and retention creatives.
+
+prompts:
+  copy_system: prompts/gloskin/copy_system.md
+  learned_rules: prompts/gloskin/learned_rules.md
+  image_character: prompts/gloskin/image_character.json
+  compliance_policy: null
+
+slideshow:
+  wordmark_text: GloSkin
+  hook_kicker: POV
+
+testimonial:
+  score_label: Glo Score
+  scan_caption: "So I scanned my face.\nGlo Score: {score}."
+  mid_text: "8 weeks on Glo's routine."
+  cta_text: "What's your Glo Score?"
+  cta_button: "Get GloSkin"
+  cta_subtext: "Free on the App Store"
+  fallback_hooks:
+    - "I let AI score my skin.\nThe number hurt."
+    - "My Glo Score was {before_score}.\nI needed a real routine."
+    - "Same face, same lighting.\nScore {after_score} after 8 weeks."
+    - "I stopped guessing at skincare.\nAI did the audit."
+    - "My routine was chaos.\nThen I scanned it."
+  after_texts:
+    - "Score {after_score}. Same face, no filter."
+    - "Glo Score {after_score}. My routine finally made sense."
+    - "Score {after_score}. I stopped guessing."
+  no_screenshot_slides: []
+
+caption:
+  secondary_cta: "What's your Glo Score?"
+  disclaimer: "Results vary. Not medical advice."
+
+tracking:
+  prefix: glo
+
+compliance:
+  banned_patterns:
+    - "\\b(cure|cures|treat|treats|prevent|prevents)\\b"
+  required_disclaimers: []
