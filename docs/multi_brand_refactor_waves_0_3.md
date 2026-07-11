@@ -32,8 +32,8 @@ the next agents.
   `posts/<brand>/YYYY-MM-DD/<post_id>/`. Entries missing `brand` are read as
   `gloskin`.
 - D3: CTAs are config values. GloSkin points to `https://gloskin.app` until the
-  App Store listing is live. VendraRx uses a hosted quiz/waitlist URL; use
-  `TODO_QUIZ_URL` until Amol supplies it.
+  App Store listing is live. VendraRx quiz/waitlist lives on the homepage:
+  `https://vendrarx.com/`.
 - D4: Image provider default is OpenAI. Dreamina is deferred.
 - D5: Manual publishing only. No TikTok, Instagram, Meta, X, or Reddit posting
   API integrations in these waves.
@@ -74,7 +74,9 @@ brand asset folders.
 New files:
 
 - `brands/gloskin.yaml`: fully populated from current GloSkin hardcoded values.
-- `brands/vendrarx.yaml`: structurally complete stub with clear `TODO` values.
+- `brands/vendrarx.yaml`: structurally complete stub using
+  `https://vendrarx.com/` for CTA URL, homepage-derived provisional theme, and
+  `TODO` account handles.
 - `brand_loader.py`: loads and validates YAML, exposes a `Brand` dataclass, and
   fails loudly with the missing/invalid key named.
 - `prompts/gloskin/`: move current GloSkin prompt files here.
@@ -130,9 +132,9 @@ VendraRx brand pack:
   marketing
 - pillars: `peptide_explainers`, `research_summaries`,
   `telehealth_logistics`, `build_in_public`
-- CTA: waitlist/quiz framing with Amol-supplied URL or `TODO_QUIZ_URL`
-- palette/fonts/wordmark: use supplied files, or extract provisional values
-  from the waitlist site if Amol approves
+- CTA: waitlist/quiz framing pointing to `https://vendrarx.com/`
+- palette/fonts/wordmark: extract provisional values from the homepage; see
+  `docs/vendrarx_homepage_notes.md`
 - formats enabled: `reddit_longform`, `x_thread`, `tiktok_script`, `slideshow`
 - `prompts/vendrarx/copy_system.md`: real voice rules, banned hype phrases,
   cautious research posture, and founder-POV framing
@@ -221,14 +223,21 @@ voice:
 pillars: [peptide_explainers, research_summaries, telehealth_logistics, build_in_public]
 cta:
   text: "Join the VendraRx waitlist"
-  url: "TODO_QUIZ_URL"
+  url: "https://vendrarx.com/"
 palette:
-  bg: "#0B0F14"
-  fg: "#F5F7FA"
-  accent: "#3DD6A3"
+  bg: "#F5F0E6"
+  fg: "#0E1410"
+  surface: "#FAF7EF"
+  primary: "#1B2A24"
+  secondary: "#3F5A4E"
+  accent: "#B8542C"
+  accent_2: "#D26A3F"
+  muted: "#5C6A63"
 fonts:
-  heading: "Inter-Bold.ttf"
-  body: "Inter-Regular.ttf"
+  heading: "Inter Tight"
+  body: "Inter"
+  accent: "Instrument Serif"
+  mono: "JetBrains Mono"
 assets:
   wordmark: assets/brands/vendrarx/wordmark.png
 accounts:
@@ -251,13 +260,15 @@ compliance:
       text: "Compounded medications are prepared by licensed pharmacies and are not FDA-approved. Individual suitability is determined by a licensed clinician."
 ```
 
-## Inputs Needed From Amol
+## Resolved And Remaining Inputs
 
-Agents should proceed with placeholders unless these are supplied:
+Resolved inputs:
 
-- VendraRx quiz/waitlist URL
-- VendraRx palette, fonts, and wordmark, or approval to extract provisional
-  values from the waitlist site
+- VendraRx quiz/waitlist URL: `https://vendrarx.com/`
+- VendraRx theme/content extraction: approved from the homepage; see
+  `docs/vendrarx_homepage_notes.md`
+- GloSkin CTA: confirmed as `https://gloskin.app` until App Store approval
+
+Still TODO:
+
 - VendraRx account handles for TikTok, X, and Reddit
-- confirmation that GloSkin CTA remains `https://gloskin.app` until App Store
-  approval
