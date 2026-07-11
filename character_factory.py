@@ -256,7 +256,7 @@ def gen_pair_api(spec, out_dir, opening_style=None, product_style=None):
     return slug
 
 
-# back-compat alias (run_pipeline / older callers)
+# back-compat alias for older callers
 gen_pair_openai = gen_pair_api
 
 

@@ -1,137 +1,141 @@
-# BUILD SPEC — GloSkin content engine (handoff for Claude Code / Codex)
+# GloSkin Content Engine - Current Build Spec
 
-You are picking up a **working** content-generation pipeline. Your job is to add
-the operational layer: a dashboard, real performance ingestion, an upgraded
-feedback loop, and (optional) auto-publishing. Read this whole file first, then
-`README.md` for how the existing pieces run.
+This repo is a local-first Python content engine. The active direction is the
+multi-brand refactor described in:
 
-## What already works (don't rebuild)
+- `docs/multi_brand_refactor_waves_0_3.md`
+
+Wave 0 hygiene is complete in this branch. Waves 1-3 should follow that document
+unless Amol supersedes it.
+
+## Current Runtime
+
+- Local Windows PC only.
+- No VPS, scheduler, DB server, auth, or hosted storage.
+- Dashboard: `python api_server.py`, then open `http://127.0.0.1:5055`.
+- Source of truth: local `posts.json` written by `manifest.py`.
+- GitHub: `https://github.com/dasuya0101/gloskin-content-engine`, branch `main`.
+
+## Entrypoints
+
+Primary generation entrypoint:
+
+```powershell
+python content_job.py --roster roster.json --avatars 2 --posts-per-avatar 2 --placeholder
 ```
-roster.json ─▶ run_pipeline.py
-                 ├─ character_factory.py   before/scan/after selfies (OpenAI gpt-image-1, or --placeholder)
-                 ├─ screenshot_factory.py  swaps face+score into REAL app screenshots
-                 ├─ slideshow_maker.py     renders slides (TikTok photo mode) + 9:16 mp4
-                 └─ manifest.py            logs each post to posts.json
-generate_briefs.py   angles ─▶ briefs (copy), via llm_router (editable prompts/)
-import_metrics.py    CSV ─▶ posts.json metrics
-analyze_winners.py   posts.json ─▶ winners_report.md + suggested prompt rules
-dashboard.html       reads posts.json (SEED — your main target)
+
+Copy-only brief flow:
+
+```powershell
+python generate_briefs.py --angles angles.txt --out briefs
+python slideshow_maker.py --briefs-dir briefs --out output
 ```
-Pipeline outputs are real; verify with `python run_pipeline.py --roster roster.json --out output --placeholder`.
 
-## Data model — posts.json (source of truth)
-A list of records. Schema (see manifest.py `record_post`):
-```jsonc
-{
-  "post_id": "12hexchars",
-  "created_at": "ISO8601",
-  "format": "testimonial_beforeafter" | "macro_faceless" | ...,
-  "character": {"slug","spec","before_score","after_score"},
-  "hook": "string",
-  "slides": [{"kind","text"}],
-  "assets": {"before","scan","after","shot_before","shot_after"},
-  "outputs": {"slides_dir","video"},
-  "variant_of": null | post_id,
-  "tracking_code": "string",         // how metrics get matched back
-  "publish": {"platform","account","url","posted_at"},
-  "metrics": {"views","likes","shares","saves","ctr","installs","updated_at"},
-  "is_winner": null | true | false
-}
+`run_pipeline.py` was deprecated and removed. Do not add new work there.
+
+## Repo Structure
+
+- `content_job.py` - orchestrates avatar generation, screenshot compositing, slide/video rendering, packaging, and manifest writes.
+- `character_factory.py` - generates `before.png`, optional `opening.png`, `scan.png`, `after.png`, and optional `product_prop.png`.
+- `image_router.py` - provider registry for image APIs. Default is OpenAI `gpt-image-1`; `custom` is an HTTP template.
+- `screenshot_factory.py` - personalizes real app screenshots by replacing measured slots, currently Scan Results face/score/progress.
+- `slideshow_maker.py` - renders 1080x1920 slide PNGs and MP4 videos. It no longer contains fake result/product UI renderers.
+- `api_server.py` + `dashboard.html` - local Flask API and dashboard.
+- `manifest.py` - JSON manifest helpers.
+- `publish.py` - manual publishing bridge and future API scaffolds.
+- `metrics_refresh.py` / `import_metrics.py` - CSV metrics import and future API scaffolds.
+- `prompts/` - current GloSkin prompt files.
+- `templates/` - real app screenshot templates.
+- `briefs/` - example brief JSON files.
+
+Generated/local artifacts are ignored by Git: `assets/`, `output/`, `posts/`,
+`screenshots/`, `posts.json`, logs, runs, and local secrets.
+
+## End-To-End Flow
+
+Dashboard or CLI inputs:
+
+- roster character spec, scores, hooks
+- batch size: avatars and posts per avatar
+- prompt options: opening image style, product prop style
+- image provider: OpenAI by default, placeholder for no-API tests
+
+Pipeline:
+
+1. `content_job.py` selects roster characters or ad-hoc spec.
+2. `character_factory.py` creates persona assets through `image_router.py` or placeholders.
+3. `screenshot_factory.py` composites `scan.png` / `after.png` into `templates/scan_results.webp`.
+4. `content_job.py` builds an in-memory testimonial brief.
+5. `slideshow_maker.py` renders slide PNGs and MP4.
+6. `content_job.py` packages files under `posts/YYYY-MM-DD/<post_id>/`.
+7. `manifest.py` records the post in `posts.json`.
+
+Packaged post shape:
+
+```text
+posts/YYYY-MM-DD/<post_id>/
+  slides/
+  video.mp4
+  source_assets/
+  caption.txt
+  brief.json
+  post.json
 ```
-If volume exceeds ~a few thousand posts, migrate posts.json → SQLite (one `posts`
-table, same fields) and keep manifest.py's function signatures so callers don't change.
 
-## TASK 1 — Dashboard (primary)
-Extend `dashboard.html` (or rebuild as a small React/Vite app — your call) into a
-real console. Requirements:
-- **Pipeline/progress view:** show in-flight runs (tail a run log or watch output/),
-  per-character status (faces ✓ / screenshots ✓ / render ✓), and failures.
-- **Grid + table of posts** with hover-play video previews (table seed exists).
-- **Sort/filter** by any metric, format, demographic, account, date; filter to winners.
-- **Per-post detail:** all slides, the hook, the variant lineage (variant_of), and a
-  side-by-side of variants spawned from the same parent.
-- **Aggregate charts:** views/CTR/installs over time; performance by format; by
-  demographic; by hook-first-word; by slide order. This is where the "what's
-  different about winners" story should be *visible*, not just in a report.
-- **Winner selection UI:** let the user star/unstar posts (write is_winner back to
-  posts.json via a tiny local API — add a minimal Flask/FastAPI backend; the seed is
-  static-only and can't write).
-- Keep it local-first (runs on his Mac). Design: this is an internal tool — favor a
-  dense, fast, legible data aesthetic. Do NOT use a purple-gradient-on-white look.
+## Current GloSkin-Specific Locations
 
-## TASK 2 — Real metrics ingestion (replace the CSV path)
-`import_metrics.py` is the manual bootstrap. Build direct pulls:
-- **TikTok**: Business/Display API for video metrics; match by tracking_code embedded
-  in caption or by the posted video id stored in publish.url.
-- **Instagram**: Graph API (Insights) for Reels.
-- **Meta Ads**: Marketing API for paid-creative metrics (spend, CTR, CPI) — keep
-  organic and paid metrics distinguishable on the record.
-- **Installs/conversions**: wire the app-store / attribution side (tracking_code →
-  bio-link or UTM → install). Schedule a periodic refresh (cron) that updates
-  metrics + updated_at.
+These are intentionally still hardcoded until Wave 1 moves brand identity into
+`brands/<brand_id>.yaml`.
 
-## TASK 3 — Feedback loop upgrade (the compounding part)
-`analyze_winners.py` is a heuristic v1. Upgrade the "what's different" step to an LLM
-pass routed through `llm_router.complete(task="analysis")`:
-- Feed it the actual winning vs losing **copy + attributes** and have it write
-  specific, falsifiable rules ("hooks that name a dollar amount outperform"; "POV
-  framing beats confessional for the under-25 segment").
-- Append accepted rules to `prompts/learned_rules.md` (already concatenated into the
-  copy system prompt at generation time — close the loop so new copy inherits wins).
-- Keep a human approval step before rules are adopted (show diff in dashboard).
-- Track rule provenance + whether posts generated after a rule actually improved
-  (so the loop can retire rules that don't hold up).
+- Prompts: `prompts/copy_system.md`, `prompts/learned_rules.md`, `prompts/image_character.json`, plus defaults in `character_factory.py`.
+- Styling/wordmark/CTA chrome: `slideshow_maker.py`.
+- Default account: `gloskin_main` in `content_job.py`, `api_server.py`, and `publish.py`.
+- App screenshot inventory: `app_assets.py`.
+- Real Scan Results screenshot: `templates/scan_results.webp`.
+- Roster/template defaults: `roster.json`.
 
-## TASK 4 — Auto-publishing (optional, after metrics work)
-Add `publish.py`: take finished posts and push to TikTok/IG/FB on a schedule via
-their **content APIs** (TikTok Content Posting API, IG Graph API). Write
-publish.platform/account/url/posted_at back via manifest.set_publish. Support the
-persona-account model: a post's character.slug maps to a target account.
+## Manifest Schema
 
-## TASK 5 — Variant generator (conversion-testing engine)
-Add `make_variants.py`: given one post (or asset set), produce N testable variants —
-different hooks (llm_router task="hook_variants"), captions, slide orders — same
-assets, near-zero marginal cost (just re-render). Each variant records variant_of =
-parent post_id so the dashboard can compare lineages. This is the real A/B engine.
+Current `posts.json` records are a list of objects with:
 
-## Model routing (llm_router.py)
-Copy tasks are routed per `ROUTES` (OpenRouter cheap tiers — Kimi/DeepSeek/GLM — for
-bulk; premium only for analysis). This is where his OpenClaw multi-model setup plugs
-in: point OPENROUTER_API_KEY at it, or add OpenClaw as another provider in
-llm_router. Retune ROUTES to trade cost vs quality in one place.
+- `post_id`, `created_at`, `format`
+- `character`: slug/spec/scores plus current style metadata
+- `hook`
+- `slides`: kind/text summary
+- `assets`: source asset paths such as opening/before/scan/after/product_prop/shot_before/shot_after
+- `outputs`: slides/video paths
+- `caption`
+- `package`: packaged folder paths
+- `variant_of`
+- `tracking_code`
+- `publish`
+- `publish_queue`
+- `metrics`
+- `is_winner`
 
-## HARD CONSTRAINT — do not build subscription scraping
-Image generation and LLM calls must go through real **APIs** (gpt-image-1, Dreamina
-credits, OpenRouter, Anthropic, OpenAI). Do NOT build browser-automation / click
-macros that drive a consumer ChatGPT or Dreamina *subscription* — it violates those
-providers' ToS and risks account bans. If cost is the concern, route copy to cheaper
-API models and keep the face roster small (it's reused across hundreds of posts).
+Wave 1 adds `brand`, defaults missing legacy values to `gloskin`, and partitions
+packages under `posts/<brand>/YYYY-MM-DD/<post_id>/`.
 
-AI image generation should produce only visual assets: `before.png`, optional
-`opening.png` close-up hooks, `scan.png`, `after.png`, and optional unbranded
-`product_prop.png` attention props. Product props are not recommendations. Scan
-Results and other app screens must come from real exported app screenshots in
-`templates/`, then be personalized by measured slot replacement.
+## Working
 
-## Compliance to preserve
-Before/after skincare creative is scrutinized for health claims. Keep copy
-cosmetic/educational (the prompt enforces this) and ensure a visible "results vary ·
-not medical advice" line ships in captions/bio. Don't remove these guardrails.
+- Local dashboard can start runs, preview prompts, preview rendered files, update queue status, mark winners, and import CSV metrics.
+- Placeholder generation runs without API keys.
+- OpenAI image route exists for real generation.
+- Real Scan Results compositing works.
+- Manual publish queue works.
+- CSV metrics import works.
+- GitHub remote is linked.
 
-## Env / setup
-```
-pip install openai anthropic pillow flask   # +vite/react if you go that route
-export OPENAI_API_KEY=...        # faces
-export OPENROUTER_API_KEY=...    # cheap copy routing
-export ANTHROPIC_API_KEY=...     # premium analysis
-```
-For pixel-perfect score numbers in screenshots, add SF-Pro-Display-Bold.otf and point
-`screenshot_factory.SCORE_FONT` at it.
+## Stale / Deferred
 
-## Acceptance criteria
-- Dashboard runs locally, reads posts.json, shows progress + metrics + winner starring
-  that persists.
-- A scheduled job pulls real metrics into posts.json.
-- analyze_winners produces LLM-written rules; approved ones land in learned_rules.md
-  and measurably shift new copy.
-- Optional: posts auto-publish to at least one platform with url written back.
+- Direct platform publishing APIs are scaffolded but not implemented.
+- Direct metrics API pulls are scaffolded but not implemented.
+- Dreamina provider is deferred.
+- VPS/deploy/scheduler/database/auth are explicitly out of scope for Waves 0-3.
+- Multi-brand config is not implemented yet; see Wave 1 in `docs/multi_brand_refactor_waves_0_3.md`.
+
+## Next Work
+
+1. Wave 1: add `brands/gloskin.yaml`, `brands/vendrarx.yaml`, `brand_loader.py`, brand-aware prompts/assets, and manifest `brand`.
+2. Wave 2: VendraRx brand pack and text-native formats.
+3. Wave 3: compliance linter and publish gate.

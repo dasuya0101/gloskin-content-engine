@@ -11,6 +11,15 @@ One brief → two outputs:
   **IG Reels, YouTube Shorts, and paid ads** (Meta / TikTok Ads Manager), where
   you need an actual video file.
 
+## Current build direction
+
+The current runtime/status handoff is in `BUILD_SPEC.md`. The active refactor
+roadmap is in `docs/multi_brand_refactor_waves_0_3.md`.
+
+Short version: `content_job.py` is the generation entrypoint, generated posts are
+stored locally under `posts/YYYY-MM-DD/<post_id>/`, publishing is manual for now,
+and the next build wave moves GloSkin/VendraRx identity into brand config files.
+
 ## The 3-step loop
 
 ```
@@ -303,6 +312,8 @@ Before/after acne creative is heavily scrutinized. Keep copy cosmetic/educationa
 visible "results vary · not medical advice" line in captions/bio.
 
 ## Where this is going (next builds)
-- **Character persistence** for persona accounts (lock a face, reuse it daily).
-- **Auto-publish** to TikTok / IG / FB via their content APIs on a schedule.
-- **Winner feedback loop**: pull CTR back in, bias the angle generator toward winners.
+- **Brand-as-config**: move GloSkin and VendraRx voice, prompts, styling, CTAs,
+  accounts, and compliance rules into `brands/<brand_id>.yaml`.
+- **Text-native formats**: generate Reddit posts, X threads, and TikTok scripts
+  alongside slideshows.
+- **Compliance gate**: lint copy before it can enter the manual publish queue.

@@ -88,8 +88,7 @@ DEFAULT_PALETTE = {
 }
 
 # Per-slide default durations (seconds) used in the video render.
-KIND_DURATION = {"hook": 2.8, "body": 2.4, "cta": 3.2,
-                 "results": 3.0, "products": 3.4, "screenshot": 3.0}
+KIND_DURATION = {"hook": 2.8, "body": 2.4, "cta": 3.2, "screenshot": 3.0}
 
 
 # ----------------------------------------------------------------------------
@@ -270,96 +269,6 @@ def render_image_top(slide, palette):
     return base.convert("RGB")
 
 
-def render_results_card(slide, palette):
-    """Branded mock of the GloSkin first-scan result. No screenshot needed."""
-    accent = hex_to_rgb(palette["accent"])
-    text_rgb = hex_to_rgb(palette["text"])
-    base = gradient_bg(palette["bg1"], palette["bg2"])
-    draw = ImageDraw.Draw(base)
-
-    cx0, cy0, cx1, cy1 = 80, int(H * 0.16), W - 80, int(H * 0.68)
-    draw.rounded_rectangle([cx0, cy0, cx1, cy1], radius=56, fill=(255, 255, 255))
-
-    hf = load_font(FONT_BOLD, 56)
-    draw.text((cx0 + 60, cy0 + 50), "Your Glo Analysis", font=hf, fill=text_rgb)
-
-    # score ring
-    score = slide.get("score", 58)
-    rx, ry, rr = W // 2, cy0 + 350, 165
-    draw.arc([rx - rr, ry - rr, rx + rr, ry + rr], 0, 360, fill=(238, 226, 232),
-             width=34)
-    draw.arc([rx - rr, ry - rr, rx + rr, ry + rr], -90, -90 + int(360 * score / 100),
-             fill=accent, width=34)
-    sf = load_font(FONT_BOLD, 124)
-    draw.text((rx - draw.textlength(str(score), font=sf) / 2, ry - 92),
-              str(score), font=sf, fill=text_rgb)
-    lf = load_font(FONT_REG, 30)
-    draw.text((rx - draw.textlength("GLO SCORE", font=lf) / 2, ry + 58),
-              "GLO SCORE", font=lf, fill=(150, 130, 142))
-
-    # skin type
-    tf = load_font(FONT_REG, 40)
-    bf = load_font(FONT_BOLD, 48)
-    st_label = slide.get("skin_type", "Combination · Acne-prone")
-    draw.text((cx0 + 60, ry + rr + 36), "Skin type", font=tf, fill=(150, 130, 142))
-    draw.text((cx0 + 60, ry + rr + 86), st_label, font=bf, fill=text_rgb)
-
-    # concern chips (wrap before drawing so nothing overruns the card)
-    concerns = slide.get("concerns", ["Active acne", "Excess oil", "Dark marks"])
-    chip_y = ry + rr + 180
-    chip_x = cx0 + 60
-    cfont = load_font(FONT_BOLD, 36)
-    for c in concerns:
-        w = draw.textlength(c, font=cfont) + 64
-        if chip_x + w > cx1 - 60:
-            chip_x = cx0 + 60
-            chip_y += 96
-        draw.rounded_rectangle([chip_x, chip_y, chip_x + w, chip_y + 76],
-                               radius=38, fill=(252, 230, 239))
-        draw.text((chip_x + 32, chip_y + 18), c, font=cfont, fill=accent)
-        chip_x += w + 24
-    return base.convert("RGB")
-
-
-def render_products_card(slide, palette):
-    """Branded 'recommended routine' product list. No screenshot needed."""
-    accent = hex_to_rgb(palette["accent"])
-    text_rgb = hex_to_rgb(palette["text"])
-    base = gradient_bg(palette["bg1"], palette["bg2"])
-    draw = ImageDraw.Draw(base)
-
-    cx0, cy0, cx1, cy1 = 80, int(H * 0.13), W - 80, int(H * 0.87)
-    draw.rounded_rectangle([cx0, cy0, cx1, cy1], radius=56, fill=(255, 255, 255))
-    hf = load_font(FONT_BOLD, 54)
-    draw.text((cx0 + 60, cy0 + 46), slide.get("heading", "Your routine,\nmatched to your skin"),
-              font=hf, fill=text_rgb, spacing=12)
-
-    products = slide.get("products", [
-        {"step": "CLEANSE", "name": "Gentle gel cleanser", "tag": "AM · PM"},
-        {"step": "TREAT", "name": "2% BHA exfoliant", "tag": "PM"},
-        {"step": "TREAT", "name": "Niacinamide 10%", "tag": "AM"},
-        {"step": "HYDRATE", "name": "Oil-free moisturizer", "tag": "AM · PM"},
-        {"step": "PROTECT", "name": "SPF 50 fluid", "tag": "AM"},
-    ])
-    sf = load_font(FONT_BOLD, 30)
-    nf = load_font(FONT_BOLD, 44)
-    gf = load_font(FONT_REG, 32)
-    row_y = cy0 + 230
-    for p in products:
-        draw.rounded_rectangle([cx0 + 50, row_y, cx1 - 50, row_y + 150],
-                               radius=32, fill=(250, 244, 247))
-        # step chip
-        sw = draw.textlength(p["step"], font=sf) + 44
-        draw.rounded_rectangle([cx0 + 80, row_y + 30, cx0 + 80 + sw, row_y + 84],
-                               radius=27, fill=accent)
-        draw.text((cx0 + 102, row_y + 42), p["step"], font=sf, fill=(255, 255, 255))
-        draw.text((cx0 + 80, row_y + 92), p["name"], font=nf, fill=text_rgb)
-        draw.text((cx1 - 50 - draw.textlength(p["tag"], font=gf) - 40, row_y + 56),
-                  p["tag"], font=gf, fill=(150, 130, 142))
-        row_y += 174
-    return base.convert("RGB")
-
-
 def render_screenshot_slide(slide, palette):
     """Frames a REAL app screenshot on the brand background with a soft shadow
     and optional caption. Use this for authentic app-proof slides instead of
@@ -423,14 +332,6 @@ def render_slide(slide, palette, idx, total):
     if slide.get("layout") == "image_top":
         bg = render_image_top(slide, palette)
         _draw_chrome(bg, palette, idx, total, on_image=True)
-        return bg
-    if kind == "results":
-        bg = render_results_card(slide, palette)
-        _draw_chrome(bg, palette, idx, total, on_image=False)
-        return bg
-    if kind == "products":
-        bg = render_products_card(slide, palette)
-        _draw_chrome(bg, palette, idx, total, on_image=False)
         return bg
     if kind == "screenshot":
         bg = render_screenshot_slide(slide, palette)
