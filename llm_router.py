@@ -26,6 +26,9 @@ ROUTES = {
     "copy_brief":    ("openrouter", "moonshotai/kimi-k2"),      # bulk brief JSON
     "hook_variants": ("openrouter", "deepseek/deepseek-chat"),  # cheap, high volume
     "caption":       ("openrouter", "deepseek/deepseek-chat"),
+    "reddit_longform": ("openrouter", "deepseek/deepseek-chat"),
+    "x_thread":      ("openrouter", "deepseek/deepseek-chat"),
+    "tiktok_script": ("openrouter", "deepseek/deepseek-chat"),
     "analysis":      ("anthropic", "claude-sonnet-4-5"),        # winner analysis = premium
 }
 DEFAULT_ROUTE = ("anthropic", "claude-sonnet-4-5")

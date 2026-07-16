@@ -33,7 +33,7 @@
   .ops{display:grid;grid-template-columns:minmax(440px,1fr) minmax(360px,1fr);gap:16px;margin-bottom:18px}
   .section{background:var(--band);border:1px solid var(--line);border-radius:8px;padding:16px}
   .section h2{margin:0 0 14px;font-size:13px;font-weight:700;color:var(--dim);font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em}
-  .run-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:10px;align-items:end}
+  .run-grid{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:10px;align-items:end}
   label{display:block;color:var(--dim);font-size:11px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
   input,select,button,textarea{font:inherit}
   input,select,textarea{width:100%;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:7px;padding:9px 10px;min-height:38px}
@@ -156,6 +156,10 @@
             <option value="dreamina">dreamina</option>
             <option value="custom">custom</option>
           </select>
+        </div>
+        <div>
+          <label for="formats">Formats</label>
+          <input id="formats" value="slideshow">
         </div>
         <div>
           <label for="account">Account</label>
@@ -336,6 +340,10 @@
         <div class="thumb-grid" id="detailSlideImages"></div>
       </div>
       <div class="preview-block">
+        <div class="preview-title">Text formats</div>
+        <div class="thumb-grid" id="detailFormats"></div>
+      </div>
+      <div class="preview-block">
         <div class="preview-title">Slide copy</div>
         <div class="slides" id="detailSlides"></div>
       </div>
@@ -444,6 +452,7 @@ async function load(){
     $("apiState").textContent = `${activeBrandInfo().display_name || "brand"} / ${config.roster_count} roster characters / ${config.image_provider}`;
     $("provider").value = config.image_provider || "openai";
     $("account").value = activeBrandInfo().default_account || config.default_account || "";
+    $("formats").value = "slideshow";
     $("savePrompt").disabled = !activeBrandInfo().has_image_prompts;
     assetRows = await api(`/api/assets/status?brand=${brandParam()}`);
     await previewPrompt();
@@ -576,7 +585,7 @@ function renderRuns(){
   const cfg = r.config || {};
   $("runLog").textContent =
     `${r.run_id} / ${r.status}\n` +
-    `brand=${cfg.brand || "-"} avatars=${cfg.avatars} posts_per_avatar=${cfg.posts_per_avatar} provider=${cfg.provider} placeholder=${cfg.placeholder}\n` +
+    `brand=${cfg.brand || "-"} formats=${cfg.formats || "slideshow"} avatars=${cfg.avatars} posts_per_avatar=${cfg.posts_per_avatar} provider=${cfg.provider} placeholder=${cfg.placeholder}\n` +
     `opening=${cfg.opening_style || "saved"} product=${cfg.product_style || "saved"}\n\n` +
     (r.tail || "");
 }
@@ -686,6 +695,7 @@ async function changeBrand(){
   selectedBrand = $("brand").value;
   const info = activeBrandInfo();
   $("account").value = info.default_account || "";
+  $("formats").value = "slideshow";
   $("savePrompt").disabled = !info.has_image_prompts;
   $("apiState").textContent = `${info.display_name || "brand"} / ${configData.roster_count} roster characters / ${configData.image_provider}`;
   assetRows = await api(`/api/assets/status?brand=${brandParam()}`);
@@ -711,6 +721,7 @@ async function startRun(){
         posts_per_avatar:Number($("postsPerAvatar").value || 1),
         provider:$("provider").value,
         account:$("account").value,
+        formats:$("formats").value,
         placeholder:$("placeholder").checked,
         opening_style:$("openingStyle").value,
         product_style:$("productStyle").value,
@@ -738,6 +749,7 @@ async function runPromptTest(){
         posts_per_avatar:1,
         provider:$("provider").value,
         account:$("account").value,
+        formats:$("formats").value,
         placeholder:$("promptPlaceholder").checked,
         spec:$("promptSpec").value.trim(),
         hook:$("promptHook").value.trim(),
@@ -846,6 +858,7 @@ async function showDetail(postId, open=true){
     ...Object.entries(assetMap).filter(([k]) => !assetOrder.includes(k))
   ];
   const slideImages = payload.slides || [];
+  const formatFiles = payload.formats || {};
   $("detailTitle").textContent = `${p.post_id} / ${queue(p).status || "draft"}`;
   $("detailSub").textContent = `${(p.character||{}).spec || ""} / ${p.tracking_code || ""}`;
   $("detailMedia").innerHTML = video ? `<video src="${fileUrl(video)}" muted controls></video>` : "";
@@ -856,6 +869,14 @@ async function showDetail(postId, open=true){
   $("detailSlideImages").innerHTML = slideImages.length
     ? slideImages.map((path,i) => imageThumb(`slide ${i + 1}`, path)).join("")
     : `<div class="sub">No rendered slide PNGs found.</div>`;
+  $("detailFormats").innerHTML = Object.keys(formatFiles).length
+    ? Object.entries(formatFiles).map(([name,path]) => `
+      <a class="thumb" href="${fileUrl(path)}" target="_blank" title="${esc(path)}">
+        <span class="label">${esc(name)}</span>
+        <span class="label">${esc(path.split("/").pop())}</span>
+      </a>
+    `).join("")
+    : `<div class="sub">No text formats recorded for this post.</div>`;
   $("detailSlides").innerHTML = (p.slides || []).map((s,i) => `
     <div class="slide"><div class="kind">${esc(i+1)} / ${esc(s.kind)}</div>${esc(s.text || "")}</div>
   `).join("");

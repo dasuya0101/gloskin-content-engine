@@ -28,6 +28,7 @@ from brand_loader import DEFAULT_BRAND, load_brand
 import manifest
 import screenshot_factory as sf
 import slideshow_maker as sm
+import text_formats as tf
 
 
 def rel(path):
@@ -240,14 +241,17 @@ def caption_for(character, hook, tracking_code, brand):
 
 def copy_package(post_id, result, brief, caption, posts_dir, run_date, brand_id, assets=None):
     package_dir = Path(posts_dir) / brand_id / run_date / post_id
-    slides_dest = package_dir / "slides"
-    slides_dest.mkdir(parents=True, exist_ok=True)
+    package_dir.mkdir(parents=True, exist_ok=True)
 
-    for slide_path in result["slides"]:
-        shutil.copy2(slide_path, slides_dest / Path(slide_path).name)
+    slides_dest = package_dir / "slides"
+    if result and result.get("slides"):
+        slides_dest.mkdir(parents=True, exist_ok=True)
+        for slide_path in result["slides"]:
+            shutil.copy2(slide_path, slides_dest / Path(slide_path).name)
 
     video_dest = package_dir / "video.mp4"
-    shutil.copy2(result["video"], video_dest)
+    if result and result.get("video"):
+        shutil.copy2(result["video"], video_dest)
 
     caption_dest = package_dir / "caption.txt"
     caption_dest.write_text(caption, encoding="utf-8")
@@ -270,13 +274,14 @@ def copy_package(post_id, result, brief, caption, posts_dir, run_date, brand_id,
     metadata_dest = package_dir / "post.json"
     package = {
         "dir": rel(package_dir),
-        "slides_dir": rel(slides_dest),
-        "video": rel(video_dest),
+        "slides_dir": rel(slides_dest) if slides_dest.exists() else None,
+        "video": rel(video_dest) if video_dest.exists() else None,
         "caption": rel(caption_dest),
         "brief": rel(brief_dest),
         "assets_dir": rel(asset_dest) if copied_assets else None,
         "assets": copied_assets,
         "metadata": rel(metadata_dest),
+        "formats": {},
     }
     return package, metadata_dest
 
@@ -286,12 +291,44 @@ def write_metadata(post_id, metadata_dest, manifest_path):
     metadata_dest.write_text(json.dumps(post, indent=2), encoding="utf-8")
 
 
+def attach_text_formats(post_id, brief, brand, package, outputs, formats, placeholder, manifest_path):
+    text_names = tf.text_format_names(formats)
+    if not text_names:
+        return package, outputs
+    package_dir = Path(package["dir"])
+    rendered = tf.render_formats(
+        brief,
+        brand,
+        package_dir,
+        text_names,
+        placeholder=placeholder,
+    )
+    rel_rendered = {name: rel(path) for name, path in rendered.items()}
+    package = {**package, "formats": rel_rendered}
+    outputs = {**outputs, "formats": rel_rendered, **rel_rendered}
+    manifest.set_package(post_id, package, path=manifest_path)
+    manifest.update_post(post_id, {"outputs": outputs}, manifest_path)
+    return package, outputs
+
+
+def build_text_brief(slug, angle, brand, formats):
+    return {
+        "slug": slug,
+        "brand": brand.brand_id,
+        "angle": angle,
+        "formats": tf.text_format_names(formats),
+        "slides": [],
+    }
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--brand", default=DEFAULT_BRAND)
     ap.add_argument("--roster", default="roster.json")
     ap.add_argument("--spec", default=None,
                     help="ad-hoc character spec for a one-off dashboard prompt test")
+    ap.add_argument("--angle", default=None,
+                    help="angle for text-native format runs")
     ap.add_argument("--hook", default=None,
                     help="hook for --spec prompt tests")
     ap.add_argument("--before-score", type=int, default=54)
@@ -308,6 +345,8 @@ def main():
     ap.add_argument("--shots", default="screenshots")
     ap.add_argument("--provider", default=os.environ.get("IMAGE_PROVIDER", "openai"))
     ap.add_argument("--account", default=None)
+    ap.add_argument("--formats", default=None,
+                    help="comma-separated outputs, e.g. slideshow,reddit_longform,x_thread,tiktok_script")
     ap.add_argument("--opening-style", choices=sorted(cf.OPENING_PRESETS), default=None)
     ap.add_argument("--product-style", choices=sorted(cf.PRODUCT_PROP_PRESETS), default=None)
     ap.add_argument("--product-slide-caption", default=None)
@@ -316,6 +355,9 @@ def main():
     args = ap.parse_args()
 
     brand = load_brand(args.brand)
+    formats = tf.parse_formats(args.formats, brand=brand, default=["slideshow"])
+    wants_slideshow = "slideshow" in formats
+    wants_text = bool(tf.text_format_names(formats))
     account = args.account or brand.default_account
     prompt_config_path = brand.prompt_path("image_character")
     os.environ["IMAGE_PROVIDER"] = args.provider
@@ -343,6 +385,48 @@ def main():
     run_id = datetime.now().strftime("%Y%m%d%H%M%S")
     run_date = datetime.now().strftime("%Y-%m-%d")
     built = []
+
+    if not wants_slideshow:
+        if not wants_text:
+            raise SystemExit("no output formats requested")
+        angle = (args.angle or args.hook or "").strip()
+        if not angle:
+            raise SystemExit("text-only runs require --angle or --hook")
+        render_slug = f"text_{tf.slugify(angle)}_{run_id}"
+        tracking_code = f"{brand.tracking.get('prefix', brand.brand_id)}_{run_id}_01_01"
+        brief = build_text_brief(render_slug, angle, brand, formats)
+        caption = caption_for({}, angle, tracking_code, brand)
+        outputs = {}
+        post_id = manifest.record_post(
+            brand=brand.brand_id,
+            character={},
+            fmt="text_native",
+            hook=angle,
+            slides=[],
+            assets={},
+            outputs=outputs,
+            tracking_code=tracking_code,
+            caption=caption,
+            publish_queue={
+                "status": "rendered",
+                "target_account": account,
+                "notes": None,
+                "updated_at": time.strftime("%Y-%m-%dT%H:%M:%S"),
+            },
+            path=args.manifest,
+        )
+        package, metadata_dest = copy_package(
+            post_id, None, brief, caption, args.posts_dir, run_date, brand.brand_id)
+        manifest.set_package(post_id, package, caption, args.manifest)
+        package, outputs = attach_text_formats(
+            post_id, brief, brand, package, outputs, formats, args.placeholder, args.manifest)
+        manifest.set_publish_queue(post_id, "ready_to_post", account, path=args.manifest)
+        write_metadata(post_id, metadata_dest, args.manifest)
+        built.append((post_id, package["dir"]))
+        print(f"[post] {post_id} -> {package['dir']}")
+        print(f"\n{len(built)} posts packaged under {args.posts_dir}/{brand.brand_id}/{run_date}/")
+        print("Manual queue status: ready_to_post")
+        return
 
     for avatar_index, character in enumerate(characters, start=1):
         if args.opening_style:
@@ -374,9 +458,14 @@ def main():
             )
             brief = build_testimonial_brief(
                 render_slug, char_dir, shot_before, shot_after, character, post_index, brand)
+            brief["formats"] = formats
             result = sm.make_content(brief, args.out, brand=brand)
             hook = pick_hook(character, post_index, brand)
             caption = caption_for(character, hook, tracking_code, brand)
+            outputs = {
+                "slides_dir": rel(result["dir"]),
+                "video": rel(result["video"]),
+            }
 
             post_id = manifest.record_post(
                 brand=brand.brand_id,
@@ -403,10 +492,7 @@ def main():
                     "shot_before": rel(shot_before),
                     "shot_after": rel(shot_after),
                 },
-                outputs={
-                    "slides_dir": rel(result["dir"]),
-                    "video": rel(result["video"]),
-                },
+                outputs=outputs,
                 tracking_code=tracking_code,
                 caption=caption,
                 publish_queue={
@@ -431,6 +517,8 @@ def main():
                 post_id, result, brief, caption, args.posts_dir, run_date,
                 brand.brand_id, package_assets)
             manifest.set_package(post_id, package, caption, args.manifest)
+            package, outputs = attach_text_formats(
+                post_id, brief, brand, package, outputs, formats, args.placeholder, args.manifest)
             manifest.set_publish_queue(post_id, "ready_to_post", account, path=args.manifest)
             write_metadata(post_id, metadata_dest, args.manifest)
 

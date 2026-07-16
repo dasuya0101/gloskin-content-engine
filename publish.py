@@ -94,6 +94,7 @@ def payload_for(post):
         "package_assets_dir": pkg.get("assets_dir"),
         "assets": post.get("assets") or {},
         "packaged_assets": pkg.get("assets") or {},
+        "formats": pkg.get("formats") or (outputs.get("formats") if isinstance(outputs.get("formats"), dict) else {}),
         "video": pkg.get("video") or outputs.get("video"),
         "slides": file_list(slides_dir),
         "publish": post.get("publish"),

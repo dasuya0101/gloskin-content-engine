@@ -78,6 +78,11 @@ Run the VendraRx stub path without screenshot templates:
 python content_job.py --brand vendrarx --spec "founder, 30s, White" --placeholder
 ```
 
+Run text-native formats only:
+```
+python content_job.py --brand vendrarx --angle "how 503A peptide compounding works" --formats reddit_longform,x_thread,tiktok_script --placeholder
+```
+
 Run a real OpenAI image batch:
 ```
 set OPENAI_API_KEY=sk-...
@@ -87,6 +92,8 @@ python content_job.py --brand gloskin --roster roster.json --avatars 6 --posts-p
 Batch sizing has two separate knobs:
 - `--avatars` controls how many characters/personas to generate from `roster.json`.
 - `--posts-per-avatar` controls how many post iterations to render from each avatar.
+- `--formats` controls outputs: `slideshow`, `reddit_longform`, `x_thread`,
+  `tiktok_script`, or a comma-separated mix.
 
 Creative visual options:
 - `--opening-style selfie` keeps slide 1 as the normal before selfie.
@@ -127,6 +134,7 @@ http://127.0.0.1:5055
 The dashboard can:
 - start `content_job.py` with dashboard-controlled `avatars` and `posts / avatar`
 - select `gloskin` or `vendrarx`
+- request output formats with the `Formats` field
 - preview and save the actual character image prompt templates
 - run a 1-post prompt test from an ad-hoc character spec
 - show which real app screenshots are present or missing
@@ -185,6 +193,23 @@ python metrics_refresh.py api-plan --provider installs
 
 Credential names live in `.env.example`. Keep organic metrics, paid metrics, and
 install attribution separate when those adapters are filled in.
+
+## Text-native formats
+Wave 2 adds brand-aware text outputs:
+
+```
+python content_job.py --brand vendrarx --angle "how to evaluate a peptide telehealth offer" --formats reddit_longform,x_thread,tiktok_script --placeholder
+python content_job.py --brand gloskin --angle "why your serum routine feels random" --formats reddit_longform,x_thread,tiktok_script --placeholder
+```
+
+Generated files land in the post package:
+- `reddit.md` - Reddit title plus 300-800 word markdown body
+- `thread.json` - `{"tweets": ["..."]}` with every tweet validated at 275 chars or less
+- `tiktok_script.md` - `HOOK`, `BEATS`, `CTA`, and `SHOTLIST`
+
+Real text generation uses `llm_router.py` and the per-brand prompts in
+`prompts/<brand>/formats/`. `--placeholder` creates deterministic local drafts
+for dry runs without API keys.
 
 ## Use REAL screenshots, never fake UI  (screenshot_factory.py)
 The AI image generator is only for the human images:
@@ -321,6 +346,4 @@ Before/after acne creative is heavily scrutinized. Keep copy cosmetic/educationa
 visible "results vary · not medical advice" line in captions/bio.
 
 ## Where this is going (next builds)
-- **Text-native formats**: generate Reddit posts, X threads, and TikTok scripts
-  alongside slideshows.
 - **Compliance gate**: lint copy before it can enter the manual publish queue.

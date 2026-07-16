@@ -121,10 +121,12 @@ Wave 1 acceptance:
   constant and back-compat manifest logic.
 - Existing `posts.json` loads without migration errors.
 
-## Wave 2 - VendraRx Brand Pack And Text-Native Formats
+## Wave 2 - Completed VendraRx Brand Pack And Text-Native Formats
 
 Objective: make VendraRx a real runnable brand and add text-first outputs that
 both brands can use.
+
+Status: complete. Current implementation is summarized in `BUILD_SPEC.md`.
 
 VendraRx brand pack:
 
@@ -162,6 +164,8 @@ Wave 2 acceptance:
 - Same command with `--brand gloskin` produces GloSkin-voiced text outputs.
 
 ## Wave 3 - Compliance Linter And Publish Gate
+
+Status: not started.
 
 Objective: no generated copy reaches the publish queue without passing
 brand-specific compliance rules.

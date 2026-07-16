@@ -5,7 +5,7 @@ active roadmap is:
 
 - `docs/multi_brand_refactor_waves_0_3.md`
 
-Wave 0 and Wave 1 are complete. Wave 2 is next.
+Wave 0, Wave 1, and Wave 2 are complete. Wave 3 is next.
 
 ## Current Runtime
 
@@ -22,12 +22,14 @@ Primary generation entrypoint:
 ```powershell
 python content_job.py --brand gloskin --roster roster.json --avatars 2 --posts-per-avatar 2 --placeholder
 python content_job.py --brand vendrarx --spec "founder, 30s, White" --placeholder
+python content_job.py --brand vendrarx --angle "how 503A compounding works" --formats reddit_longform,x_thread,tiktok_script --placeholder
 ```
 
 Copy-only brief flow:
 
 ```powershell
 python generate_briefs.py --brand gloskin --angles angles.txt --out briefs
+python generate_briefs.py --brand vendrarx --angle "how to evaluate a peptide telehealth offer" --formats reddit_longform,x_thread,tiktok_script --out briefs
 python slideshow_maker.py --briefs-dir briefs --out output
 ```
 
@@ -43,11 +45,13 @@ python slideshow_maker.py --briefs-dir briefs --out output
 - `image_router.py` - provider registry for image APIs. Default is OpenAI `gpt-image-1`; `custom` is an HTTP template.
 - `screenshot_factory.py` - personalizes real app screenshots by replacing measured slots. Used only when the selected brand declares templates.
 - `slideshow_maker.py` - renders 1080x1920 slide PNGs and MP4 videos with brand palette/chrome/CTA.
+- `text_formats.py` - renders `reddit.md`, `thread.json`, and `tiktok_script.md` from brand prompts.
 - `api_server.py` + `dashboard.html` - local Flask API and dashboard with brand selector.
 - `manifest.py` - JSON manifest helpers with legacy default-brand fallback.
 - `publish.py` - manual publishing bridge and future API scaffolds.
 - `metrics_refresh.py` / `import_metrics.py` - CSV metrics import and future API scaffolds.
 - `prompts/<brand_id>/` - brand prompt files.
+- `prompts/<brand_id>/formats/` - per-brand format prompts for Reddit, X, and TikTok scripts.
 - `templates/` - real screenshot templates referenced by brand config.
 
 Generated/local artifacts are ignored by Git: `assets/`, `output/`, `posts/`,
@@ -57,7 +61,8 @@ Generated/local artifacts are ignored by Git: `assets/`, `output/`, `posts/`,
 
 Dashboard or CLI inputs:
 
-- brand: `gloskin` by default, `vendrarx` supported in placeholder mode
+- brand: `gloskin` by default, `vendrarx` supported
+- formats: `slideshow`, `reddit_longform`, `x_thread`, `tiktok_script`
 - roster character spec, scores, hooks
 - batch size: avatars and posts per avatar
 - prompt options: opening image style, product prop style
@@ -70,9 +75,10 @@ Pipeline:
 3. If the brand declares a screenshot template, `screenshot_factory.py` composites into the real app screen.
 4. If the brand has no screenshot templates, screenshot slides are skipped and brand-config body slides are used.
 5. `content_job.py` builds an in-memory branded brief.
-6. `slideshow_maker.py` renders branded slide PNGs and MP4.
-7. `content_job.py` packages files under `posts/<brand>/YYYY-MM-DD/<post_id>/`.
-8. `manifest.py` records the post in `posts.json`.
+6. If `slideshow` is requested, `slideshow_maker.py` renders branded slide PNGs and MP4.
+7. If text formats are requested, `text_formats.py` renders `reddit.md`, `thread.json`, and/or `tiktok_script.md`.
+8. `content_job.py` packages files under `posts/<brand>/YYYY-MM-DD/<post_id>/`.
+9. `manifest.py` records the post in `posts.json`.
 
 Packaged post shape:
 
@@ -84,6 +90,9 @@ posts/<brand>/YYYY-MM-DD/<post_id>/
   caption.txt
   brief.json
   post.json
+  reddit.md          # when reddit_longform requested
+  thread.json        # when x_thread requested
+  tiktok_script.md   # when tiktok_script requested
 ```
 
 ## Brand-Specific Locations
@@ -94,6 +103,8 @@ Brand-specific identity now lives in config:
 - `brands/vendrarx.yaml`
 - `prompts/gloskin/`
 - `prompts/vendrarx/`
+- `prompts/gloskin/formats/`
+- `prompts/vendrarx/formats/`
 
 The only intended brand literal in Python is the documented default brand
 constant in `brand_loader.py`; legacy manifest reads default missing `brand` to
@@ -109,6 +120,7 @@ Current `posts.json` records are a list of objects with:
 - `slides`: kind/text summary
 - `assets`: source asset paths such as opening/before/scan/after/product_prop/shot_before/shot_after
 - `outputs`: slides/video paths
+- `outputs.formats`: generated text-native files by format name
 - `caption`
 - `package`: packaged folder paths
 - `variant_of`
@@ -125,6 +137,8 @@ Entries missing `brand` are treated as the default brand on read.
 - Local dashboard can select brand, start runs, preview prompts, preview rendered files, update queue status, mark winners, and import CSV metrics.
 - GloSkin placeholder generation runs with real Scan Results compositing.
 - VendraRx placeholder generation runs without screenshot templates and packages under `posts/vendrarx/...`.
+- VendraRx and GloSkin text-native placeholder runs generate `reddit.md`, `thread.json`, and `tiktok_script.md`.
+- X thread validation rejects any tweet over 275 characters before packaging.
 - OpenAI image route exists for real generation.
 - Manual publish queue works.
 - CSV metrics import works.
@@ -136,10 +150,8 @@ Entries missing `brand` are treated as the default brand on read.
 - Direct metrics API pulls are scaffolded but not implemented.
 - Dreamina provider is deferred.
 - VPS/deploy/scheduler/database/auth are explicitly out of scope for Waves 0-3.
-- Text-native output formats are not implemented yet; see Wave 2.
 - Compliance lint/publish gate is not implemented yet; see Wave 3.
 
 ## Next Work
 
-1. Wave 2: VendraRx brand pack and text-native formats.
-2. Wave 3: compliance linter and publish gate.
+1. Wave 3: compliance linter and publish gate.

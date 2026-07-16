@@ -56,6 +56,9 @@ class Brand:
         value = (self.prompts or {}).get(key)
         return _root_path(value) if value else None
 
+    def format_prompt_path(self, format_name):
+        return ROOT / "prompts" / self.brand_id / "formats" / f"{format_name}.md"
+
     def template_path(self, key):
         item = (self.templates or {}).get(key)
         if isinstance(item, dict):
@@ -127,6 +130,14 @@ def _brand_from_dict(data, source_path):
 
     for key, value in (data.get("prompts") or {}).items():
         _validate_path_exists(brand_id, "prompts", key, value)
+    for format_name in data.get("formats") or []:
+        if format_name != "slideshow":
+            _validate_path_exists(
+                brand_id,
+                "format_prompts",
+                format_name,
+                f"prompts/{brand_id}/formats/{format_name}.md",
+            )
     for key, value in (data.get("assets") or {}).items():
         _validate_path_exists(brand_id, "assets", key, value, allow_missing=(value is None))
     for item in (data.get("templates") or {}).values():

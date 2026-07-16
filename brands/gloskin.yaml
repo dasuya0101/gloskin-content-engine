@@ -40,7 +40,7 @@ accounts:
   instagram: gloskin_main
   facebook: gloskin_main
 
-formats: [slideshow]
+formats: [slideshow, reddit_longform, x_thread, tiktok_script]
 
 templates:
   scan_results:

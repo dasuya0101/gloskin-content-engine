@@ -16,6 +16,7 @@ from pathlib import Path
 
 from brand_loader import DEFAULT_BRAND, load_brand
 from llm_router import complete
+import text_formats as tf
 
 
 SCHEMA_TMPL = """
@@ -24,6 +25,7 @@ Schema:
 {{
   "slug": "snake_case_id",
   "brand": "%(brand_id)s",
+  "formats": %(formats_json)s,
   "slides": [
     {{"kind":"hook","kicker":"2-3 word punchy chip","text":"hook, <=8 words, \\n for line breaks"}},
     {{"kind":"body","text":"<=12 words"}},
@@ -46,7 +48,7 @@ def brand_context(brand):
     ])
 
 
-def load_system_prompt(brand):
+def load_system_prompt(brand, formats):
     copy_path = brand.prompt_path("copy_system")
     if not copy_path:
         raise FileNotFoundError(f"{brand.brand_id} has no copy_system prompt configured")
@@ -58,17 +60,27 @@ def load_system_prompt(brand):
     parts.append(brand_context(brand))
     parts.append(SCHEMA_TMPL % {
         "brand_id": brand.brand_id,
+        "formats_json": json.dumps(formats),
         "button": brand.cta.get("button") or brand.cta.get("text", "Learn more"),
         "subtext": brand.cta.get("subtext", ""),
     })
     return "\n".join(parts)
 
 
-def gen_brief(angle, brand, task="copy_brief"):
-    raw = complete(system=load_system_prompt(brand), user=f"Angle: {angle}", task=task)
+def gen_brief(angle, brand, formats, task="copy_brief"):
+    if "slideshow" not in formats:
+        return {
+            "slug": tf.slugify(angle),
+            "brand": brand.brand_id,
+            "angle": angle,
+            "formats": tf.text_format_names(formats),
+            "slides": [],
+        }
+    raw = complete(system=load_system_prompt(brand, formats), user=f"Angle: {angle}", task=task)
     raw = re.sub(r"^```(?:json)?|```$", "", raw, flags=re.MULTILINE).strip()
     brief = json.loads(raw)
     brief["brand"] = brand.brand_id
+    brief["formats"] = formats
     return brief
 
 
@@ -77,9 +89,11 @@ def main():
     ap.add_argument("--angle")
     ap.add_argument("--angles")
     ap.add_argument("--brand", default=DEFAULT_BRAND)
+    ap.add_argument("--formats", default="slideshow")
     ap.add_argument("--out", default="briefs")
     args = ap.parse_args()
     brand = load_brand(args.brand)
+    formats = tf.parse_formats(args.formats, brand=brand, default=["slideshow"])
 
     if args.angle:
         angles = [args.angle]
@@ -90,7 +104,7 @@ def main():
 
     Path(args.out).mkdir(parents=True, exist_ok=True)
     for angle in angles:
-        brief = gen_brief(angle, brand)
+        brief = gen_brief(angle, brand, formats)
         path = Path(args.out) / f"{brief['slug']}.json"
         json.dump(brief, open(path, "w", encoding="utf-8"), indent=2)
         print(f"[brief] {angle[:50]!r} -> {path}")

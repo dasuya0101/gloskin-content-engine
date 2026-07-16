@@ -408,6 +408,7 @@ def create_run():
     posts_per_avatar = max(1, min(50, int(data.get("posts_per_avatar") or 1)))
     provider = data.get("provider") or os.environ.get("IMAGE_PROVIDER", "openai")
     account = data.get("account") or brand.default_account
+    formats = (data.get("formats") or "slideshow").strip()
     placeholder = bool(data.get("placeholder"))
     spec = (data.get("spec") or "").strip()
     hook = (data.get("hook") or "").strip()
@@ -431,6 +432,7 @@ def create_run():
         "--posts-per-avatar", str(posts_per_avatar),
         "--provider", provider,
         "--account", account,
+        "--formats", formats,
         "--out", root_rel(OUTPUT_DIR),
         "--posts-dir", root_rel(PACKAGE_DIR),
         "--manifest", root_rel(POSTS_FILE),
@@ -464,6 +466,7 @@ def create_run():
             "posts_per_avatar": posts_per_avatar,
             "provider": provider,
             "brand": brand.brand_id,
+            "formats": formats,
             "account": account,
             "placeholder": placeholder,
             "spec": spec or None,
