@@ -9,6 +9,7 @@ deterministic drafts for tests and dashboard dry runs.
 import argparse
 import json
 import re
+import sys
 from pathlib import Path
 
 from brand_loader import DEFAULT_BRAND, load_brand
@@ -118,13 +119,30 @@ def load_system_prompt(brand, format_name):
 def generate_format(brief, brand, format_name, *, placeholder=False):
     if placeholder:
         return placeholder_format(brief, brand, format_name)
-    raw = complete(
-        system=load_system_prompt(brand, format_name),
-        user=brief_context(brief, brand, format_name),
-        task=format_name,
-        max_tokens=1800 if format_name == "reddit_longform" else 1000,
-    )
-    return normalize_format(format_name, raw)
+    system = load_system_prompt(brand, format_name)
+    base_user = brief_context(brief, brand, format_name)
+    user = base_user
+    for attempt in range(1, 4):
+        raw = complete(
+            system=system,
+            user=user,
+            task=format_name,
+            max_tokens=1800 if format_name == "reddit_longform" else 1000,
+        )
+        try:
+            return normalize_format(format_name, raw)
+        except TextFormatError as exc:
+            if attempt == 3:
+                raise
+            print(
+                f"[{format_name}] response failed validation; regenerating "
+                f"({attempt + 1}/3): {exc}",
+                file=sys.stderr,
+            )
+            user = (
+                f"{base_user}\n\nThe previous response failed validation: {exc}. "
+                "Regenerate the complete output and satisfy every format requirement."
+            )
 
 
 def normalize_format(format_name, raw):

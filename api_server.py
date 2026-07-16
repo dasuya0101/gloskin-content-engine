@@ -409,6 +409,9 @@ def create_run():
     provider = data.get("provider") or os.environ.get("IMAGE_PROVIDER", "openai")
     account = data.get("account") or brand.default_account
     formats = (data.get("formats") or "slideshow").strip()
+    format_names = {name.strip() for name in formats.split(",") if name.strip()}
+    requested_formats = set(brand.formats) if "all" in format_names else format_names
+    text_only = "slideshow" not in requested_formats
     placeholder = bool(data.get("placeholder"))
     spec = (data.get("spec") or "").strip()
     hook = (data.get("hook") or "").strip()
@@ -421,6 +424,8 @@ def create_run():
         abort(400, description="invalid opening_style")
     if product_style and product_style not in character_factory.PRODUCT_PROP_PRESETS:
         abort(400, description="invalid product_style")
+    if text_only and not hook:
+        abort(400, description="text-only runs require a hook/angle")
 
     run_id = datetime.now().strftime("%Y%m%d%H%M%S")
     cmd = [
@@ -443,7 +448,9 @@ def create_run():
         cmd += ["--product-style", product_style]
     if product_slide_caption:
         cmd += ["--product-slide-caption", product_slide_caption]
-    if spec:
+    if text_only:
+        cmd += ["--angle", hook]
+    elif spec:
         cmd += [
             "--spec", spec,
             "--before-score", str(before_score),
