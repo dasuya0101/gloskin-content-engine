@@ -22,6 +22,7 @@ FORMAT_FILES = {
     "tiktok_script": "tiktok_script.md",
 }
 SECTION_NAMES = ["HOOK", "BEATS", "CTA", "SHOTLIST"]
+CTA_SENTINEL = "<<CTA>>"
 
 
 class TextFormatError(RuntimeError):
@@ -94,8 +95,7 @@ def brief_context(brief, brand, format_name):
         f"Brand: {brand.display_name}",
         f"Format: {format_name}",
         f"Angle: {brief_angle(brief)}",
-        f"CTA text: {brand.cta.get('text', '')}",
-        f"CTA URL: {brand.cta.get('url', '')}",
+        f"CTA placeholder: {CTA_SENTINEL}",
         f"Voice: {json.dumps(brand.voice)}",
         f"Pillars: {', '.join(brand.pillars)}",
         "Existing slide/copy context:",
@@ -116,9 +116,122 @@ def load_system_prompt(brand, format_name):
     ])
 
 
-def generate_format(brief, brand, format_name, *, placeholder=False):
+def build_cta_url(base_url, platform, tracking_code):
+    # TODO: Append platform UTM parameters and tracking_code here.
+    return str(base_url or "").strip()
+
+
+def build_cta(brand, format_name, tracking_code=None):
+    text = str(brand.cta.get("text") or "").strip()
+    platform = {
+        "reddit_longform": "reddit",
+        "x_thread": "x",
+        "tiktok_script": "tiktok",
+    }.get(format_name, format_name)
+    url = build_cta_url(brand.cta.get("url"), platform, tracking_code)
+    if not text or not url:
+        raise TextFormatError(f"{brand.brand_id} requires cta.text and cta.url")
+    if format_name == "reddit_longform":
+        return f"[{text}]({url})"
+    if format_name == "x_thread":
+        return f"{text}: {url}"
+    if format_name == "tiktok_script":
+        return f"{text} — {url}"
+    raise TextFormatError(f"unknown text format: {format_name}")
+
+
+def _cta_words(value):
+    return [
+        word for word in re.findall(r"[a-z0-9]+", str(value).lower())
+        if word not in {"a", "an", "at", "our", "the", "to", "your"}
+    ]
+
+
+def _looks_like_cta(value, cta_text, cta_url):
+    text = str(value or "").strip()
+    if not text or CTA_SENTINEL in text:
+        return False
+    lowered = text.lower()
+    url = str(cta_url or "").lower().rstrip("/")
+    host = re.sub(r"^https?://", "", url).split("/", 1)[0]
+    if url and (url in lowered.rstrip("/") or host in lowered):
+        return True
+    target_words = set(_cta_words(cta_text))
+    value_words = _cta_words(text)
+    if not target_words or len(value_words) > len(target_words) + 8:
+        return False
+    overlap = len(target_words.intersection(value_words))
+    return overlap >= max(2, len(target_words) - 1)
+
+
+def _canonicalize_reddit(text, canonical, cta_text, cta_url):
+    blocks = re.split(r"\n\s*\n", text.strip())
+    clean = []
+    inserted = False
+    for block in blocks:
+        if CTA_SENTINEL in block:
+            if inserted:
+                block = block.replace(CTA_SENTINEL, "").strip()
+            else:
+                block = block.replace(CTA_SENTINEL, canonical, 1)
+                block = block.replace(CTA_SENTINEL, "").strip()
+                inserted = True
+        elif len(block) <= 300 and _looks_like_cta(block, cta_text, cta_url):
+            continue
+        if block:
+            clean.append(block)
+    if not inserted:
+        clean.append(canonical)
+    return "\n\n".join(clean)
+
+
+def _canonicalize_thread(data, canonical, cta_text, cta_url):
+    tweets = data.get("tweets") if isinstance(data, dict) else None
+    if not isinstance(tweets, list):
+        return data
+    clean = []
+    for tweet in tweets:
+        if not isinstance(tweet, str):
+            clean.append(tweet)
+            continue
+        if CTA_SENTINEL in tweet or _looks_like_cta(tweet, cta_text, cta_url):
+            continue
+        clean.append(tweet)
+    clean.append(canonical)
+    return {**data, "tweets": clean}
+
+
+def _canonicalize_tiktok(text, canonical):
+    text = text.replace(CTA_SENTINEL, "")
+    cta_section = re.compile(
+        r"(?ms)^CTA\s*\n.*?(?=^SHOTLIST\s*$)"
+    )
+    replacement = f"CTA\n{canonical}\n\n"
+    if cta_section.search(text):
+        return cta_section.sub(replacement, text, count=1).strip()
+    shotlist = re.search(r"(?m)^SHOTLIST\s*$", text)
+    if shotlist:
+        return (text[:shotlist.start()].rstrip() + "\n\n" + replacement
+                + text[shotlist.start():]).strip()
+    return text.rstrip() + "\n\n" + replacement.rstrip()
+
+
+def insert_canonical_cta(content, brand, format_name, tracking_code=None):
+    canonical = build_cta(brand, format_name, tracking_code)
+    cta_text = brand.cta.get("text")
+    cta_url = brand.cta.get("url")
+    if format_name == "reddit_longform":
+        return _canonicalize_reddit(content, canonical, cta_text, cta_url)
+    if format_name == "x_thread":
+        return _canonicalize_thread(content, canonical, cta_text, cta_url)
+    if format_name == "tiktok_script":
+        return _canonicalize_tiktok(content, canonical)
+    raise TextFormatError(f"unknown text format: {format_name}")
+
+
+def generate_format(brief, brand, format_name, *, placeholder=False, tracking_code=None):
     if placeholder:
-        return placeholder_format(brief, brand, format_name)
+        return placeholder_format(brief, brand, format_name, tracking_code=tracking_code)
     system = load_system_prompt(brand, format_name)
     base_user = brief_context(brief, brand, format_name)
     user = base_user
@@ -130,7 +243,12 @@ def generate_format(brief, brand, format_name, *, placeholder=False):
             max_tokens=1800 if format_name == "reddit_longform" else 1000,
         )
         try:
-            return normalize_format(format_name, raw)
+            return normalize_format(
+                format_name,
+                raw,
+                brand=brand,
+                tracking_code=tracking_code,
+            )
         except TextFormatError as exc:
             if attempt == 3:
                 raise
@@ -145,18 +263,31 @@ def generate_format(brief, brand, format_name, *, placeholder=False):
             )
 
 
-def normalize_format(format_name, raw):
+def normalize_format(format_name, raw, *, brand=None, tracking_code=None):
     if format_name == "reddit_longform":
-        return validate_reddit(strip_fences(raw))
+        content = strip_fences(raw)
+        if brand:
+            content = insert_canonical_cta(
+                content, brand, format_name, tracking_code)
+        return validate_reddit(content)
     if format_name == "x_thread":
-        text = strip_fences(raw)
-        try:
-            data = json.loads(text)
-        except json.JSONDecodeError as exc:
-            raise TextFormatError(f"x_thread did not return valid JSON: {exc}") from exc
+        if isinstance(raw, dict):
+            data = raw
+        else:
+            text = strip_fences(raw)
+            try:
+                data = json.loads(text)
+            except json.JSONDecodeError as exc:
+                raise TextFormatError(f"x_thread did not return valid JSON: {exc}") from exc
+        if brand:
+            data = insert_canonical_cta(data, brand, format_name, tracking_code)
         return validate_x_thread(data)
     if format_name == "tiktok_script":
-        return validate_tiktok_script(strip_fences(raw))
+        content = strip_fences(raw)
+        if brand:
+            content = insert_canonical_cta(
+                content, brand, format_name, tracking_code)
+        return validate_tiktok_script(content)
     raise TextFormatError(f"unknown text format: {format_name}")
 
 
@@ -201,13 +332,19 @@ def validate_tiktok_script(text):
     return text.rstrip() + "\n"
 
 
-def placeholder_format(brief, brand, format_name):
+def placeholder_format(brief, brand, format_name, *, tracking_code=None):
     if format_name == "reddit_longform":
-        return validate_reddit(placeholder_reddit(brief, brand))
+        return normalize_format(
+            format_name, placeholder_reddit(brief, brand),
+            brand=brand, tracking_code=tracking_code)
     if format_name == "x_thread":
-        return validate_x_thread({"tweets": placeholder_thread(brief, brand)})
+        return normalize_format(
+            format_name, {"tweets": placeholder_thread(brief, brand)},
+            brand=brand, tracking_code=tracking_code)
     if format_name == "tiktok_script":
-        return validate_tiktok_script(placeholder_tiktok_script(brief, brand))
+        return normalize_format(
+            format_name, placeholder_tiktok_script(brief, brand),
+            brand=brand, tracking_code=tracking_code)
     raise TextFormatError(f"unknown text format: {format_name}")
 
 
@@ -221,7 +358,8 @@ def placeholder_reddit(brief, brand):
             "The second filter is sourcing. VendraRx is being built around physician-prescribed protocols and 503A compounding pharmacy partners, not research-use-only vendors. That distinction matters because research peptides sold online are often outside normal patient-specific prescribing and pharmacy controls. Serious care should be boring in the right places: documentation, pharmacy process, lot testing, cold-chain shipping, and follow-up.",
             "The third filter is expectations. Compounded medications are not FDA-approved drugs, and nobody should promise a specific outcome or a guaranteed prescription from a quiz. The quiz should help route people toward a clinician review, and that clinician should be able to say no, pause, or adjust based on the person's history, labs, goals, and risk profile.",
             "A good intake flow should also make disqualification feel normal. Underage patients, pregnancy, active malignancy, certain endocrine situations, medication conflicts, or missing labs can all change the answer. The point of a clinical program is not to push every person through the same funnel. It is to decide who should move forward, who needs more information, and who should be declined or sent elsewhere.",
-            "That is the bar I would use as a patient: not the loudest peptide brand, not the most aggressive claim, and not the fastest checkout. I would look for the group willing to explain the framework, name the caveats, and keep the prescribing decision in a clinician's hands. If that is the kind of access you want, the founding-member quiz is on vendrarx.com.",
+            "That is the bar I would use as a patient: not the loudest peptide brand, not the most aggressive claim, and not the fastest checkout. I would look for the group willing to explain the framework, name the caveats, and keep the prescribing decision in a clinician's hands.",
+            CTA_SENTINEL,
         ]
     else:
         title = "The skincare audit I wish I had done before buying another serum"
@@ -231,7 +369,8 @@ def placeholder_reddit(brief, brand):
             "The helpful part is the audit. You can look at texture, tone, pores, hydration, and progress without pretending that a single screenshot explains your entire skin. You can also scan products you already own, which matters because the cheapest routine upgrade is often using what is already on your shelf in a smarter order.",
             "It also creates a better feedback loop. Instead of changing five things at once and trying to remember what happened, you can keep the routine stable, track progress, and make smaller adjustments. That is less dramatic than buying a viral product, but it is usually more useful. The boring questions matter: are you cleansing too much, skipping moisturizer, doubling up on harsh actives, or missing sunscreen during the day?",
             "I would treat it like a second brain for skincare: useful for pattern spotting, ingredient translation, and routine organization. It should not replace medical care, and it should not promise to cure acne or any skin condition. Results vary. Skin is personal. But a clearer system beats a drawer full of random impulse buys.",
-            "If your routine feels chaotic, the first move is not necessarily another active. It might be a better map of what you are already doing. That is the point of checking your Glo Score and building from there at gloskin.app.",
+            "If your routine feels chaotic, the first move is not necessarily another active. It might be a better map of what you are already doing.",
+            CTA_SENTINEL,
         ]
     return title + "\n\n" + "\n\n".join(paragraphs)
 
@@ -245,7 +384,7 @@ def placeholder_thread(brief, brand):
             "I would also ask where the medication comes from. VendraRx is being built around 503A compounding pharmacy partners, not research-use-only sourcing.",
             "Compounded medications are not FDA-approved. Suitability should be determined by a licensed clinician, and outcomes should not be promised.",
             "The boring parts matter: intake, history, labs when appropriate, cold-chain shipping, COAs, follow-up, and the ability to pause or adjust.",
-            "Founding-member access and the 60-second quiz are at vendrarx.com.",
+            CTA_SENTINEL,
         ]
     return [
         f"{angle}: before buying another serum, audit the routine you already have.",
@@ -253,7 +392,7 @@ def placeholder_thread(brief, brand):
         "The goal is not to promise perfect skin. It is to stop guessing and understand what your products are doing together.",
         "Scan what you own, look for overlap, check the basics, and track what changes over time.",
         "Results vary and this is not medical advice, but a clearer system beats a shelf full of random bottles.",
-        "Check your Glo Score at gloskin.app.",
+        CTA_SENTINEL,
     ]
 
 
@@ -271,10 +410,10 @@ def placeholder_tiktok_script(brief, brand):
             "4. Name the caveat: compounded medications are not FDA-approved and outcomes are not guaranteed.",
             "",
             "CTA",
-            "Take the 60-second quiz for founding-member access at vendrarx.com.",
+            CTA_SENTINEL,
             "",
             "SHOTLIST",
-            "Founder talking to camera; simple text overlays; screenshot of the homepage quiz; desk shot with notes labeled intake, labs, follow-up; end card with vendrarx.com.",
+            "Founder talking to camera; simple text overlays; screenshot of the homepage quiz; desk shot with notes labeled intake, labs, follow-up; simple end card.",
         ])
     return "\n".join([
         "HOOK",
@@ -287,7 +426,7 @@ def placeholder_tiktok_script(brief, brand):
         "4. Build a cleaner routine from what is already there.",
         "",
         "CTA",
-        "Check your Glo Score at gloskin.app.",
+        CTA_SENTINEL,
         "",
         "SHOTLIST",
         "Before selfie; app scan screen; quick product-label closeups; routine checklist overlay; final app CTA screen.",
@@ -305,12 +444,20 @@ def write_format(out_dir, format_name, content):
     return path
 
 
-def render_formats(brief, brand, out_dir, formats, *, placeholder=False):
+def render_formats(
+        brief, brand, out_dir, formats, *, placeholder=False, tracking_code=None):
     outputs = {}
+    tracking_code = tracking_code or brief.get("tracking_code")
     for format_name in text_format_names(formats):
         if format_name not in FORMAT_FILES:
             raise TextFormatError(f"unknown text format: {format_name}")
-        content = generate_format(brief, brand, format_name, placeholder=placeholder)
+        content = generate_format(
+            brief,
+            brand,
+            format_name,
+            placeholder=placeholder,
+            tracking_code=tracking_code,
+        )
         outputs[format_name] = write_format(out_dir, format_name, content)
     return outputs
 
@@ -323,8 +470,48 @@ def selftest():
     else:
         raise TextFormatError("x_thread validator failed to reject a 276-char tweet")
     validate_tiktok_script("HOOK\nA\n\nBEATS\n1. B\n\nCTA\nC\n\nSHOTLIST\nD\n")
-    validate_reddit(placeholder_reddit({"angle": "routine audit"}, load_brand(DEFAULT_BRAND)))
-    print("[ok] text format validators")
+
+    brand = load_brand("vendrarx")
+    brief = {"angle": "evidence review"}
+    model_cta = "Take our 60-second quiz at vendrarx.com."
+    outputs = {
+        "reddit_longform": normalize_format(
+            "reddit_longform",
+            placeholder_reddit(brief, brand).replace(CTA_SENTINEL, model_cta),
+            brand=brand,
+        ),
+        "x_thread": normalize_format(
+            "x_thread",
+            {"tweets": [
+                model_cta if tweet == CTA_SENTINEL else tweet
+                for tweet in placeholder_thread(brief, brand)
+            ]},
+            brand=brand,
+        ),
+        "tiktok_script": normalize_format(
+            "tiktok_script",
+            placeholder_tiktok_script(brief, brand).replace(CTA_SENTINEL, model_cta),
+            brand=brand,
+        ),
+    }
+    for format_name, content in outputs.items():
+        serialized = json.dumps(content) if isinstance(content, dict) else content
+        if serialized.count(brand.cta["text"]) != 1:
+            raise TextFormatError(f"{format_name} must contain cta.text exactly once")
+        if serialized.count(brand.cta["url"]) != 1:
+            raise TextFormatError(f"{format_name} must contain cta.url exactly once")
+        if model_cta in serialized or CTA_SENTINEL in serialized:
+            raise TextFormatError(f"{format_name} retained a model-written CTA")
+    final_tweet = outputs["x_thread"]["tweets"][-1]
+    if len(final_tweet) > 275:
+        raise TextFormatError("canonical X CTA exceeds 275 characters")
+    tiktok_cta = re.search(
+        r"(?ms)^CTA\s*\n(.*?)(?=^SHOTLIST\s*$)",
+        outputs["tiktok_script"],
+    )
+    if not tiktok_cta or brand.cta["url"] not in tiktok_cta.group(1):
+        raise TextFormatError("TikTok CTA section is missing the canonical URL")
+    print("[ok] text format validators and canonical CTAs")
 
 
 def main():

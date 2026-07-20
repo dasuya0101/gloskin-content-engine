@@ -10,6 +10,6 @@ Requirements:
 - Reference truthful features: AI face scan, Glo Score, product scanner,
   routine builder, progress tracking.
 - No medical claims, no cure/treat/prevent language, no guaranteed outcomes.
-- Final tweet may point to gloskin.app.
+- The final tweet must contain only the literal token <<CTA>>; never write CTA text or a URL.
 
 Return only JSON. No markdown, no code fence.
