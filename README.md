@@ -14,7 +14,7 @@ One brief → two outputs:
 ## Current build direction
 
 The current runtime/status handoff is in `BUILD_SPEC.md`. The active refactor
-roadmap is in `docs/multi_brand_refactor_waves_0_3.md`.
+roadmap is in `docs/multi_brand_refactor_waves_0_4.md`.
 
 Short version: `content_job.py` is the generation entrypoint, generated posts are
 stored locally under `posts/<brand>/YYYY-MM-DD/<post_id>/`, publishing is manual

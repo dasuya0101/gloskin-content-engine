@@ -233,13 +233,14 @@ Wave 3 acceptance:
 ```yaml
 brand_id: vendrarx
 display_name: VendraRx
+operational_status: pre_launch
 voice:
   tone: [evidence-forward, direct, operator]
   audience: "optimization/longevity crowd; Reddit/X-native; skeptical of marketing"
   pov: founder
 pillars: [peptide_explainers, research_summaries, telehealth_logistics, build_in_public]
 cta:
-  text: "Join the VendraRx waitlist"
+  text: "Take the 60-second quiz"
   url: "https://vendrarx.com/"
 palette:
   bg: "#F5F0E6"
@@ -272,10 +273,6 @@ compliance:
     - "\\bguaranteed (prescription|results|outcome)\\b"
   review:
     - "\\b(cure|cures|treat|treats|prevent|prevents|heal|heals)\\b"
-  mechanism_claims:
-    BPC-157:
-      - "may support tissue-repair pathways"
-      - "studied for effects on inflammation in animal models"
   required_disclaimers:
     - id: compounded
       applies_to: [reddit_longform, tiktok_script]
@@ -294,3 +291,43 @@ Resolved inputs:
 Still TODO:
 
 - VendraRx account handles for TikTok, X, and Reddit
+
+## Wave 4: Compliance Hardening And Operational Status
+
+Wave 4 moves patternable fabrication checks out of the stochastic judgment
+layer. Layer 1 now catches named mechanisms, research/regulatory years,
+percentages, trial-scale language, and legal conclusions identically across
+formats. A match clears only when it falls inside an exact approved phrase from
+the brief or a relevant compound claim pack. Unapproved mechanism and evidence
+specifics block; legal conclusions use the stricter
+`unapproved_regulatory_claim` rule. The LLM judge remains responsible for
+unpatternable semantic residuals.
+
+Human-authored ground truth lives in `claims/<compound>.yaml`. Packs provide
+exact `evidence_claims`, `mechanism_claims`, `regulatory_claims`, and
+`disallowed_claims`, plus aliases used to select the pack from an angle. The
+generator injects relevant packs into the brief. With no pack, specific claims
+are unavailable and copy must stay qualitative. Disallowed claims hard-block.
+
+Brand config now carries `operational_status: pre_launch | live`. VendraRx is
+`pre_launch`. At that status, generated clinical-model copy must use explicit
+design, building, or launch framing. Bare present-tense care-delivery claims
+route to review. Changing the config to `live` clears present-tense framing;
+other compliance rules remain active.
+
+Compliance rewrites now replace violating detail with useful qualitative copy
+at a supplied length target. Each full rewrite is normalized and validated;
+format or Reddit length failures regenerate up to the existing three-attempt
+cap. A post is never accepted with an invalid short rewrite.
+
+Wave 4 acceptance:
+
+- `python compliance_lint.py --selftest` covers all Layer 1 pattern families,
+  exact and missing pack membership, disallowed claims, and pre-launch/live
+  operational framing.
+- Batch angles 6, 7, 8, 10, 11, and 12 are regenerated through all three text
+  formats and linted in `acceptance/vendrarx_wave4_rerun/`.
+- The acceptance report compares the new distribution with the Wave 3 subset,
+  records initial deterministic catches even when a rewrite succeeds, and
+  confirms there are no `rewrite_render_error` violations.
+- No publishing or compliance override is part of Wave 4.

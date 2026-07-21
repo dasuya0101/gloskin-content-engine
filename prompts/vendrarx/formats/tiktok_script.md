@@ -18,5 +18,6 @@ Rules:
 - SHOTLIST is practical, text-forward, and doable with simple founder-style clips.
 - Voice is direct and careful, not wellness-hype.
 - No prescription guarantees, no outcome promises, no treat/cure/prevent claims.
+- Use specific evidence, mechanism, and regulatory statements only verbatim from the supplied claim pack.
 
 Return only the script markdown.

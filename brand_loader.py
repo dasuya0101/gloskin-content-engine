@@ -41,6 +41,7 @@ class Brand:
     testimonial: dict
     caption: dict
     tracking: dict
+    operational_status: str
     source_path: Path
 
     @property
@@ -127,6 +128,11 @@ def _brand_from_dict(data, source_path):
     ]
     _validate_required(data, brand_id, required)
     _validate_hex_colors(brand_id, data.get("palette") or {})
+    operational_status = data.get("operational_status", "pre_launch")
+    if operational_status not in {"pre_launch", "live"}:
+        raise BrandConfigError(
+            f"brands/{brand_id}.yaml operational_status must be pre_launch or live"
+        )
 
     for key, value in (data.get("prompts") or {}).items():
         _validate_path_exists(brand_id, "prompts", key, value)
@@ -171,6 +177,7 @@ def _brand_from_dict(data, source_path):
         testimonial=data["testimonial"] or {},
         caption=data["caption"] or {},
         tracking=data["tracking"] or {},
+        operational_status=operational_status,
         source_path=source_path,
     )
 
@@ -199,6 +206,7 @@ def brand_summary(brand):
         "formats": brand.formats,
         "templates": list((brand.templates or {}).keys()),
         "has_image_prompts": bool(brand.prompts.get("image_character")),
+        "operational_status": brand.operational_status,
     }
 
 

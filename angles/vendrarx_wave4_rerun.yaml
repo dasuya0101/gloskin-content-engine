@@ -1,0 +1,21 @@
+brand: vendrarx
+formats: [reddit_longform, x_thread, tiktok_script]
+angles:
+  - id: 6
+    pillar: research_summaries
+    angle: "NAD+ precursors vs injections — what human trials actually show"
+  - id: 7
+    pillar: research_summaries
+    angle: "Sermorelin and secretagogues vs direct GH — why the category exists"
+  - id: 8
+    pillar: research_summaries
+    angle: "GLP-1s beyond weight loss — cardiovascular + addiction-signal research, framed cautiously"
+  - id: 10
+    pillar: peptide_explainers
+    angle: "How GLP-1 agonists actually work — satiety signaling + gastric emptying, plain English"
+  - id: 11
+    pillar: peptide_explainers
+    angle: "Why peptides are injected — oral bioavailability, SNAC tech, what that implies about peptide pills"
+  - id: 12
+    pillar: peptide_explainers
+    angle: "GHK-Cu topical vs injected — where evidence exists and where it's thin"

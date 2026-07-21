@@ -1,0 +1,198 @@
+{
+  "post_id": "1ebfb476ae1e",
+  "brand": "vendrarx",
+  "created_at": "2026-07-21T13:18:03",
+  "format": "text_native",
+  "character": {},
+  "hook": "NAD+ precursors vs injections \u2014 what human trials actually show",
+  "slides": [],
+  "assets": {},
+  "outputs": {
+    "formats": {
+      "reddit_longform": "acceptance/vendrarx_wave4_rerun/packages/vendrarx/2026-07-21/1ebfb476ae1e/reddit.md",
+      "x_thread": "acceptance/vendrarx_wave4_rerun/packages/vendrarx/2026-07-21/1ebfb476ae1e/thread.json",
+      "tiktok_script": "acceptance/vendrarx_wave4_rerun/packages/vendrarx/2026-07-21/1ebfb476ae1e/tiktok_script.md"
+    },
+    "reddit_longform": "acceptance/vendrarx_wave4_rerun/packages/vendrarx/2026-07-21/1ebfb476ae1e/reddit.md",
+    "x_thread": "acceptance/vendrarx_wave4_rerun/packages/vendrarx/2026-07-21/1ebfb476ae1e/thread.json",
+    "tiktok_script": "acceptance/vendrarx_wave4_rerun/packages/vendrarx/2026-07-21/1ebfb476ae1e/tiktok_script.md"
+  },
+  "caption": "NAD+ precursors vs injections \u2014 what human trials actually show\n\nTake the 60-second quiz.\n\nEducational only. Not medical advice. Compounded medications are not FDA-approved. Suitability is determined by a licensed clinician.\n\nTracking: vendra_20260721131803_01_01",
+  "package": {
+    "dir": "acceptance/vendrarx_wave4_rerun/packages/vendrarx/2026-07-21/1ebfb476ae1e",
+    "slides_dir": null,
+    "video": null,
+    "caption": "acceptance/vendrarx_wave4_rerun/packages/vendrarx/2026-07-21/1ebfb476ae1e/caption.txt",
+    "brief": "acceptance/vendrarx_wave4_rerun/packages/vendrarx/2026-07-21/1ebfb476ae1e/brief.json",
+    "assets_dir": null,
+    "assets": {},
+    "metadata": "acceptance/vendrarx_wave4_rerun/packages/vendrarx/2026-07-21/1ebfb476ae1e/post.json",
+    "formats": {
+      "reddit_longform": "acceptance/vendrarx_wave4_rerun/packages/vendrarx/2026-07-21/1ebfb476ae1e/reddit.md",
+      "x_thread": "acceptance/vendrarx_wave4_rerun/packages/vendrarx/2026-07-21/1ebfb476ae1e/thread.json",
+      "tiktok_script": "acceptance/vendrarx_wave4_rerun/packages/vendrarx/2026-07-21/1ebfb476ae1e/tiktok_script.md"
+    }
+  },
+  "variant_of": null,
+  "tracking_code": "vendra_20260721131803_01_01",
+  "publish": {
+    "platform": null,
+    "account": null,
+    "url": null,
+    "posted_at": null
+  },
+  "publish_queue": {
+    "status": "needs_edit",
+    "target_account": "TODO",
+    "notes": null,
+    "updated_at": "2026-07-21T13:31:06"
+  },
+  "compliance": {
+    "status": "needs_review",
+    "violations": [
+      {
+        "text": "The conversation around NAD+ supplementation often includes oral precursors like NMN and NR alongside injectable NAD+.",
+        "rule": "unsourced_mechanism",
+        "severity": "block",
+        "layer1_rule": "named_mechanism",
+        "output": "reddit_longform"
+      },
+      {
+        "text": "For NMN, the evidence in humans is sparse and mostly preliminary, with much of the available information coming from early-stage research that has not yet established clear effects in people.",
+        "rule": "unsourced_mechanism",
+        "severity": "block",
+        "layer1_rule": "named_mechanism",
+        "output": "reddit_longform"
+      },
+      {
+        "text": "Injectable NAD+ avoids some questions related to oral absorption, but it introduces other unknowns.",
+        "rule": "unsourced_mechanism",
+        "severity": "block",
+        "layer1_rule": "named_mechanism",
+        "output": "reddit_longform"
+      },
+      {
+        "text": "Compounded NAD+ therapies are not FDA-approved medications. Suitability is determined case-by-case by licensed clinicians. We avoid promising outcomes or guaranteed prescriptions, focusing instead on responsible, evidence-informed care.",
+        "rule": "unverifiable_operational_claim",
+        "severity": "warn",
+        "output": "x_thread"
+      }
+    ],
+    "checked_at": "2026-07-21T13:31:06",
+    "outputs": {
+      "reddit_longform": {
+        "status": "needs_review",
+        "violations": [
+          {
+            "text": "The conversation around NAD+ supplementation often includes oral precursors like NMN and NR alongside injectable NAD+.",
+            "rule": "unsourced_mechanism",
+            "severity": "block",
+            "layer1_rule": "named_mechanism"
+          },
+          {
+            "text": "For NMN, the evidence in humans is sparse and mostly preliminary, with much of the available information coming from early-stage research that has not yet established clear effects in people.",
+            "rule": "unsourced_mechanism",
+            "severity": "block",
+            "layer1_rule": "named_mechanism"
+          },
+          {
+            "text": "Injectable NAD+ avoids some questions related to oral absorption, but it introduces other unknowns.",
+            "rule": "unsourced_mechanism",
+            "severity": "block",
+            "layer1_rule": "named_mechanism"
+          }
+        ],
+        "checked_at": "2026-07-21T13:26:40",
+        "candidates": [
+          {
+            "text": "The conversation around NAD+ supplementation often includes oral precursors like NMN and NR alongside injectable NAD+.",
+            "match": "NMN",
+            "start": 148,
+            "end": 151,
+            "rule": "named_mechanism",
+            "pattern": "\\b(?:receptors?|agonists?|antagonists?|signaling|pathways?|modulation of|angiogenesis|growth factors?|IGF-?1|pituitary|satiety|gastric emptying|mitochondri(?:a|al)|sirtuins?|electron transport|redox|ATP|NADH|NMN|nicotinamide riboside|SNAC|semaglutide|tirzepatide|ipamorelin|tesamorelin|GHRH|GHRPs?|feedback loops?|fibroblasts?|collagen|inflammation|tissue repair|skin barrier|absorption|bioavailability|degrad(?:es?|ation)|safety profile|extracellular matrix|gene expression|dopamine|reward pathways?|stimulat(?:es?|ing).{0,40}(?:GH|growth hormone|production)|(?:suppress|increase|raise|lower|reduce).{0,40}(?:GH|growth hormone|inflammation|NAD\\+|collagen|production))\\b"
+          },
+          {
+            "text": "For NMN, the evidence in humans is sparse and mostly preliminary, with much of the available information coming from early-stage research that has not yet established clear effects in people.",
+            "match": "NMN",
+            "start": 951,
+            "end": 954,
+            "rule": "named_mechanism",
+            "pattern": "\\b(?:receptors?|agonists?|antagonists?|signaling|pathways?|modulation of|angiogenesis|growth factors?|IGF-?1|pituitary|satiety|gastric emptying|mitochondri(?:a|al)|sirtuins?|electron transport|redox|ATP|NADH|NMN|nicotinamide riboside|SNAC|semaglutide|tirzepatide|ipamorelin|tesamorelin|GHRH|GHRPs?|feedback loops?|fibroblasts?|collagen|inflammation|tissue repair|skin barrier|absorption|bioavailability|degrad(?:es?|ation)|safety profile|extracellular matrix|gene expression|dopamine|reward pathways?|stimulat(?:es?|ing).{0,40}(?:GH|growth hormone|production)|(?:suppress|increase|raise|lower|reduce).{0,40}(?:GH|growth hormone|inflammation|NAD\\+|collagen|production))\\b"
+          },
+          {
+            "text": "Injectable NAD+ avoids some questions related to oral absorption, but it introduces other unknowns.",
+            "match": "absorption",
+            "start": 1334,
+            "end": 1344,
+            "rule": "named_mechanism",
+            "pattern": "\\b(?:receptors?|agonists?|antagonists?|signaling|pathways?|modulation of|angiogenesis|growth factors?|IGF-?1|pituitary|satiety|gastric emptying|mitochondri(?:a|al)|sirtuins?|electron transport|redox|ATP|NADH|NMN|nicotinamide riboside|SNAC|semaglutide|tirzepatide|ipamorelin|tesamorelin|GHRH|GHRPs?|feedback loops?|fibroblasts?|collagen|inflammation|tissue repair|skin barrier|absorption|bioavailability|degrad(?:es?|ation)|safety profile|extracellular matrix|gene expression|dopamine|reward pathways?|stimulat(?:es?|ing).{0,40}(?:GH|growth hormone|production)|(?:suppress|increase|raise|lower|reduce).{0,40}(?:GH|growth hormone|inflammation|NAD\\+|collagen|production))\\b"
+          }
+        ],
+        "notes": [],
+        "suggested_rewrite": "",
+        "rewrite_attempted": true,
+        "initial_violations": [
+          {
+            "text": "If you follow the NAD+ space, you\u2019ve likely encountered various claims about oral precursors like NMN and NR versus injectable NAD+.",
+            "rule": "unsourced_mechanism",
+            "severity": "block",
+            "layer1_rule": "named_mechanism"
+          },
+          {
+            "text": "For NMN, human data is even more preliminary, with much of the available information coming from animal studies that don\u2019t always translate well to humans.",
+            "rule": "unsourced_mechanism",
+            "severity": "block",
+            "layer1_rule": "named_mechanism"
+          },
+          {
+            "text": "Injectable NAD+ bypasses the question of absorption but brings other uncertainties.",
+            "rule": "unsourced_mechanism",
+            "severity": "block",
+            "layer1_rule": "named_mechanism"
+          }
+        ]
+      },
+      "x_thread": {
+        "status": "needs_review",
+        "violations": [
+          {
+            "text": "Compounded NAD+ therapies are not FDA-approved medications. Suitability is determined case-by-case by licensed clinicians. We avoid promising outcomes or guaranteed prescriptions, focusing instead on responsible, evidence-informed care.",
+            "rule": "unverifiable_operational_claim",
+            "severity": "warn"
+          }
+        ],
+        "checked_at": "2026-07-21T13:31:06",
+        "candidates": [],
+        "notes": [
+          "context-cleared Layer-2 violation: We're building a practice focused on transparent, evidence-forward peptide therapy.",
+          "context-cleared Layer-2 violation: We're designing care around this reality.",
+          "context-cleared Layer-2 violation: Our model routes patients to physician-supervised, 503A-compounded therapies with no research peptides. Labs and follow-up are included when clinically appropriate. This is not a refill mill but a clinical review process."
+        ],
+        "suggested_rewrite": "{\"tweets\": [\"NAD+ precursors and injections are often discussed without clear human data context. Many marketing claims skip over the actual evidence available.\", \"Human data on NAD+ precursors is limited and mixed. The research that's out there points to uncertainty about effects and clinical relevance.\", \"For NAD+ injections, human evidence is very sparse and preliminary. Most available data comes from small or uncontrolled studies, often industry-funded. Animal biology doesn't reliably translate to humans.\", \"Compounded NAD+ therapies are not FDA-approved medications.\", \"Take the 60-second quiz: https://vendrarx.com/?utm_source=twitter&utm_campaign=vendra_20260721131803_01_01\"]}",
+        "rewrite_attempted": false
+      },
+      "tiktok_script": {
+        "status": "pass",
+        "violations": [],
+        "checked_at": "2026-07-21T13:26:51",
+        "candidates": [],
+        "notes": [
+          "context-cleared Layer-2 violation: We\u2019re building a practice that routes treatment decisions through licensed clinical review first."
+        ],
+        "suggested_rewrite": "HOOK  \n\"NAD+ precursors and injections \u2014 here\u2019s what the evidence actually looks like.\"\n\nBEATS  \n1. Most NAD+ research comes from animal studies, which don\u2019t always translate to humans.  \n2. Human data on NAD+ precursors is limited and mostly preliminary.  \n3. Available studies tend to be small and short-term, so conclusions are cautious.  \n4. There aren\u2019t large, well-controlled trials directly comparing delivery methods yet.  \n\nCompounded medications are prepared by licensed pharmacies and are not FDA-approved. Individual suitability is determined by a licensed clinician.\n\nCTA\nTake the 60-second quiz \u2014 https://vendrarx.com/?utm_source=tiktok&utm_campaign=vendra_20260721131803_01_01\n\nSHOTLIST  \n- Founder speaking directly to camera (hook)  \n- Text overlay: \u201cAnimal studies don\u2019t equal human results\u201d  \n- Visual: side-by-side of supplement bottle and injection vial (no claims)  \n- End frame: simple text \u201cVendraRx \u2014 clinically supervised peptide therapy\u201d\n",
+        "rewrite_attempted": false
+      }
+    }
+  },
+  "metrics": {
+    "views": null,
+    "likes": null,
+    "shares": null,
+    "saves": null,
+    "ctr": null,
+    "installs": null,
+    "updated_at": null
+  },
+  "is_winner": null
+}

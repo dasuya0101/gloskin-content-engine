@@ -1,0 +1,48 @@
+[usage] openrouter openai/gpt-4.1-mini {"prompt_tokens": 904, "completion_tokens": 44, "total_tokens": 948, "cost": 0.000432}
+[usage] openrouter openai/gpt-4.1-mini {"prompt_tokens": 901, "completion_tokens": 41, "total_tokens": 942, "cost": 0.000426}
+[usage] openrouter openai/gpt-4.1-mini {"prompt_tokens": 897, "completion_tokens": 37, "total_tokens": 934, "cost": 0.000418}
+[usage] openrouter openai/gpt-4.1-mini {"prompt_tokens": 963, "completion_tokens": 41, "total_tokens": 1004, "cost": 0.0004508}
+[usage] openrouter openai/gpt-4.1-mini {"prompt_tokens": 965, "completion_tokens": 33, "total_tokens": 998, "cost": 0.0004388}
+[usage] openrouter openai/gpt-4.1-mini {"prompt_tokens": 901, "completion_tokens": 17, "total_tokens": 918, "cost": 0.0003876}
+[usage] openrouter openai/gpt-4.1-mini {"prompt_tokens": 1171, "completion_tokens": 17, "total_tokens": 1188, "cost": 0.0001884}
+[usage] openrouter openai/gpt-4.1-mini {"prompt_tokens": 1217, "completion_tokens": 50, "total_tokens": 1267, "cost": 0.0002596}
+[usage] openrouter openai/gpt-4.1-mini {"prompt_tokens": 1196, "completion_tokens": 42, "total_tokens": 1238, "cost": 0.0002384}
+[usage] openrouter openai/gpt-4.1-mini {"prompt_tokens": 904, "completion_tokens": 45, "total_tokens": 949, "cost": 0.0004336}
+[usage] openrouter openai/gpt-4.1-mini {"prompt_tokens": 1195, "completion_tokens": 49, "total_tokens": 1244, "cost": 0.0002492}
+[usage] openrouter openai/gpt-4.1-mini {"prompt_tokens": 963, "completion_tokens": 17, "total_tokens": 980, "cost": 0.0004124}
+[usage] openrouter openai/gpt-4.1-mini {"prompt_tokens": 962, "completion_tokens": 17, "total_tokens": 979, "cost": 0.000412}
+[usage] openrouter openai/gpt-4.1-mini {"prompt_tokens": 915, "completion_tokens": 17, "total_tokens": 932, "cost": 0.0003932}
+[usage] openrouter openai/gpt-4.1-mini {"prompt_tokens": 599, "completion_tokens": 43, "total_tokens": 642, "cost": 0.0003084}
+[usage] openrouter openai/gpt-4.1-mini {"prompt_tokens": 541, "completion_tokens": 52, "total_tokens": 593, "cost": 0.0002996}
+[usage] openrouter openai/gpt-4.1-mini {"prompt_tokens": 548, "completion_tokens": 42, "total_tokens": 590, "cost": 0.0002864}
+[usage] openrouter openai/gpt-4.1-mini {"prompt_tokens": 537, "completion_tokens": 22, "total_tokens": 559, "cost": 0.00025}
+[usage] openrouter openai/gpt-4.1-mini {"prompt_tokens": 546, "completion_tokens": 17, "total_tokens": 563, "cost": 0.0002456}
+[PASS] frozen_research_months: expected=fail actual=fail
+[PASS] frozen_research_bpc: expected=fail actual=fail
+[PASS] frozen_mechanism_growth: expected=fail actual=fail
+[PASS] frozen_mechanism_inflammation: expected=fail actual=fail
+[PASS] frozen_operations: expected=needs_review actual=needs_review
+[PASS] vendra_guaranteed_rx: expected=fail actual=fail
+[PASS] vendra_heals: expected=fail actual=fail
+[PASS] vendra_animal_caveat: expected=pass actual=pass
+[PASS] vendra_allowlisted_mechanism: expected=pass actual=pass
+[PASS] wave4_named_mechanism: expected=fail actual=fail
+[PASS] wave4_research_year: expected=fail actual=fail
+[PASS] wave4_percentage: expected=fail actual=fail
+[PASS] wave4_trial_scale: expected=fail actual=fail
+[PASS] wave4_legal_conclusion: expected=fail actual=fail
+[PASS] wave4_claim_pack_exact_clear: expected=pass actual=pass
+[PASS] wave4_claim_pack_nonmember: expected=fail actual=fail
+[PASS] wave4_claim_pack_disallowed: expected=fail actual=fail
+[PASS] wave4_prelaunch_present_operation: expected=needs_review actual=needs_review
+[PASS] wave4_prelaunch_design_operation: expected=pass actual=pass
+[PASS] wave4_live_present_operation: expected=pass actual=pass
+[PASS] vendra_debunk_cure: expected=pass actual=pass
+[PASS] vendra_disclaims_heal: expected=pass actual=pass
+[PASS] vendra_required_disclaimer: expected=pass actual=pass
+[PASS] glo_cures_acne: expected=fail actual=fail
+[PASS] glo_undisclosed_affiliate: expected=fail actual=fail
+[PASS] glo_unlabeled_avatar: expected=fail actual=fail
+[PASS] glo_appearance_claim: expected=pass actual=pass
+[PASS] glo_disclosed_affiliate: expected=pass actual=pass
+[ok] 28 compliance seed cases

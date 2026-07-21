@@ -1,0 +1,313 @@
+{
+  "post_id": "60face2246e4",
+  "brand": "vendrarx",
+  "created_at": "2026-07-21T13:22:34",
+  "format": "text_native",
+  "character": {},
+  "hook": "Why peptides are injected \u2014 oral bioavailability, SNAC tech, what that implies about peptide pills",
+  "slides": [],
+  "assets": {},
+  "outputs": {
+    "formats": {
+      "reddit_longform": "acceptance/vendrarx_wave4_rerun/packages/vendrarx/2026-07-21/60face2246e4/reddit.md",
+      "x_thread": "acceptance/vendrarx_wave4_rerun/packages/vendrarx/2026-07-21/60face2246e4/thread.json",
+      "tiktok_script": "acceptance/vendrarx_wave4_rerun/packages/vendrarx/2026-07-21/60face2246e4/tiktok_script.md"
+    },
+    "reddit_longform": "acceptance/vendrarx_wave4_rerun/packages/vendrarx/2026-07-21/60face2246e4/reddit.md",
+    "x_thread": "acceptance/vendrarx_wave4_rerun/packages/vendrarx/2026-07-21/60face2246e4/thread.json",
+    "tiktok_script": "acceptance/vendrarx_wave4_rerun/packages/vendrarx/2026-07-21/60face2246e4/tiktok_script.md"
+  },
+  "caption": "Why peptides are injected \u2014 oral bioavailability, SNAC tech, what that implies about peptide pills\n\nTake the 60-second quiz.\n\nEducational only. Not medical advice. Compounded medications are not FDA-approved. Suitability is determined by a licensed clinician.\n\nTracking: vendra_20260721132234_01_01",
+  "package": {
+    "dir": "acceptance/vendrarx_wave4_rerun/packages/vendrarx/2026-07-21/60face2246e4",
+    "slides_dir": null,
+    "video": null,
+    "caption": "acceptance/vendrarx_wave4_rerun/packages/vendrarx/2026-07-21/60face2246e4/caption.txt",
+    "brief": "acceptance/vendrarx_wave4_rerun/packages/vendrarx/2026-07-21/60face2246e4/brief.json",
+    "assets_dir": null,
+    "assets": {},
+    "metadata": "acceptance/vendrarx_wave4_rerun/packages/vendrarx/2026-07-21/60face2246e4/post.json",
+    "formats": {
+      "reddit_longform": "acceptance/vendrarx_wave4_rerun/packages/vendrarx/2026-07-21/60face2246e4/reddit.md",
+      "x_thread": "acceptance/vendrarx_wave4_rerun/packages/vendrarx/2026-07-21/60face2246e4/thread.json",
+      "tiktok_script": "acceptance/vendrarx_wave4_rerun/packages/vendrarx/2026-07-21/60face2246e4/tiktok_script.md"
+    }
+  },
+  "variant_of": null,
+  "tracking_code": "vendra_20260721132234_01_01",
+  "publish": {
+    "platform": null,
+    "account": null,
+    "url": null,
+    "posted_at": null
+  },
+  "publish_queue": {
+    "status": "needs_edit",
+    "target_account": "TODO",
+    "notes": null,
+    "updated_at": "2026-07-21T13:28:33"
+  },
+  "compliance": {
+    "status": "needs_review",
+    "violations": [
+      {
+        "text": "Because of these factors, many oral peptide products have limited evidence supporting their absorption and systemic availability in humans.",
+        "rule": "unsourced_mechanism",
+        "severity": "block",
+        "layer1_rule": "named_mechanism",
+        "output": "reddit_longform"
+      },
+      {
+        "text": "Without proven delivery technologies or absorption enhancers, oral peptides are unlikely to reach effective levels in the bloodstream.",
+        "rule": "unsourced_mechanism",
+        "severity": "block",
+        "layer1_rule": "named_mechanism",
+        "output": "reddit_longform"
+      },
+      {
+        "text": "- Does the product use validated methods to enhance absorption or protect the peptide through digestion?",
+        "rule": "unsourced_mechanism",
+        "severity": "block",
+        "layer1_rule": "named_mechanism",
+        "output": "reddit_longform"
+      },
+      {
+        "text": "Without such methods, absorption is probably minimal.",
+        "rule": "unsourced_mechanism",
+        "severity": "block",
+        "layer1_rule": "named_mechanism",
+        "output": "reddit_longform"
+      },
+      {
+        "text": "Low-dose oral peptides without absorption support are unlikely to have systemic effects.",
+        "rule": "unsourced_mechanism",
+        "severity": "block",
+        "layer1_rule": "named_mechanism",
+        "output": "reddit_longform"
+      },
+      {
+        "text": "{\"tweets\": [\"Peptides are typically injected because delivering them orally presents challenges that can affect their clinical use compared to injections.\", \"Peptides taken orally may face barriers that influence how much active compound reaches systemic circulation, which can impact their overall effectiveness.\", \"Various approaches exist to improve oral peptide formulations, but their success can vary depending on the specific peptide and how it\u2019s prepared.\", \"Despite formulation advances, oral peptides often encounter variability in absorption and metabolism that can influence the amount of active peptide available.\", \"While some peptides might be suitable for oral delivery, many require injection to support consistent clinical use, reflecting the complexity of peptide therapies.\", \"We're building a practice where US-licensed clinicians review each case to determine appropriate peptide options and delivery methods.",
+        "rule": "unsourced_mechanism",
+        "severity": "block",
+        "layer1_rule": "named_mechanism",
+        "output": "x_thread"
+      }
+    ],
+    "checked_at": "2026-07-21T13:28:33",
+    "outputs": {
+      "reddit_longform": {
+        "status": "needs_review",
+        "violations": [
+          {
+            "text": "Because of these factors, many oral peptide products have limited evidence supporting their absorption and systemic availability in humans.",
+            "rule": "unsourced_mechanism",
+            "severity": "block",
+            "layer1_rule": "named_mechanism"
+          },
+          {
+            "text": "Without proven delivery technologies or absorption enhancers, oral peptides are unlikely to reach effective levels in the bloodstream.",
+            "rule": "unsourced_mechanism",
+            "severity": "block",
+            "layer1_rule": "named_mechanism"
+          },
+          {
+            "text": "- Does the product use validated methods to enhance absorption or protect the peptide through digestion?",
+            "rule": "unsourced_mechanism",
+            "severity": "block",
+            "layer1_rule": "named_mechanism"
+          },
+          {
+            "text": "Without such methods, absorption is probably minimal.",
+            "rule": "unsourced_mechanism",
+            "severity": "block",
+            "layer1_rule": "named_mechanism"
+          },
+          {
+            "text": "Low-dose oral peptides without absorption support are unlikely to have systemic effects.",
+            "rule": "unsourced_mechanism",
+            "severity": "block",
+            "layer1_rule": "named_mechanism"
+          }
+        ],
+        "checked_at": "2026-07-21T13:28:20",
+        "candidates": [
+          {
+            "text": "Because of these factors, many oral peptide products have limited evidence supporting their absorption and systemic availability in humans.",
+            "match": "absorption",
+            "start": 922,
+            "end": 932,
+            "rule": "named_mechanism",
+            "pattern": "\\b(?:receptors?|agonists?|antagonists?|signaling|pathways?|modulation of|angiogenesis|growth factors?|IGF-?1|pituitary|satiety|gastric emptying|mitochondri(?:a|al)|sirtuins?|electron transport|redox|ATP|NADH|NMN|nicotinamide riboside|SNAC|semaglutide|tirzepatide|ipamorelin|tesamorelin|GHRH|GHRPs?|feedback loops?|fibroblasts?|collagen|inflammation|tissue repair|skin barrier|absorption|bioavailability|degrad(?:es?|ation)|safety profile|extracellular matrix|gene expression|dopamine|reward pathways?|stimulat(?:es?|ing).{0,40}(?:GH|growth hormone|production)|(?:suppress|increase|raise|lower|reduce).{0,40}(?:GH|growth hormone|inflammation|NAD\\+|collagen|production))\\b"
+          },
+          {
+            "text": "Without proven delivery technologies or absorption enhancers, oral peptides are unlikely to reach effective levels in the bloodstream.",
+            "match": "absorption",
+            "start": 1151,
+            "end": 1161,
+            "rule": "named_mechanism",
+            "pattern": "\\b(?:receptors?|agonists?|antagonists?|signaling|pathways?|modulation of|angiogenesis|growth factors?|IGF-?1|pituitary|satiety|gastric emptying|mitochondri(?:a|al)|sirtuins?|electron transport|redox|ATP|NADH|NMN|nicotinamide riboside|SNAC|semaglutide|tirzepatide|ipamorelin|tesamorelin|GHRH|GHRPs?|feedback loops?|fibroblasts?|collagen|inflammation|tissue repair|skin barrier|absorption|bioavailability|degrad(?:es?|ation)|safety profile|extracellular matrix|gene expression|dopamine|reward pathways?|stimulat(?:es?|ing).{0,40}(?:GH|growth hormone|production)|(?:suppress|increase|raise|lower|reduce).{0,40}(?:GH|growth hormone|inflammation|NAD\\+|collagen|production))\\b"
+          },
+          {
+            "text": "- Does the product use validated methods to enhance absorption or protect the peptide through digestion?",
+            "match": "absorption",
+            "start": 1497,
+            "end": 1507,
+            "rule": "named_mechanism",
+            "pattern": "\\b(?:receptors?|agonists?|antagonists?|signaling|pathways?|modulation of|angiogenesis|growth factors?|IGF-?1|pituitary|satiety|gastric emptying|mitochondri(?:a|al)|sirtuins?|electron transport|redox|ATP|NADH|NMN|nicotinamide riboside|SNAC|semaglutide|tirzepatide|ipamorelin|tesamorelin|GHRH|GHRPs?|feedback loops?|fibroblasts?|collagen|inflammation|tissue repair|skin barrier|absorption|bioavailability|degrad(?:es?|ation)|safety profile|extracellular matrix|gene expression|dopamine|reward pathways?|stimulat(?:es?|ing).{0,40}(?:GH|growth hormone|production)|(?:suppress|increase|raise|lower|reduce).{0,40}(?:GH|growth hormone|inflammation|NAD\\+|collagen|production))\\b"
+          },
+          {
+            "text": "Without such methods, absorption is probably minimal.",
+            "match": "absorption",
+            "start": 1572,
+            "end": 1582,
+            "rule": "named_mechanism",
+            "pattern": "\\b(?:receptors?|agonists?|antagonists?|signaling|pathways?|modulation of|angiogenesis|growth factors?|IGF-?1|pituitary|satiety|gastric emptying|mitochondri(?:a|al)|sirtuins?|electron transport|redox|ATP|NADH|NMN|nicotinamide riboside|SNAC|semaglutide|tirzepatide|ipamorelin|tesamorelin|GHRH|GHRPs?|feedback loops?|fibroblasts?|collagen|inflammation|tissue repair|skin barrier|absorption|bioavailability|degrad(?:es?|ation)|safety profile|extracellular matrix|gene expression|dopamine|reward pathways?|stimulat(?:es?|ing).{0,40}(?:GH|growth hormone|production)|(?:suppress|increase|raise|lower|reduce).{0,40}(?:GH|growth hormone|inflammation|NAD\\+|collagen|production))\\b"
+          },
+          {
+            "text": "Low-dose oral peptides without absorption support are unlikely to have systemic effects.",
+            "match": "absorption",
+            "start": 1728,
+            "end": 1738,
+            "rule": "named_mechanism",
+            "pattern": "\\b(?:receptors?|agonists?|antagonists?|signaling|pathways?|modulation of|angiogenesis|growth factors?|IGF-?1|pituitary|satiety|gastric emptying|mitochondri(?:a|al)|sirtuins?|electron transport|redox|ATP|NADH|NMN|nicotinamide riboside|SNAC|semaglutide|tirzepatide|ipamorelin|tesamorelin|GHRH|GHRPs?|feedback loops?|fibroblasts?|collagen|inflammation|tissue repair|skin barrier|absorption|bioavailability|degrad(?:es?|ation)|safety profile|extracellular matrix|gene expression|dopamine|reward pathways?|stimulat(?:es?|ing).{0,40}(?:GH|growth hormone|production)|(?:suppress|increase|raise|lower|reduce).{0,40}(?:GH|growth hormone|inflammation|NAD\\+|collagen|production))\\b"
+          }
+        ],
+        "notes": [],
+        "suggested_rewrite": "",
+        "rewrite_attempted": true,
+        "initial_violations": [
+          {
+            "text": "**Why Peptides Are Injected \u2014 The Bioavailability Problem and What That Means for Pills**",
+            "rule": "unsourced_mechanism",
+            "severity": "block",
+            "layer1_rule": "named_mechanism"
+          },
+          {
+            "text": "**Poor intestinal absorption**\u2014even if a peptide survives digestion, it often can\u2019t cross the gut barrier effectively.",
+            "rule": "unsourced_mechanism",
+            "severity": "block",
+            "layer1_rule": "named_mechanism"
+          },
+          {
+            "text": "Most oral peptides have very low bioavailability.",
+            "rule": "unsourced_mechanism",
+            "severity": "block",
+            "layer1_rule": "named_mechanism"
+          },
+          {
+            "text": "There are some specialized formulations designed to improve oral peptide absorption, but these are the exception rather than the rule.",
+            "rule": "unsourced_mechanism",
+            "severity": "block",
+            "layer1_rule": "named_mechanism"
+          },
+          {
+            "text": "Most oral peptide products on the market lack robust evidence showing meaningful absorption in humans.",
+            "rule": "unsourced_mechanism",
+            "severity": "block",
+            "layer1_rule": "named_mechanism"
+          },
+          {
+            "text": "Without validated absorption enhancers or delivery technologies, oral peptides are likely broken down in the gut and never reach effective levels in the bloodstream.",
+            "rule": "unsourced_mechanism",
+            "severity": "block",
+            "layer1_rule": "named_mechanism"
+          },
+          {
+            "text": "- **Is there published human data on its bioavailability?** Many \u201coral peptide\u201d supplements have none or only preliminary data.",
+            "rule": "unsourced_mechanism",
+            "severity": "block",
+            "layer1_rule": "named_mechanism"
+          },
+          {
+            "text": "- **Does it use a validated absorption enhancer or delivery technology?** Without this, the peptide is unlikely to be absorbed effectively.",
+            "rule": "unsourced_mechanism",
+            "severity": "block",
+            "layer1_rule": "named_mechanism"
+          }
+        ]
+      },
+      "x_thread": {
+        "status": "needs_review",
+        "violations": [
+          {
+            "text": "{\"tweets\": [\"Peptides are typically injected because delivering them orally presents challenges that can affect their clinical use compared to injections.\", \"Peptides taken orally may face barriers that influence how much active compound reaches systemic circulation, which can impact their overall effectiveness.\", \"Various approaches exist to improve oral peptide formulations, but their success can vary depending on the specific peptide and how it\u2019s prepared.\", \"Despite formulation advances, oral peptides often encounter variability in absorption and metabolism that can influence the amount of active peptide available.\", \"While some peptides might be suitable for oral delivery, many require injection to support consistent clinical use, reflecting the complexity of peptide therapies.\", \"We're building a practice where US-licensed clinicians review each case to determine appropriate peptide options and delivery methods.",
+            "rule": "unsourced_mechanism",
+            "severity": "block",
+            "layer1_rule": "named_mechanism"
+          }
+        ],
+        "checked_at": "2026-07-21T13:28:23",
+        "candidates": [
+          {
+            "text": "{\"tweets\": [\"Peptides are typically injected because delivering them orally presents challenges that can affect their clinical use compared to injections.\", \"Peptides taken orally may face barriers that influence how much active compound reaches systemic circulation, which can impact their overall effectiveness.\", \"Various approaches exist to improve oral peptide formulations, but their success can vary depending on the specific peptide and how it\u2019s prepared.\", \"Despite formulation advances, oral peptides often encounter variability in absorption and metabolism that can influence the amount of active peptide available.\", \"While some peptides might be suitable for oral delivery, many require injection to support consistent clinical use, reflecting the complexity of peptide therapies.\", \"We're building a practice where US-licensed clinicians review each case to determine appropriate peptide options and delivery methods.",
+            "match": "absorption",
+            "start": 542,
+            "end": 552,
+            "rule": "named_mechanism",
+            "pattern": "\\b(?:receptors?|agonists?|antagonists?|signaling|pathways?|modulation of|angiogenesis|growth factors?|IGF-?1|pituitary|satiety|gastric emptying|mitochondri(?:a|al)|sirtuins?|electron transport|redox|ATP|NADH|NMN|nicotinamide riboside|SNAC|semaglutide|tirzepatide|ipamorelin|tesamorelin|GHRH|GHRPs?|feedback loops?|fibroblasts?|collagen|inflammation|tissue repair|skin barrier|absorption|bioavailability|degrad(?:es?|ation)|safety profile|extracellular matrix|gene expression|dopamine|reward pathways?|stimulat(?:es?|ing).{0,40}(?:GH|growth hormone|production)|(?:suppress|increase|raise|lower|reduce).{0,40}(?:GH|growth hormone|inflammation|NAD\\+|collagen|production))\\b"
+          },
+          {
+            "text": "{\"tweets\": [\"Peptides are typically injected because delivering them orally presents challenges that can affect their clinical use compared to injections.\", \"Peptides taken orally may face barriers that influence how much active compound reaches systemic circulation, which can impact their overall effectiveness.\", \"Various approaches exist to improve oral peptide formulations, but their success can vary depending on the specific peptide and how it\u2019s prepared.\", \"Despite formulation advances, oral peptides often encounter variability in absorption and metabolism that can influence the amount of active peptide available.\", \"While some peptides might be suitable for oral delivery, many require injection to support consistent clinical use, reflecting the complexity of peptide therapies.\", \"We're building a practice where US-licensed clinicians review each case to determine appropriate peptide options and delivery methods. Our model routes prescriptions through 503A-compounded pharmacies with labs and follow-up.\", \"Take the 60-second quiz: https://vendrarx.com/?utm_source=twitter&utm_campaign=vendra_20260721132234_01_01\"]}",
+            "match": "each case to determine appropriate peptide options and delivery methods. Our model routes",
+            "start": 859,
+            "end": 948,
+            "rule": "present_tense_care_model",
+            "pattern": "\\b(?:(?:VendraRx|we|our practice) (?:works?|partners?|sources?|prescribes?|provides?|monitors?|orders?|reviews?|uses?)|(?:every|each) (?:case|patient).{0,80}(?:routes?|goes|is reviewed|gets reviewed)|(?:every|all) protocols?.{0,60}(?:start|begin).{0,40}(?:clinician|physician)|our (?:clinicians?|physicians?) (?:review|prescribe|monitor)|medications?.{0,50}(?:come from|comes from|are sourced|are compounded))\\b"
+          }
+        ],
+        "notes": [],
+        "suggested_rewrite": "",
+        "rewrite_attempted": true,
+        "initial_violations": [
+          {
+            "text": "Oral bioavailability is a known challenge that affects how peptide pills may work compared to injections.\", \"The digestive system breaks peptides down before absorption, limiting how much intact peptide reaches the bloodstream.",
+            "rule": "unsourced_mechanism",
+            "severity": "block",
+            "layer1_rule": "named_mechanism"
+          },
+          {
+            "text": "This is why oral peptide effectiveness can be limited.\", \"Various technologies aim to improve oral peptide stability, but their effectiveness can vary widely depending on the peptide and formulation.\", \"Even with advances, oral peptides face challenges like variable absorption and metabolism that can affect how much active peptide is available.\", \"Some peptides may be suitable for oral delivery, but many require injection to achieve consistent clinical effects.",
+            "rule": "unsourced_mechanism",
+            "severity": "block",
+            "layer1_rule": "named_mechanism"
+          }
+        ]
+      },
+      "tiktok_script": {
+        "status": "pass",
+        "violations": [],
+        "checked_at": "2026-07-21T13:28:33",
+        "candidates": [],
+        "notes": [
+          "context-cleared Layer-2 violation: We're building a practice that routes peptides the right way: clinically supervised, with clear sourcing and realistic delivery methods."
+        ],
+        "suggested_rewrite": "HOOK\n\"Why do most peptides need to be injected? Here\u2019s what the evidence shows.\"\n\nBEATS\n1. Oral peptides face significant challenges because they often don\u2019t remain intact through digestion.  \n2. Injection routes bypass the digestive system, allowing peptides to reach the body more directly.  \n3. Many oral peptide products may not deliver active peptides in a form that works as intended.  \n4. The research on oral peptide effectiveness is limited and still developing.  \n5. We are developing approaches to peptide delivery that consider clinical supervision, sourcing, and delivery methods.\nCompounded medications are prepared by licensed pharmacies and are not FDA-approved. Individual suitability is determined by a licensed clinician.\n\nCTA\nTake the 60-second quiz \u2014 https://vendrarx.com/?utm_source=tiktok&utm_campaign=vendra_20260721132234_01_01\n\nSHOTLIST\n- Hook: Direct to camera, holding an empty vial or syringe  \n- B-roll: Simple text overlay explaining digestion challenges without naming mechanisms  \n- Cut: Side-by-side of a generic pill bottle and an injection vial with a \u201c?\u201d graphic  \n- Closing shot: Direct to camera, \u201cWe\u2019re building this right\u201d with clinic setup b-roll\n",
+        "rewrite_attempted": true,
+        "initial_violations": [
+          {
+            "text": "Let's talk bioavailability.",
+            "rule": "unsourced_mechanism",
+            "severity": "block",
+            "layer1_rule": "named_mechanism"
+          },
+          {
+            "text": "Most peptides get destroyed in your gut if taken orally \u2014 stomach acid breaks them down before absorption.",
+            "rule": "unsourced_mechanism",
+            "severity": "block",
+            "layer1_rule": "named_mechanism"
+          }
+        ]
+      }
+    }
+  },
+  "metrics": {
+    "views": null,
+    "likes": null,
+    "shares": null,
+    "saves": null,
+    "ctr": null,
+    "installs": null,
+    "updated_at": null
+  },
+  "is_winner": null
+}

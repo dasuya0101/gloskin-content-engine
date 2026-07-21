@@ -1,0 +1,202 @@
+{
+  "post_id": "17ea087dc598",
+  "brand": "vendrarx",
+  "created_at": "2026-07-21T13:20:22",
+  "format": "text_native",
+  "character": {},
+  "hook": "GLP-1s beyond weight loss \u2014 cardiovascular + addiction-signal research, framed cautiously",
+  "slides": [],
+  "assets": {},
+  "outputs": {
+    "formats": {
+      "reddit_longform": "acceptance/vendrarx_wave4_rerun/packages/vendrarx/2026-07-21/17ea087dc598/reddit.md",
+      "x_thread": "acceptance/vendrarx_wave4_rerun/packages/vendrarx/2026-07-21/17ea087dc598/thread.json",
+      "tiktok_script": "acceptance/vendrarx_wave4_rerun/packages/vendrarx/2026-07-21/17ea087dc598/tiktok_script.md"
+    },
+    "reddit_longform": "acceptance/vendrarx_wave4_rerun/packages/vendrarx/2026-07-21/17ea087dc598/reddit.md",
+    "x_thread": "acceptance/vendrarx_wave4_rerun/packages/vendrarx/2026-07-21/17ea087dc598/thread.json",
+    "tiktok_script": "acceptance/vendrarx_wave4_rerun/packages/vendrarx/2026-07-21/17ea087dc598/tiktok_script.md"
+  },
+  "caption": "GLP-1s beyond weight loss \u2014 cardiovascular + addiction-signal research, framed cautiously\n\nTake the 60-second quiz.\n\nEducational only. Not medical advice. Compounded medications are not FDA-approved. Suitability is determined by a licensed clinician.\n\nTracking: vendra_20260721132022_01_01",
+  "package": {
+    "dir": "acceptance/vendrarx_wave4_rerun/packages/vendrarx/2026-07-21/17ea087dc598",
+    "slides_dir": null,
+    "video": null,
+    "caption": "acceptance/vendrarx_wave4_rerun/packages/vendrarx/2026-07-21/17ea087dc598/caption.txt",
+    "brief": "acceptance/vendrarx_wave4_rerun/packages/vendrarx/2026-07-21/17ea087dc598/brief.json",
+    "assets_dir": null,
+    "assets": {},
+    "metadata": "acceptance/vendrarx_wave4_rerun/packages/vendrarx/2026-07-21/17ea087dc598/post.json",
+    "formats": {
+      "reddit_longform": "acceptance/vendrarx_wave4_rerun/packages/vendrarx/2026-07-21/17ea087dc598/reddit.md",
+      "x_thread": "acceptance/vendrarx_wave4_rerun/packages/vendrarx/2026-07-21/17ea087dc598/thread.json",
+      "tiktok_script": "acceptance/vendrarx_wave4_rerun/packages/vendrarx/2026-07-21/17ea087dc598/tiktok_script.md"
+    }
+  },
+  "variant_of": null,
+  "tracking_code": "vendra_20260721132022_01_01",
+  "publish": {
+    "platform": null,
+    "account": null,
+    "url": null,
+    "posted_at": null
+  },
+  "publish_queue": {
+    "status": "needs_edit",
+    "target_account": "TODO",
+    "notes": null,
+    "updated_at": "2026-07-21T13:27:55"
+  },
+  "compliance": {
+    "status": "needs_review",
+    "violations": [
+      {
+        "text": "GLP-1 receptor agonists have established roles in weight management, but there are also early-stage signals in other areas that deserve cautious attention.",
+        "rule": "unsourced_mechanism",
+        "severity": "block",
+        "layer1_rule": "named_mechanism",
+        "output": "reddit_longform"
+      },
+      {
+        "text": "{\"tweets\": [\"GLP-1 agonists like semaglutide are primarily known for their role in weight management.",
+        "rule": "unsourced_mechanism",
+        "severity": "block",
+        "layer1_rule": "named_mechanism",
+        "output": "x_thread"
+      },
+      {
+        "text": "The research landscape includes various exploratory areas, but current evidence remains preliminary and should be interpreted with caution.\", \"Some clinical reports mention changes observed during GLP-1 agonist use, but the underlying biological processes are not well understood and need more investigation.\", \"Early human data suggest possible effects on behavior, though these findings are preliminary and not definitive.\", \"It\u2019s important to note that much of the evidence comes from studies not designed to assess these specific outcomes, and animal research may not reliably translate to humans.\", \"We\u2019re building a practice where US-licensed physicians asynchronously review cases, prescribing 503A-compounded peptides with labs and follow-up when clinically appropriate\u2014no research peptides or refill mills.\", \"Take the 60-second quiz: https://vendrarx.com/?utm_source=twitter&utm_campaign=vendra_20260721132022_01_01\"]}",
+        "rule": "unsourced_mechanism",
+        "severity": "block",
+        "layer1_rule": "named_mechanism",
+        "output": "x_thread"
+      }
+    ],
+    "checked_at": "2026-07-21T13:27:55",
+    "outputs": {
+      "reddit_longform": {
+        "status": "needs_review",
+        "violations": [
+          {
+            "text": "GLP-1 receptor agonists have established roles in weight management, but there are also early-stage signals in other areas that deserve cautious attention.",
+            "rule": "unsourced_mechanism",
+            "severity": "block",
+            "layer1_rule": "named_mechanism"
+          }
+        ],
+        "checked_at": "2026-07-21T13:27:44",
+        "candidates": [
+          {
+            "text": "GLP-1 receptor agonists have established roles in weight management, but there are also early-stage signals in other areas that deserve cautious attention.",
+            "match": "receptor",
+            "start": 234,
+            "end": 242,
+            "rule": "named_mechanism",
+            "pattern": "\\b(?:receptors?|agonists?|antagonists?|signaling|pathways?|modulation of|angiogenesis|growth factors?|IGF-?1|pituitary|satiety|gastric emptying|mitochondri(?:a|al)|sirtuins?|electron transport|redox|ATP|NADH|NMN|nicotinamide riboside|SNAC|semaglutide|tirzepatide|ipamorelin|tesamorelin|GHRH|GHRPs?|feedback loops?|fibroblasts?|collagen|inflammation|tissue repair|skin barrier|absorption|bioavailability|degrad(?:es?|ation)|safety profile|extracellular matrix|gene expression|dopamine|reward pathways?|stimulat(?:es?|ing).{0,40}(?:GH|growth hormone|production)|(?:suppress|increase|raise|lower|reduce).{0,40}(?:GH|growth hormone|inflammation|NAD\\+|collagen|production))\\b"
+          },
+          {
+            "text": "GLP-1 receptor agonists have established roles in weight management, but there are also early-stage signals in other areas that deserve cautious attention.",
+            "match": "agonists",
+            "start": 243,
+            "end": 251,
+            "rule": "named_mechanism",
+            "pattern": "\\b(?:receptors?|agonists?|antagonists?|signaling|pathways?|modulation of|angiogenesis|growth factors?|IGF-?1|pituitary|satiety|gastric emptying|mitochondri(?:a|al)|sirtuins?|electron transport|redox|ATP|NADH|NMN|nicotinamide riboside|SNAC|semaglutide|tirzepatide|ipamorelin|tesamorelin|GHRH|GHRPs?|feedback loops?|fibroblasts?|collagen|inflammation|tissue repair|skin barrier|absorption|bioavailability|degrad(?:es?|ation)|safety profile|extracellular matrix|gene expression|dopamine|reward pathways?|stimulat(?:es?|ing).{0,40}(?:GH|growth hormone|production)|(?:suppress|increase|raise|lower|reduce).{0,40}(?:GH|growth hormone|inflammation|NAD\\+|collagen|production))\\b"
+          }
+        ],
+        "notes": [],
+        "suggested_rewrite": "",
+        "rewrite_attempted": true,
+        "initial_violations": [
+          {
+            "text": "There\u2019s growing interest in GLP-1s (glucagon-like peptide-1 receptor agonists) for effects beyond weight management, including possible cardiovascular and behavioral impacts.",
+            "rule": "unsourced_mechanism",
+            "severity": "block",
+            "layer1_rule": "named_mechanism"
+          }
+        ]
+      },
+      "x_thread": {
+        "status": "needs_review",
+        "violations": [
+          {
+            "text": "{\"tweets\": [\"GLP-1 agonists like semaglutide are primarily known for their role in weight management.",
+            "rule": "unsourced_mechanism",
+            "severity": "block",
+            "layer1_rule": "named_mechanism"
+          },
+          {
+            "text": "The research landscape includes various exploratory areas, but current evidence remains preliminary and should be interpreted with caution.\", \"Some clinical reports mention changes observed during GLP-1 agonist use, but the underlying biological processes are not well understood and need more investigation.\", \"Early human data suggest possible effects on behavior, though these findings are preliminary and not definitive.\", \"It\u2019s important to note that much of the evidence comes from studies not designed to assess these specific outcomes, and animal research may not reliably translate to humans.\", \"We\u2019re building a practice where US-licensed physicians asynchronously review cases, prescribing 503A-compounded peptides with labs and follow-up when clinically appropriate\u2014no research peptides or refill mills.\", \"Take the 60-second quiz: https://vendrarx.com/?utm_source=twitter&utm_campaign=vendra_20260721132022_01_01\"]}",
+            "rule": "unsourced_mechanism",
+            "severity": "block",
+            "layer1_rule": "named_mechanism"
+          }
+        ],
+        "checked_at": "2026-07-21T13:27:49",
+        "candidates": [
+          {
+            "text": "{\"tweets\": [\"GLP-1 agonists like semaglutide are primarily known for their role in weight management.",
+            "match": "agonists",
+            "start": 19,
+            "end": 27,
+            "rule": "named_mechanism",
+            "pattern": "\\b(?:receptors?|agonists?|antagonists?|signaling|pathways?|modulation of|angiogenesis|growth factors?|IGF-?1|pituitary|satiety|gastric emptying|mitochondri(?:a|al)|sirtuins?|electron transport|redox|ATP|NADH|NMN|nicotinamide riboside|SNAC|semaglutide|tirzepatide|ipamorelin|tesamorelin|GHRH|GHRPs?|feedback loops?|fibroblasts?|collagen|inflammation|tissue repair|skin barrier|absorption|bioavailability|degrad(?:es?|ation)|safety profile|extracellular matrix|gene expression|dopamine|reward pathways?|stimulat(?:es?|ing).{0,40}(?:GH|growth hormone|production)|(?:suppress|increase|raise|lower|reduce).{0,40}(?:GH|growth hormone|inflammation|NAD\\+|collagen|production))\\b"
+          },
+          {
+            "text": "{\"tweets\": [\"GLP-1 agonists like semaglutide are primarily known for their role in weight management.",
+            "match": "semaglutide",
+            "start": 33,
+            "end": 44,
+            "rule": "named_mechanism",
+            "pattern": "\\b(?:receptors?|agonists?|antagonists?|signaling|pathways?|modulation of|angiogenesis|growth factors?|IGF-?1|pituitary|satiety|gastric emptying|mitochondri(?:a|al)|sirtuins?|electron transport|redox|ATP|NADH|NMN|nicotinamide riboside|SNAC|semaglutide|tirzepatide|ipamorelin|tesamorelin|GHRH|GHRPs?|feedback loops?|fibroblasts?|collagen|inflammation|tissue repair|skin barrier|absorption|bioavailability|degrad(?:es?|ation)|safety profile|extracellular matrix|gene expression|dopamine|reward pathways?|stimulat(?:es?|ing).{0,40}(?:GH|growth hormone|production)|(?:suppress|increase|raise|lower|reduce).{0,40}(?:GH|growth hormone|inflammation|NAD\\+|collagen|production))\\b"
+          },
+          {
+            "text": "The research landscape includes various exploratory areas, but current evidence remains preliminary and should be interpreted with caution.\", \"Some clinical reports mention changes observed during GLP-1 agonist use, but the underlying biological processes are not well understood and need more investigation.\", \"Early human data suggest possible effects on behavior, though these findings are preliminary and not definitive.\", \"It\u2019s important to note that much of the evidence comes from studies not designed to assess these specific outcomes, and animal research may not reliably translate to humans.\", \"We\u2019re building a practice where US-licensed physicians asynchronously review cases, prescribing 503A-compounded peptides with labs and follow-up when clinically appropriate\u2014no research peptides or refill mills.\", \"Take the 60-second quiz: https://vendrarx.com/?utm_source=twitter&utm_campaign=vendra_20260721132022_01_01\"]}",
+            "match": "agonist",
+            "start": 305,
+            "end": 312,
+            "rule": "named_mechanism",
+            "pattern": "\\b(?:receptors?|agonists?|antagonists?|signaling|pathways?|modulation of|angiogenesis|growth factors?|IGF-?1|pituitary|satiety|gastric emptying|mitochondri(?:a|al)|sirtuins?|electron transport|redox|ATP|NADH|NMN|nicotinamide riboside|SNAC|semaglutide|tirzepatide|ipamorelin|tesamorelin|GHRH|GHRPs?|feedback loops?|fibroblasts?|collagen|inflammation|tissue repair|skin barrier|absorption|bioavailability|degrad(?:es?|ation)|safety profile|extracellular matrix|gene expression|dopamine|reward pathways?|stimulat(?:es?|ing).{0,40}(?:GH|growth hormone|production)|(?:suppress|increase|raise|lower|reduce).{0,40}(?:GH|growth hormone|inflammation|NAD\\+|collagen|production))\\b"
+          }
+        ],
+        "notes": [],
+        "suggested_rewrite": "",
+        "rewrite_attempted": true,
+        "initial_violations": [
+          {
+            "text": "{\"tweets\": [\"GLP-1 agonists like semaglutide are known for weight management, but ongoing research is exploring a range of potential effects beyond that.",
+            "rule": "unsourced_mechanism",
+            "severity": "block",
+            "layer1_rule": "named_mechanism"
+          },
+          {
+            "text": "Here\u2019s a cautious look at what the evidence currently suggests.\", \"Some clinical observations note cardiovascular changes during GLP-1 agonist use, though the exact biological processes remain unclear and require further study.\", \"Preliminary human data hints at possible influences on reward-related behaviors, but these findings are early and not yet conclusive.\", \"It\u2019s important to remember these findings come from studies not primarily designed for these outcomes, and animal research doesn\u2019t always translate to humans reliably.\", \"Our model is building a practice where US-licensed physicians review each case asynchronously, prescribing 503A-compounded peptides with labs and follow-up when clinically appropriate\u2014no research peptides or refill mills.\", \"Take the 60-second quiz: https://vendrarx.com/?utm_source=twitter&utm_campaign=vendra_20260721132022_01_01\"]}",
+            "rule": "unsourced_mechanism",
+            "severity": "block",
+            "layer1_rule": "named_mechanism"
+          }
+        ]
+      },
+      "tiktok_script": {
+        "status": "pass",
+        "violations": [],
+        "checked_at": "2026-07-21T13:27:55",
+        "candidates": [],
+        "notes": [
+          "context-cleared Layer-2 violation: We\u2019re building a practice to explore clinically supervised peptide use \u2014 no hype, just evidence-forward care."
+        ],
+        "suggested_rewrite": "HOOK  \n\"GLP-1s might do more than just weight loss \u2014 here\u2019s what the research signals.\"\n\nBEATS  \n1. Most GLP-1 discussion focuses on weight loss, but early studies hint at broader effects.  \n2. Some human trials show cardiovascular risk reduction \u2014 though we still need larger, longer studies.  \n3. Research is still very preliminary on other potential effects beyond weight and heart health.  \n4. Key caveat: rodent studies don\u2019t always translate to humans, and we\u2019re still mapping mechanisms.  \n5. Clinical oversight is planned to explore peptide use \u2014 no hype, just evidence-forward care.\nCompounded medications are prepared by licensed pharmacies and are not FDA-approved. Individual suitability is determined by a licensed clinician.\n\nCTA\nTake the 60-second quiz \u2014 https://vendrarx.com/?utm_source=tiktok&utm_campaign=vendra_20260721132022_01_01\n\nSHOTLIST  \n- Hook: direct-to-camera, lab coat optional  \n- Beat 1: text overlay \"Beyond weight loss?\" with stock footage of medical research  \n- Beat 2: simple animated graph rising/falling for \"cardiovascular risk\"  \n- Beat 3: text slide \"Preliminary research only\" with neutral medical imagery  \n- Beat 4: split-screen rodent/human silhouettes with \"Translation unclear\"  \n- Beat 5: founder-style clip at desk with \"Building serious clinical oversight\" text\n",
+        "rewrite_attempted": false
+      }
+    }
+  },
+  "metrics": {
+    "views": null,
+    "likes": null,
+    "shares": null,
+    "saves": null,
+    "ctr": null,
+    "installs": null,
+    "updated_at": null
+  },
+  "is_winner": null
+}

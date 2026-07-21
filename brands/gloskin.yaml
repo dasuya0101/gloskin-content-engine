@@ -1,5 +1,6 @@
 brand_id: gloskin
 display_name: GloSkin
+operational_status: live
 
 voice:
   tone: [punchy, self-aware, skincare-native]

@@ -1,0 +1,105 @@
+{
+  "post_id": "88e95d2dd79a",
+  "brand": "vendrarx",
+  "created_at": "2026-07-21T13:23:47",
+  "format": "text_native",
+  "character": {},
+  "hook": "GHK-Cu topical vs injected \u2014 where evidence exists and where it's thin",
+  "slides": [],
+  "assets": {},
+  "outputs": {
+    "formats": {
+      "reddit_longform": "acceptance/vendrarx_wave4_rerun/packages/vendrarx/2026-07-21/88e95d2dd79a/reddit.md",
+      "x_thread": "acceptance/vendrarx_wave4_rerun/packages/vendrarx/2026-07-21/88e95d2dd79a/thread.json",
+      "tiktok_script": "acceptance/vendrarx_wave4_rerun/packages/vendrarx/2026-07-21/88e95d2dd79a/tiktok_script.md"
+    },
+    "reddit_longform": "acceptance/vendrarx_wave4_rerun/packages/vendrarx/2026-07-21/88e95d2dd79a/reddit.md",
+    "x_thread": "acceptance/vendrarx_wave4_rerun/packages/vendrarx/2026-07-21/88e95d2dd79a/thread.json",
+    "tiktok_script": "acceptance/vendrarx_wave4_rerun/packages/vendrarx/2026-07-21/88e95d2dd79a/tiktok_script.md"
+  },
+  "caption": "GHK-Cu topical vs injected \u2014 where evidence exists and where it's thin\n\nTake the 60-second quiz.\n\nEducational only. Not medical advice. Compounded medications are not FDA-approved. Suitability is determined by a licensed clinician.\n\nTracking: vendra_20260721132347_01_01",
+  "package": {
+    "dir": "acceptance/vendrarx_wave4_rerun/packages/vendrarx/2026-07-21/88e95d2dd79a",
+    "slides_dir": null,
+    "video": null,
+    "caption": "acceptance/vendrarx_wave4_rerun/packages/vendrarx/2026-07-21/88e95d2dd79a/caption.txt",
+    "brief": "acceptance/vendrarx_wave4_rerun/packages/vendrarx/2026-07-21/88e95d2dd79a/brief.json",
+    "assets_dir": null,
+    "assets": {},
+    "metadata": "acceptance/vendrarx_wave4_rerun/packages/vendrarx/2026-07-21/88e95d2dd79a/post.json",
+    "formats": {
+      "reddit_longform": "acceptance/vendrarx_wave4_rerun/packages/vendrarx/2026-07-21/88e95d2dd79a/reddit.md",
+      "x_thread": "acceptance/vendrarx_wave4_rerun/packages/vendrarx/2026-07-21/88e95d2dd79a/thread.json",
+      "tiktok_script": "acceptance/vendrarx_wave4_rerun/packages/vendrarx/2026-07-21/88e95d2dd79a/tiktok_script.md"
+    }
+  },
+  "variant_of": null,
+  "tracking_code": "vendra_20260721132347_01_01",
+  "publish": {
+    "platform": null,
+    "account": null,
+    "url": null,
+    "posted_at": null
+  },
+  "publish_queue": {
+    "status": "ready_to_post",
+    "target_account": "TODO",
+    "notes": null,
+    "updated_at": "2026-07-21T13:31:32"
+  },
+  "compliance": {
+    "status": "pass",
+    "violations": [],
+    "checked_at": "2026-07-21T13:31:32",
+    "outputs": {
+      "reddit_longform": {
+        "status": "pass",
+        "violations": [],
+        "checked_at": "2026-07-21T13:31:18",
+        "candidates": [],
+        "notes": [
+          "context-cleared Layer-2 violation: clinician review will determine whether peptide therapy is appropriate on a case-by-case basis",
+          "context-cleared Layer-2 violation: Compounding will be done under 503A pharmacy regulations",
+          "context-cleared Layer-2 violation: Labs and follow-up when clinically appropriate",
+          "context-cleared Layer-2 violation: clinician oversight is essential\u2014this is not a DIY compound",
+          "context-cleared Layer-2 violation: We\u2019re building a model that routes these decisions through actual medical review\u2014no chatbot protocols, no refill mills"
+        ],
+        "suggested_rewrite": "**GHK-Cu: What We Actually Know About Topical vs. Injected**\n\nIf you\u2019ve spent any time in peptide circles, you\u2019ve seen the debate: *Should GHK-Cu be applied topically or injected?* The answer isn\u2019t as clear-cut as some vendors or broscience threads make it seem. Here\u2019s where the evidence stands\u2014and where it doesn\u2019t.\n\n### **Topical GHK-Cu: The Skin-Deep Evidence**  \nMost of the available information about GHK-Cu involves topical use, often aimed at skin-related applications. The evidence supporting topical use is mostly preclinical, with limited human data available. This means that while some early findings suggest potential localized effects, the overall clinical picture remains uncertain.\n\nThat said:  \n- **Human data is limited.** Much of the support comes from laboratory or animal studies, which don\u2019t always translate directly to human outcomes.  \n- **Product formulation matters.** The way topical products are made\u2014including ingredients and other factors\u2014can influence how the peptide behaves on the skin, but detailed evidence on this is sparse.  \n- **Robust clinical trials are lacking.** The enthusiasm around topical GHK-Cu often exceeds the strength of the evidence.\n\n### **Injected GHK-Cu: The Unknowns**  \nInjecting GHK-Cu for systemic effects is an area with very little solid data. While some anecdotal reports suggest possible benefits, the scientific literature does not provide clear guidance on this use.\n\nKey points to consider:  \n- **Pharmacokinetics are not well understood.** We lack detailed information on how GHK-Cu behaves in the body when injected, including how long it stays active and where it distributes.  \n- **Safety data is mostly anecdotal.** Some users report mild side effects, but formal safety evaluations in humans are not available.  \n- **Mechanistic explanations are speculative.** Claims about systemic benefits are not supported by established mechanisms or clinical evidence.\n\n### **The Regulatory Reality**  \nGHK-Cu is not FDA-approved for any medical use. Compounded medications are prepared by licensed pharmacies and are not FDA-approved. Suitability is always determined by a licensed clinician.\n\n### **The Bottom Line**  \nIf you\u2019re considering GHK-Cu topically for skin health, there is some preclinical rationale but limited human data, so manage expectations accordingly. If you\u2019re thinking about injections for systemic effects, the evidence is very sparse and mostly anecdotal.\n\n\n\nCompounded medications are prepared by licensed pharmacies and are not FDA-approved. Individual suitability is determined by a licensed clinician.\n\n[Take the 60-second quiz](https://vendrarx.com/?utm_source=reddit&utm_campaign=vendra_20260721132347_01_01)\n",
+        "rewrite_attempted": false
+      },
+      "x_thread": {
+        "status": "pass",
+        "violations": [],
+        "checked_at": "2026-07-21T13:31:23",
+        "candidates": [],
+        "notes": [
+          "context-cleared Layer-2 violation: Our practice is building a model that routes GHK-Cu through physician supervision, labs, and follow-up\u2014both for topical and injectable use, where clinically appropriate."
+        ],
+        "suggested_rewrite": "{\"tweets\": [\"GHK-Cu: topical or injected? The evidence isn't equal in both routes. Let's break down where the research is strongest\u2014and where it still leaves questions. \ud83e\uddf5\", \"Topical GHK-Cu has more existing research, particularly in cosmetic applications. Much of the evidence comes from preliminary studies focused on skin appearance and related outcomes.\", \"Injected GHK-Cu has limited human data available. Most findings come from animal research, which may not reliably translate to human clinical effects.\", \"Take the 60-second quiz: https://vendrarx.com/?utm_source=twitter&utm_campaign=vendra_20260721132347_01_01\"]}",
+        "rewrite_attempted": false
+      },
+      "tiktok_script": {
+        "status": "pass",
+        "violations": [],
+        "checked_at": "2026-07-21T13:31:32",
+        "candidates": [],
+        "notes": [
+          "context-cleared Layer-2 violation: We're building a practice that routes you to evidence-backed options first.",
+          "context-cleared Layer-2 violation: Individual suitability is determined by a licensed clinician."
+        ],
+        "suggested_rewrite": "HOOK  \n\"GHK-Cu: where the evidence actually exists \u2014 and where it doesn't.\"  \n\nBEATS  \n1. [Hold up two fingers] \"Two ways to get GHK-Cu: topical creams or injections. The data isn't equal.\"  \n2. [Cut to text overlay: \"Topical\"] \"Most available human data on topical use is limited and preliminary, with some early indications but no definitive conclusions.\"  \n3. [Cut to text overlay: \"Injected\"] \"Injection data mainly comes from animal studies, and rodent biology doesn't reliably translate to humans.\"  \n4. [Hands open, shrug] \"We are designing a practice to explore evidence-backed options first.\"  \n5.   \n\nCompounded medications are prepared by licensed pharmacies and are not FDA-approved. Suitability should be determined by a licensed clinician.  \n\nCTA\nTake the 60-second quiz \u2014 https://vendrarx.com/?utm_source=tiktok&utm_campaign=vendra_20260721132347_01_01\n\nSHOTLIST  \n- Hook: Direct to camera, lab coat optional  \n- Beat 1: Two fingers held up, quick cut  \n- Beat 2: Text overlay \"Topical\" with simple underline animation  \n- Beat 3: Text overlay \"Injected\" with question mark appearing after  \n- Beat 4: Casual shrug, practical tone\n",
+        "rewrite_attempted": false
+      }
+    }
+  },
+  "metrics": {
+    "views": null,
+    "likes": null,
+    "shares": null,
+    "saves": null,
+    "ctr": null,
+    "installs": null,
+    "updated_at": null
+  },
+  "is_winner": null
+}

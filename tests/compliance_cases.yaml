@@ -42,6 +42,82 @@
   brand: vendrarx
   mechanism_claims: ["may support tissue-repair pathways"]
   expect: pass
+- id: wave4_named_mechanism
+  text: "The compound activates a receptor signaling pathway."
+  brand: vendrarx
+  expect: fail
+  rule: unsourced_mechanism
+- id: wave4_research_year
+  text: "A 2021 study reported a meaningful effect."
+  brand: vendrarx
+  expect: fail
+  rule: fabricated_evidence
+- id: wave4_percentage
+  text: "Oral bioavailability is less than 1%."
+  brand: vendrarx
+  expect: fail
+  rule: fabricated_evidence
+- id: wave4_trial_scale
+  text: "A large randomized trial measured MACE."
+  brand: vendrarx
+  expect: fail
+  rule: fabricated_evidence
+- id: wave4_legal_conclusion
+  text: "Selling this compound is legal under FDA guidance."
+  brand: vendrarx
+  expect: fail
+  rule: unapproved_regulatory_claim
+- id: wave4_claim_pack_exact_clear
+  text: "The verified test statement is that it may engage the example receptor."
+  brand: vendrarx
+  claim_packs:
+    - compound: Test compound
+      evidence_claims: []
+      mechanism_claims:
+        - "may engage the example receptor"
+      regulatory_claims: []
+      disallowed_claims: []
+  expect: pass
+- id: wave4_claim_pack_nonmember
+  text: "It activates the example receptor."
+  brand: vendrarx
+  claim_packs:
+    - compound: Test compound
+      evidence_claims: []
+      mechanism_claims:
+        - "may engage the example receptor"
+      regulatory_claims: []
+      disallowed_claims: []
+  expect: fail
+  rule: unsourced_mechanism
+- id: wave4_claim_pack_disallowed
+  text: "This compound guarantees rapid recovery."
+  brand: vendrarx
+  claim_packs:
+    - compound: Test compound
+      evidence_claims: []
+      mechanism_claims: []
+      regulatory_claims: []
+      disallowed_claims:
+        - "guarantees rapid recovery"
+  expect: fail
+  rule: disallowed_claim
+- id: wave4_prelaunch_present_operation
+  text: "Every case is reviewed by a licensed clinician."
+  brand: vendrarx
+  operational_status: pre_launch
+  expect: needs_review
+  rule: unverifiable_operational_claim
+- id: wave4_prelaunch_design_operation
+  text: "Our model routes every case through review by a licensed clinician."
+  brand: vendrarx
+  operational_status: pre_launch
+  expect: pass
+- id: wave4_live_present_operation
+  text: "Every case is reviewed by a licensed clinician."
+  brand: vendrarx
+  operational_status: live
+  expect: pass
 - id: vendra_debunk_cure
   text: "the hype suggests it's a cure-all"
   brand: vendrarx

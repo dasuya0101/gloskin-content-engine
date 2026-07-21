@@ -26,6 +26,7 @@ from pathlib import Path
 import character_factory as cf
 import compliance_lint
 from brand_loader import DEFAULT_BRAND, load_brand, mechanism_claims_for
+from claim_packs import approved_claims, relevant_claim_packs
 import manifest
 import screenshot_factory as sf
 import slideshow_maker as sm
@@ -315,6 +316,8 @@ def attach_text_formats(post_id, brief, brand, package, outputs, formats, placeh
 
 
 def build_text_brief(slug, angle, brand, formats):
+    claim_packs = relevant_claim_packs(angle)
+    seeded = {"claim_packs": claim_packs, "mechanism_claims": mechanism_claims_for(brand, angle)}
     return {
         "slug": slug,
         "brand": brand.brand_id,
@@ -322,7 +325,9 @@ def build_text_brief(slug, angle, brand, formats):
         "formats": tf.text_format_names(formats),
         "slides": [],
         "factual_claims": [angle],
-        "mechanism_claims": mechanism_claims_for(brand, angle),
+        "claim_packs": claim_packs,
+        "mechanism_claims": approved_claims(seeded),
+        "operational_status": brand.operational_status,
     }
 
 
@@ -332,9 +337,13 @@ def run_compliance(post_id, brief, brand, package, caption, slides,
     format_paths = package.get("formats") or {}
     for format_name, path in format_paths.items():
         results[format_name] = compliance_lint.lint_file(
-            path, format_name, brand, brief, tracking_code=tracking_code)
+            path, format_name, brand, brief, tracking_code=tracking_code,
+            context={"operational_status": brand.operational_status})
     if not results:
-        context = {"avatar_testimonial": bool(slides)}
+        context = {
+            "avatar_testimonial": bool(slides),
+            "operational_status": brand.operational_status,
+        }
         combined = "\n\n".join([
             caption or "",
             *[str(item.get("text") or "") for item in (slides or [])],
@@ -490,7 +499,9 @@ def main():
             hook = pick_hook(character, post_index, brand)
             brief["formats"] = formats
             brief.setdefault("factual_claims", [hook])
-            brief.setdefault("mechanism_claims", mechanism_claims_for(brand, hook))
+            brief.setdefault("claim_packs", relevant_claim_packs(hook))
+            brief.setdefault("mechanism_claims", approved_claims(brief))
+            brief.setdefault("operational_status", brand.operational_status)
             result = sm.make_content(brief, args.out, brand=brand)
             caption = caption_for(character, hook, tracking_code, brand)
             outputs = {

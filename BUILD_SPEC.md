@@ -3,7 +3,7 @@
 This repo is a local-first Python content engine with multi-brand config. The
 active roadmap is:
 
-- `docs/multi_brand_refactor_waves_0_3.md`
+- `docs/multi_brand_refactor_waves_0_4.md`
 
 Wave 0, Wave 1, and Wave 2 are complete. Wave 3 is next.
 

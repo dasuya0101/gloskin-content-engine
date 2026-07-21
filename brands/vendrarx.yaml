@@ -1,5 +1,6 @@
 brand_id: vendrarx
 display_name: VendraRx
+operational_status: pre_launch
 
 voice:
   tone: [evidence-forward, direct, operator]
@@ -93,10 +94,6 @@ compliance:
     - "\\bguaranteed (prescription|results|outcome)\\b"
   review:
     - "\\b(cure|cures|treat|treats|prevent|prevents|heal|heals)\\b"
-  mechanism_claims:
-    BPC-157:
-      - "may support tissue-repair pathways"
-      - "studied for effects on inflammation in animal models"
   required_disclaimers:
     - id: compounded
       applies_to: [reddit_longform, tiktok_script]

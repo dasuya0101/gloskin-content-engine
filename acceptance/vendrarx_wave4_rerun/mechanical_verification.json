@@ -1,0 +1,175 @@
+{
+  "old_status_distribution": {
+    "pass": 5,
+    "needs_review": 1
+  },
+  "new_status_distribution": {
+    "needs_review": 4,
+    "pass": 2
+  },
+  "post_count": 6,
+  "output_file_count": 18,
+  "rows": [
+    {
+      "id": 6,
+      "post_id": "1ebfb476ae1e",
+      "status": "needs_review",
+      "queue": "needs_edit",
+      "reddit_words": 369,
+      "tweet_count": 6,
+      "max_tweet_chars": 247,
+      "checks": {
+        "reddit_300_800": true,
+        "tweets_at_most_275": true,
+        "tiktok_sections": true,
+        "cta_url_once_each": true,
+        "not_published": true,
+        "no_override": true
+      }
+    },
+    {
+      "id": 7,
+      "post_id": "e731aad2b74e",
+      "status": "pass",
+      "queue": "ready_to_post",
+      "reddit_words": 442,
+      "tweet_count": 4,
+      "max_tweet_chars": 247,
+      "checks": {
+        "reddit_300_800": true,
+        "tweets_at_most_275": true,
+        "tiktok_sections": true,
+        "cta_url_once_each": true,
+        "not_published": true,
+        "no_override": true
+      }
+    },
+    {
+      "id": 8,
+      "post_id": "17ea087dc598",
+      "status": "needs_review",
+      "queue": "needs_edit",
+      "reddit_words": 326,
+      "tweet_count": 6,
+      "max_tweet_chars": 228,
+      "checks": {
+        "reddit_300_800": true,
+        "tweets_at_most_275": true,
+        "tiktok_sections": true,
+        "cta_url_once_each": true,
+        "not_published": true,
+        "no_override": true
+      }
+    },
+    {
+      "id": 10,
+      "post_id": "29e057bcf509",
+      "status": "needs_review",
+      "queue": "needs_edit",
+      "reddit_words": 333,
+      "tweet_count": 7,
+      "max_tweet_chars": 245,
+      "checks": {
+        "reddit_300_800": true,
+        "tweets_at_most_275": true,
+        "tiktok_sections": true,
+        "cta_url_once_each": true,
+        "not_published": true,
+        "no_override": true
+      }
+    },
+    {
+      "id": 11,
+      "post_id": "60face2246e4",
+      "status": "needs_review",
+      "queue": "needs_edit",
+      "reddit_words": 370,
+      "tweet_count": 7,
+      "max_tweet_chars": 225,
+      "checks": {
+        "reddit_300_800": true,
+        "tweets_at_most_275": true,
+        "tiktok_sections": true,
+        "cta_url_once_each": true,
+        "not_published": true,
+        "no_override": true
+      }
+    },
+    {
+      "id": 12,
+      "post_id": "88e95d2dd79a",
+      "status": "pass",
+      "queue": "ready_to_post",
+      "reddit_words": 451,
+      "tweet_count": 5,
+      "max_tweet_chars": 182,
+      "checks": {
+        "reddit_300_800": true,
+        "tweets_at_most_275": true,
+        "tiktok_sections": true,
+        "cta_url_once_each": true,
+        "not_published": true,
+        "no_override": true
+      }
+    }
+  ],
+  "historical_wave3_output_regression": [
+    {
+      "id": 6,
+      "counts": {
+        "reddit_longform": 7,
+        "x_thread": 1,
+        "tiktok_script": 2
+      },
+      "all_formats_flagged": true
+    },
+    {
+      "id": 7,
+      "counts": {
+        "reddit_longform": 5,
+        "x_thread": 2,
+        "tiktok_script": 4
+      },
+      "all_formats_flagged": true
+    },
+    {
+      "id": 8,
+      "counts": {
+        "reddit_longform": 8,
+        "x_thread": 6,
+        "tiktok_script": 2
+      },
+      "all_formats_flagged": true
+    },
+    {
+      "id": 10,
+      "counts": {
+        "reddit_longform": 8,
+        "x_thread": 3,
+        "tiktok_script": 4
+      },
+      "all_formats_flagged": true
+    },
+    {
+      "id": 11,
+      "counts": {
+        "reddit_longform": 9,
+        "x_thread": 6,
+        "tiktok_script": 5
+      },
+      "all_formats_flagged": true
+    },
+    {
+      "id": 12,
+      "counts": {
+        "reddit_longform": 5,
+        "x_thread": 1,
+        "tiktok_script": 3
+      },
+      "all_formats_flagged": true
+    }
+  ],
+  "all_18_historical_outputs_flagged": true,
+  "rewrite_render_errors": [],
+  "all_mechanical_checks_pass": true
+}

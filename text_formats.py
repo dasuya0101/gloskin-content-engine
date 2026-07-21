@@ -100,6 +100,8 @@ def brief_context(brief, brand, format_name):
         f"CTA placeholder: {CTA_SENTINEL}",
         f"Factual claims supplied by the brief: {json.dumps(brief.get('factual_claims') or [])}",
         f"Approved mechanism claims: {json.dumps(brief.get('mechanism_claims') or [])}",
+        f"Verified claim packs: {json.dumps(brief.get('claim_packs') or [])}",
+        f"Operational status: {brief.get('operational_status') or brand.operational_status}",
         f"Voice: {json.dumps(brand.voice)}",
         f"Pillars: {', '.join(brand.pillars)}",
         "Existing slide/copy context:",
