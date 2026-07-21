@@ -1,0 +1,124 @@
+{
+  "post_id": "cf3c30972074",
+  "brand": "vendrarx",
+  "created_at": "2026-07-21T12:38:19",
+  "format": "text_native",
+  "character": {},
+  "hook": "How GLP-1 agonists actually work \u2014 satiety signaling + gastric emptying, plain English",
+  "slides": [],
+  "assets": {},
+  "outputs": {
+    "formats": {
+      "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/cf3c30972074/reddit.md",
+      "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/cf3c30972074/thread.json",
+      "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/cf3c30972074/tiktok_script.md"
+    },
+    "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/cf3c30972074/reddit.md",
+    "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/cf3c30972074/thread.json",
+    "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/cf3c30972074/tiktok_script.md"
+  },
+  "caption": "How GLP-1 agonists actually work \u2014 satiety signaling + gastric emptying, plain English\n\nTake the 60-second quiz.\n\nEducational only. Not medical advice. Compounded medications are not FDA-approved. Suitability is determined by a licensed clinician.\n\nTracking: vendra_20260721123819_01_01",
+  "package": {
+    "dir": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/cf3c30972074",
+    "slides_dir": null,
+    "video": null,
+    "caption": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/cf3c30972074/caption.txt",
+    "brief": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/cf3c30972074/brief.json",
+    "assets_dir": null,
+    "assets": {},
+    "metadata": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/cf3c30972074/post.json",
+    "formats": {
+      "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/cf3c30972074/reddit.md",
+      "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/cf3c30972074/thread.json",
+      "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/cf3c30972074/tiktok_script.md"
+    }
+  },
+  "variant_of": null,
+  "tracking_code": "vendra_20260721123819_01_01",
+  "publish": {
+    "platform": null,
+    "account": null,
+    "url": null,
+    "posted_at": null
+  },
+  "publish_queue": {
+    "status": "ready_to_post",
+    "target_account": "TODO",
+    "notes": null,
+    "updated_at": "2026-07-21T12:39:16"
+  },
+  "compliance": {
+    "status": "pass",
+    "violations": [],
+    "checked_at": "2026-07-21T12:39:16",
+    "outputs": {
+      "reddit_longform": {
+        "status": "pass",
+        "violations": [],
+        "checked_at": "2026-07-21T12:39:08",
+        "candidates": [
+          {
+            "text": "cures",
+            "rule": "review",
+            "pattern": "\\b(cure|cures|treat|treats|prevent|prevents|heal|heals)\\b"
+          }
+        ],
+        "notes": [
+          "context-cleared Layer-1 candidate: cures"
+        ],
+        "suggested_rewrite": "",
+        "rewrite_attempted": false
+      },
+      "x_thread": {
+        "status": "pass",
+        "violations": [],
+        "checked_at": "2026-07-21T12:39:15",
+        "candidates": [],
+        "notes": [],
+        "suggested_rewrite": "",
+        "rewrite_attempted": true,
+        "initial_violations": [
+          {
+            "text": "GLP-1 receptor agonists (GLP-1 RAs) mimic a naturally occurring hormone that regulates appetite. By activating these receptors, they signal fullness earlier and sustain it longer. Key mechanism: enhanced satiety signaling.",
+            "rule": "unsourced_mechanism",
+            "severity": "block"
+          },
+          {
+            "text": "Another lever: gastric emptying. GLP-1 agonists slow the rate at which food leaves your stomach. This prolongs digestion, keeps you feeling fuller longer, & reduces post-meal hunger spikes.",
+            "rule": "unsourced_mechanism",
+            "severity": "block"
+          },
+          {
+            "text": "GLP-1 RAs interact with complex pathways that regulate energy balance, insulin release, & glucose metabolism. This multi-target effect drives their metabolic impact.",
+            "rule": "unsourced_mechanism",
+            "severity": "block"
+          },
+          {
+            "text": "Their mechanisms address broader metabolic dysregulation \u2014 insulin resistance, glycemic control, & appetite hormones.",
+            "rule": "unsourced_mechanism",
+            "severity": "block"
+          }
+        ]
+      },
+      "tiktok_script": {
+        "status": "pass",
+        "violations": [],
+        "checked_at": "2026-07-21T12:39:16",
+        "candidates": [],
+        "notes": [],
+        "suggested_rewrite": "",
+        "rewrite_attempted": false
+      }
+    }
+  },
+  "metrics": {
+    "views": null,
+    "likes": null,
+    "shares": null,
+    "saves": null,
+    "ctr": null,
+    "installs": null,
+    "updated_at": null
+  },
+  "is_winner": null
+}

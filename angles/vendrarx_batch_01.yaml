@@ -1,0 +1,45 @@
+brand: vendrarx
+formats: [reddit_longform, x_thread, tiktok_script]
+angles:
+  - id: 1
+    pillar: telehealth_logistics
+    angle: "Why your peptide vendor disappeared overnight — the 503A compounding crackdown, what's still legal, where the gray market went"
+  - id: 2
+    pillar: telehealth_logistics
+    angle: "503A vs 503B pharmacies — what the distinction means for what's in your vial"
+  - id: 3
+    pillar: telehealth_logistics
+    angle: "What \"research use only\" legally means — the fiction behind RUO peptide sites"
+  - id: 4
+    pillar: telehealth_logistics
+    angle: "Anatomy of a legitimate telehealth Rx flow — intake → clinician → prescription → compounding pharmacy → shipment, and why each step exists"
+  - id: 5
+    pillar: research_summaries
+    angle: "I read the BPC-157 literature so you don't have to  (already run — include for a clean set)"
+  - id: 6
+    pillar: research_summaries
+    angle: "NAD+ precursors vs injections — what human trials actually show"
+  - id: 7
+    pillar: research_summaries
+    angle: "Sermorelin and secretagogues vs direct GH — why the category exists"
+  - id: 8
+    pillar: research_summaries
+    angle: "GLP-1s beyond weight loss — cardiovascular + addiction-signal research, framed cautiously"
+  - id: 9
+    pillar: research_summaries
+    angle: "\"Peptide\" means nothing — insulin is a peptide, collagen is peptides; the molecule is what matters"
+  - id: 10
+    pillar: peptide_explainers
+    angle: "How GLP-1 agonists actually work — satiety signaling + gastric emptying, plain English"
+  - id: 11
+    pillar: peptide_explainers
+    angle: "Why peptides are injected — oral bioavailability, SNAC tech, what that implies about peptide pills"
+  - id: 12
+    pillar: peptide_explainers
+    angle: "GHK-Cu topical vs injected — where evidence exists and where it's thin"
+  - id: 13
+    pillar: build_in_public
+    angle: "Building a compounded-peptide telehealth company — the regulatory gauntlet (series opener)"
+  - id: 14
+    pillar: build_in_public
+    angle: "Why we're building a waitlist before signing a provider — clinical-infra minimums, unit economics of not paying for idle capacity"

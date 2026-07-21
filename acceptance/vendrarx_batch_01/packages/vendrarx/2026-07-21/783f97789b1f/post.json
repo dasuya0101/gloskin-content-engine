@@ -1,0 +1,153 @@
+{
+  "post_id": "783f97789b1f",
+  "brand": "vendrarx",
+  "created_at": "2026-07-21T12:34:09",
+  "format": "text_native",
+  "character": {},
+  "hook": "I read the BPC-157 literature so you don't have to  (already run \u2014 include for a clean set)",
+  "slides": [],
+  "assets": {},
+  "outputs": {
+    "formats": {
+      "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/783f97789b1f/reddit.md",
+      "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/783f97789b1f/thread.json",
+      "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/783f97789b1f/tiktok_script.md"
+    },
+    "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/783f97789b1f/reddit.md",
+    "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/783f97789b1f/thread.json",
+    "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/783f97789b1f/tiktok_script.md"
+  },
+  "caption": "I read the BPC-157 literature so you don't have to (already run \u2014 include for a clean set)\n\nTake the 60-second quiz.\n\nEducational only. Not medical advice. Compounded medications are not FDA-approved. Suitability is determined by a licensed clinician.\n\nTracking: vendra_20260721123409_01_01",
+  "package": {
+    "dir": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/783f97789b1f",
+    "slides_dir": null,
+    "video": null,
+    "caption": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/783f97789b1f/caption.txt",
+    "brief": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/783f97789b1f/brief.json",
+    "assets_dir": null,
+    "assets": {},
+    "metadata": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/783f97789b1f/post.json",
+    "formats": {
+      "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/783f97789b1f/reddit.md",
+      "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/783f97789b1f/thread.json",
+      "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/783f97789b1f/tiktok_script.md"
+    }
+  },
+  "variant_of": null,
+  "tracking_code": "vendra_20260721123409_01_01",
+  "publish": {
+    "platform": null,
+    "account": null,
+    "url": null,
+    "posted_at": null
+  },
+  "publish_queue": {
+    "status": "needs_edit",
+    "target_account": "TODO",
+    "notes": null,
+    "updated_at": "2026-07-21T12:35:06"
+  },
+  "compliance": {
+    "status": "needs_review",
+    "violations": [
+      {
+        "text": "I Read the BPC-157 Literature So You Don\u2019t Have To",
+        "rule": "fabricated_research_act",
+        "severity": "block",
+        "output": "reddit_longform"
+      },
+      {
+        "text": "Every case is reviewed by a US-licensed physician",
+        "rule": "unverifiable_operational_claim",
+        "severity": "warn",
+        "output": "reddit_longform"
+      },
+      {
+        "text": "",
+        "rule": "rewrite_render_error",
+        "severity": "warn",
+        "detail": "reddit_longform body must be 300-800 words; got 186",
+        "output": "reddit_longform"
+      }
+    ],
+    "checked_at": "2026-07-21T12:35:06",
+    "outputs": {
+      "reddit_longform": {
+        "status": "needs_review",
+        "violations": [
+          {
+            "text": "I Read the BPC-157 Literature So You Don\u2019t Have To",
+            "rule": "fabricated_research_act",
+            "severity": "block"
+          },
+          {
+            "text": "Every case is reviewed by a US-licensed physician",
+            "rule": "unverifiable_operational_claim",
+            "severity": "warn"
+          },
+          {
+            "text": "",
+            "rule": "rewrite_render_error",
+            "severity": "warn",
+            "detail": "reddit_longform body must be 300-800 words; got 186"
+          }
+        ],
+        "checked_at": "2026-07-21T12:34:58",
+        "candidates": [
+          {
+            "text": "cure",
+            "rule": "review",
+            "pattern": "\\b(cure|cures|treat|treats|prevent|prevents|heal|heals)\\b"
+          },
+          {
+            "text": "Every case is reviewed by a US-licensed physician",
+            "rule": "physician_availability",
+            "pattern": "\\b(?:(?:physicians?|clinicians?) available (?:24/7|today|now)|(?:every|each) (?:case|patient).{0,80}(?:reviewed|seen) by.{0,40}(?:physician|clinician))\\b"
+          }
+        ],
+        "notes": [
+          "context-cleared Layer-1 candidate: cure"
+        ],
+        "suggested_rewrite": "Let\u2019s talk BPC-157. It\u2019s got a lot of buzz online, but separating fact from hype isn\u2019t easy. BPC-157 is a peptide studied primarily in animal models. Most of the research focuses on its potential to support tissue-repair pathways and modulate inflammation. While the results in rodents look promising, the big caveat is that rodent biology doesn\u2019t always translate to humans. The human data is sparse, with only a handful of small studies out there. It\u2019s early days, and we\u2019re not at the point of definitive conclusions.\n\nPeptide therapy is an area worth exploring with the right clinical guardrails. VendraRx is building a telehealth practice focused on clinically supervised peptide therapy \u2014 no research chemicals, no shortcuts. The approach includes:\n\n- 503A Compounding: Medications are compounded in-house under FDA\u2019s 503A framework. This means they\u2019re tailored to individual needs and overseen by licensed pharmacists.\n- Labs & Follow-Up: Where clinically appropriate, labs and follow-up monitoring may be recommended to track progress. This isn\u2019t a \u201cset it and forget it\u201d approach \u2014 it\u2019s proactive care.\n\nWhen it comes to BPC-157, there is cautious optimism but the evidence is limited. The research suggests potential, but it\u2019s not a miracle cure. The goal is to provide access responsibly, with transparency about what is known and what is not.\n\nCompounded medications are prepared by licensed pharmacies and are not FDA-approved. Individual suitability is determined by a licensed clinician.\n\nFor those curious about peptide therapy and wanting to learn more, questions can be answered. This operation is being built in public, with a commitment to doing it right.\n\n[Take the 60-second quiz](https://vendrarx.com/?utm_source=reddit&utm_campaign=vendra_20260721123409_01_01)",
+        "rewrite_attempted": true
+      },
+      "x_thread": {
+        "status": "pass",
+        "violations": [],
+        "checked_at": "2026-07-21T12:35:05",
+        "candidates": [],
+        "notes": [
+          "discarded source-only Layer-2 violation: I read the BPC-157 literature so you don't have to"
+        ],
+        "suggested_rewrite": "{\"tweets\": [\"BPC-157 gets hyped as a 'healing peptide'\u2014but what does the actual research show? Most BPC-157 data comes from animal studies. It's been looked at for tissue repair and inflammation in rodents, but human evidence is sparse. Rodent biology \u2260 human biology.\", \"No large randomized human trials exist yet. What's out there is preliminary\u2014mostly small studies with mixed results. That's why physician supervision matters.\", \"We approach BPC-157 clinically: 503A-compounded, labs/follow-up where appropriate, no research peptides. Not a refill mill\u2014actual telehealth with licensed physicians.\", \"The takeaway? Interesting early signals, but we're years away from definitive answers. If you're considering it, do it under medical supervision with realistic expectations.\", \"Take the 60-second quiz: https://vendrarx.com/?utm_source=twitter&utm_campaign=vendra_20260721123409_01_01\"]}",
+        "rewrite_attempted": true,
+        "initial_violations": [
+          {
+            "text": "Here's what I found digging through the literature (so you don't have to).",
+            "rule": "fabricated_research_act",
+            "severity": "block"
+          }
+        ]
+      },
+      "tiktok_script": {
+        "status": "pass",
+        "violations": [],
+        "checked_at": "2026-07-21T12:35:06",
+        "candidates": [],
+        "notes": [],
+        "suggested_rewrite": "",
+        "rewrite_attempted": false
+      }
+    }
+  },
+  "metrics": {
+    "views": null,
+    "likes": null,
+    "shares": null,
+    "saves": null,
+    "ctr": null,
+    "installs": null,
+    "updated_at": null
+  },
+  "is_winner": null
+}

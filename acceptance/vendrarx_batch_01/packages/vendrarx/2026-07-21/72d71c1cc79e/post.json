@@ -1,0 +1,94 @@
+{
+  "post_id": "72d71c1cc79e",
+  "brand": "vendrarx",
+  "created_at": "2026-07-21T12:35:07",
+  "format": "text_native",
+  "character": {},
+  "hook": "NAD+ precursors vs injections \u2014 what human trials actually show",
+  "slides": [],
+  "assets": {},
+  "outputs": {
+    "formats": {
+      "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/72d71c1cc79e/reddit.md",
+      "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/72d71c1cc79e/thread.json",
+      "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/72d71c1cc79e/tiktok_script.md"
+    },
+    "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/72d71c1cc79e/reddit.md",
+    "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/72d71c1cc79e/thread.json",
+    "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/72d71c1cc79e/tiktok_script.md"
+  },
+  "caption": "NAD+ precursors vs injections \u2014 what human trials actually show\n\nTake the 60-second quiz.\n\nEducational only. Not medical advice. Compounded medications are not FDA-approved. Suitability is determined by a licensed clinician.\n\nTracking: vendra_20260721123507_01_01",
+  "package": {
+    "dir": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/72d71c1cc79e",
+    "slides_dir": null,
+    "video": null,
+    "caption": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/72d71c1cc79e/caption.txt",
+    "brief": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/72d71c1cc79e/brief.json",
+    "assets_dir": null,
+    "assets": {},
+    "metadata": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/72d71c1cc79e/post.json",
+    "formats": {
+      "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/72d71c1cc79e/reddit.md",
+      "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/72d71c1cc79e/thread.json",
+      "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/72d71c1cc79e/tiktok_script.md"
+    }
+  },
+  "variant_of": null,
+  "tracking_code": "vendra_20260721123507_01_01",
+  "publish": {
+    "platform": null,
+    "account": null,
+    "url": null,
+    "posted_at": null
+  },
+  "publish_queue": {
+    "status": "ready_to_post",
+    "target_account": "TODO",
+    "notes": null,
+    "updated_at": "2026-07-21T12:35:56"
+  },
+  "compliance": {
+    "status": "pass",
+    "violations": [],
+    "checked_at": "2026-07-21T12:35:56",
+    "outputs": {
+      "reddit_longform": {
+        "status": "pass",
+        "violations": [],
+        "checked_at": "2026-07-21T12:35:53",
+        "candidates": [],
+        "notes": [],
+        "suggested_rewrite": "",
+        "rewrite_attempted": false
+      },
+      "x_thread": {
+        "status": "pass",
+        "violations": [],
+        "checked_at": "2026-07-21T12:35:54",
+        "candidates": [],
+        "notes": [],
+        "suggested_rewrite": "",
+        "rewrite_attempted": false
+      },
+      "tiktok_script": {
+        "status": "pass",
+        "violations": [],
+        "checked_at": "2026-07-21T12:35:56",
+        "candidates": [],
+        "notes": [],
+        "suggested_rewrite": "",
+        "rewrite_attempted": false
+      }
+    }
+  },
+  "metrics": {
+    "views": null,
+    "likes": null,
+    "shares": null,
+    "saves": null,
+    "ctr": null,
+    "installs": null,
+    "updated_at": null
+  },
+  "is_winner": null
+}

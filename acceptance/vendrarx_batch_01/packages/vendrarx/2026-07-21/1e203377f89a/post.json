@@ -1,0 +1,94 @@
+{
+  "post_id": "1e203377f89a",
+  "brand": "vendrarx",
+  "created_at": "2026-07-21T12:30:26",
+  "format": "text_native",
+  "character": {},
+  "hook": "Why your peptide vendor disappeared overnight \u2014 the 503A compounding crackdown, what's still legal, where the gray market went",
+  "slides": [],
+  "assets": {},
+  "outputs": {
+    "formats": {
+      "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/1e203377f89a/reddit.md",
+      "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/1e203377f89a/thread.json",
+      "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/1e203377f89a/tiktok_script.md"
+    },
+    "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/1e203377f89a/reddit.md",
+    "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/1e203377f89a/thread.json",
+    "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/1e203377f89a/tiktok_script.md"
+  },
+  "caption": "Why your peptide vendor disappeared overnight \u2014 the 503A compounding crackdown, what's still legal, where the gray market went\n\nTake the 60-second quiz.\n\nEducational only. Not medical advice. Compounded medications are not FDA-approved. Suitability is determined by a licensed clinician.\n\nTracking: vendra_20260721123026_01_01",
+  "package": {
+    "dir": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/1e203377f89a",
+    "slides_dir": null,
+    "video": null,
+    "caption": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/1e203377f89a/caption.txt",
+    "brief": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/1e203377f89a/brief.json",
+    "assets_dir": null,
+    "assets": {},
+    "metadata": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/1e203377f89a/post.json",
+    "formats": {
+      "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/1e203377f89a/reddit.md",
+      "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/1e203377f89a/thread.json",
+      "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/1e203377f89a/tiktok_script.md"
+    }
+  },
+  "variant_of": null,
+  "tracking_code": "vendra_20260721123026_01_01",
+  "publish": {
+    "platform": null,
+    "account": null,
+    "url": null,
+    "posted_at": null
+  },
+  "publish_queue": {
+    "status": "ready_to_post",
+    "target_account": "TODO",
+    "notes": null,
+    "updated_at": "2026-07-21T12:31:06"
+  },
+  "compliance": {
+    "status": "pass",
+    "violations": [],
+    "checked_at": "2026-07-21T12:31:06",
+    "outputs": {
+      "reddit_longform": {
+        "status": "pass",
+        "violations": [],
+        "checked_at": "2026-07-21T12:31:04",
+        "candidates": [],
+        "notes": [],
+        "suggested_rewrite": "",
+        "rewrite_attempted": false
+      },
+      "x_thread": {
+        "status": "pass",
+        "violations": [],
+        "checked_at": "2026-07-21T12:31:05",
+        "candidates": [],
+        "notes": [],
+        "suggested_rewrite": "",
+        "rewrite_attempted": false
+      },
+      "tiktok_script": {
+        "status": "pass",
+        "violations": [],
+        "checked_at": "2026-07-21T12:31:06",
+        "candidates": [],
+        "notes": [],
+        "suggested_rewrite": "",
+        "rewrite_attempted": false
+      }
+    }
+  },
+  "metrics": {
+    "views": null,
+    "likes": null,
+    "shares": null,
+    "saves": null,
+    "ctr": null,
+    "installs": null,
+    "updated_at": null
+  },
+  "is_winner": null
+}

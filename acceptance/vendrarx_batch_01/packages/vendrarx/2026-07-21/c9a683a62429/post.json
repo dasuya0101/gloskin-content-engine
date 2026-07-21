@@ -1,0 +1,102 @@
+{
+  "post_id": "c9a683a62429",
+  "brand": "vendrarx",
+  "created_at": "2026-07-21T12:37:38",
+  "format": "text_native",
+  "character": {},
+  "hook": "\"Peptide\" means nothing \u2014 insulin is a peptide, collagen is peptides; the molecule is what matters",
+  "slides": [],
+  "assets": {},
+  "outputs": {
+    "formats": {
+      "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/c9a683a62429/reddit.md",
+      "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/c9a683a62429/thread.json",
+      "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/c9a683a62429/tiktok_script.md"
+    },
+    "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/c9a683a62429/reddit.md",
+    "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/c9a683a62429/thread.json",
+    "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/c9a683a62429/tiktok_script.md"
+  },
+  "caption": "\"Peptide\" means nothing \u2014 insulin is a peptide, collagen is peptides; the molecule is what matters\n\nTake the 60-second quiz.\n\nEducational only. Not medical advice. Compounded medications are not FDA-approved. Suitability is determined by a licensed clinician.\n\nTracking: vendra_20260721123738_01_01",
+  "package": {
+    "dir": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/c9a683a62429",
+    "slides_dir": null,
+    "video": null,
+    "caption": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/c9a683a62429/caption.txt",
+    "brief": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/c9a683a62429/brief.json",
+    "assets_dir": null,
+    "assets": {},
+    "metadata": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/c9a683a62429/post.json",
+    "formats": {
+      "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/c9a683a62429/reddit.md",
+      "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/c9a683a62429/thread.json",
+      "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/c9a683a62429/tiktok_script.md"
+    }
+  },
+  "variant_of": null,
+  "tracking_code": "vendra_20260721123738_01_01",
+  "publish": {
+    "platform": null,
+    "account": null,
+    "url": null,
+    "posted_at": null
+  },
+  "publish_queue": {
+    "status": "ready_to_post",
+    "target_account": "TODO",
+    "notes": null,
+    "updated_at": "2026-07-21T12:38:19"
+  },
+  "compliance": {
+    "status": "pass",
+    "violations": [],
+    "checked_at": "2026-07-21T12:38:19",
+    "outputs": {
+      "reddit_longform": {
+        "status": "pass",
+        "violations": [],
+        "checked_at": "2026-07-21T12:38:10",
+        "candidates": [],
+        "notes": [],
+        "suggested_rewrite": "",
+        "rewrite_attempted": false
+      },
+      "x_thread": {
+        "status": "pass",
+        "violations": [],
+        "checked_at": "2026-07-21T12:38:13",
+        "candidates": [
+          {
+            "text": "treats",
+            "rule": "review",
+            "pattern": "\\b(cure|cures|treat|treats|prevent|prevents|heal|heals)\\b"
+          }
+        ],
+        "notes": [
+          "context-cleared Layer-1 candidate: treats"
+        ],
+        "suggested_rewrite": "",
+        "rewrite_attempted": false
+      },
+      "tiktok_script": {
+        "status": "pass",
+        "violations": [],
+        "checked_at": "2026-07-21T12:38:19",
+        "candidates": [],
+        "notes": [],
+        "suggested_rewrite": "",
+        "rewrite_attempted": false
+      }
+    }
+  },
+  "metrics": {
+    "views": null,
+    "likes": null,
+    "shares": null,
+    "saves": null,
+    "ctr": null,
+    "installs": null,
+    "updated_at": null
+  },
+  "is_winner": null
+}

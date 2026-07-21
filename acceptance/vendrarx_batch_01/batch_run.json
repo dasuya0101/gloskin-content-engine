@@ -1,0 +1,297 @@
+{
+  "source": "angles/vendrarx_batch_01.yaml",
+  "brand": "vendrarx",
+  "formats": [
+    "reddit_longform",
+    "x_thread",
+    "tiktok_script"
+  ],
+  "started_at": "2026-07-21T12:30:25",
+  "completed_at": "2026-07-21T12:43:00",
+  "results": [
+    {
+      "id": 1,
+      "pillar": "telehealth_logistics",
+      "angle": "Why your peptide vendor disappeared overnight — the 503A compounding crackdown, what's still legal, where the gray market went",
+      "returncode": 0,
+      "started_at": "2026-07-21T12:30:25",
+      "finished_at": "2026-07-21T12:31:06",
+      "post_id": "1e203377f89a",
+      "package_dir": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/1e203377f89a",
+      "compliance_status": "pass",
+      "queue_status": "ready_to_post",
+      "usage": [
+        "[usage] openrouter deepseek/deepseek-chat {\"prompt_tokens\": 1312, \"completion_tokens\": 472, \"total_tokens\": 1784, \"cost\": 0.0006403096}",
+        "[usage] openrouter deepseek/deepseek-chat {\"prompt_tokens\": 1265, \"completion_tokens\": 288, \"total_tokens\": 1553, \"cost\": 0.0004836818}",
+        "[usage] openrouter deepseek/deepseek-chat {\"prompt_tokens\": 1293, \"completion_tokens\": 199, \"total_tokens\": 1492, \"cost\": 0.0007759}",
+        "[usage] openrouter openai/gpt-4.1-mini {\"prompt_tokens\": 1234, \"completion_tokens\": 17, \"total_tokens\": 1251, \"cost\": 0.0005208}",
+        "[usage] openrouter openai/gpt-4.1-mini {\"prompt_tokens\": 976, \"completion_tokens\": 17, \"total_tokens\": 993, \"cost\": 0.0004176}",
+        "[usage] openrouter openai/gpt-4.1-mini {\"prompt_tokens\": 946, \"completion_tokens\": 17, \"total_tokens\": 963, \"cost\": 0.0004056}"
+      ]
+    },
+    {
+      "id": 2,
+      "pillar": "telehealth_logistics",
+      "angle": "503A vs 503B pharmacies — what the distinction means for what's in your vial",
+      "returncode": 0,
+      "started_at": "2026-07-21T12:31:06",
+      "finished_at": "2026-07-21T12:31:54",
+      "post_id": "07d02d0b7f87",
+      "package_dir": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/07d02d0b7f87",
+      "compliance_status": "pass",
+      "queue_status": "ready_to_post",
+      "usage": [
+        "[usage] openrouter deepseek/deepseek-chat {\"prompt_tokens\": 1299, \"completion_tokens\": 426, \"total_tokens\": 1725, \"cost\": 0.0006009024}",
+        "[usage] openrouter deepseek/deepseek-chat {\"prompt_tokens\": 1333, \"completion_tokens\": 549, \"total_tokens\": 1882, \"cost\": 0.0007061215}",
+        "[usage] openrouter deepseek/deepseek-chat {\"prompt_tokens\": 1252, \"completion_tokens\": 224, \"total_tokens\": 1476, \"cost\": 0.0004298728}",
+        "[usage] openrouter deepseek/deepseek-chat {\"prompt_tokens\": 1280, \"completion_tokens\": 261, \"total_tokens\": 1541, \"cost\": 0.0004650821}",
+        "[usage] openrouter openai/gpt-4.1-mini {\"prompt_tokens\": 1299, \"completion_tokens\": 17, \"total_tokens\": 1316, \"cost\": 0.0005468}",
+        "[usage] openrouter openai/gpt-4.1-mini {\"prompt_tokens\": 870, \"completion_tokens\": 17, \"total_tokens\": 887, \"cost\": 0.0003752}",
+        "[usage] openrouter openai/gpt-4.1-mini {\"prompt_tokens\": 1001, \"completion_tokens\": 17, \"total_tokens\": 1018, \"cost\": 0.0004276}"
+      ]
+    },
+    {
+      "id": 3,
+      "pillar": "telehealth_logistics",
+      "angle": "What \"research use only\" legally means — the fiction behind RUO peptide sites",
+      "returncode": 0,
+      "started_at": "2026-07-21T12:31:54",
+      "finished_at": "2026-07-21T12:33:02",
+      "post_id": "de65946192a7",
+      "package_dir": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/de65946192a7",
+      "compliance_status": "pass",
+      "queue_status": "ready_to_post",
+      "usage": [
+        "[usage] openrouter deepseek/deepseek-chat {\"prompt_tokens\": 1294, \"completion_tokens\": 622, \"total_tokens\": 1916, \"cost\": 0.00096766}",
+        "[usage] openrouter deepseek/deepseek-chat {\"prompt_tokens\": 1247, \"completion_tokens\": 289, \"total_tokens\": 1536, \"cost\": 0.0004808783}",
+        "[usage] openrouter deepseek/deepseek-chat {\"prompt_tokens\": 1275, \"completion_tokens\": 245, \"total_tokens\": 1520, \"cost\": 0.00062605}",
+        "[usage] openrouter openai/gpt-4.1-mini {\"prompt_tokens\": 1339, \"completion_tokens\": 17, \"total_tokens\": 1356, \"cost\": 0.0005628}",
+        "[usage] openrouter openai/gpt-4.1-mini {\"prompt_tokens\": 976, \"completion_tokens\": 17, \"total_tokens\": 993, \"cost\": 0.0004176}",
+        "[usage] openrouter openai/gpt-4.1-mini {\"prompt_tokens\": 981, \"completion_tokens\": 17, \"total_tokens\": 998, \"cost\": 0.0004196}"
+      ]
+    },
+    {
+      "id": 4,
+      "pillar": "telehealth_logistics",
+      "angle": "Anatomy of a legitimate telehealth Rx flow — intake → clinician → prescription → compounding pharmacy → shipment, and why each step exists",
+      "returncode": 0,
+      "started_at": "2026-07-21T12:33:02",
+      "finished_at": "2026-07-21T12:34:08",
+      "post_id": "e8728a7deb68",
+      "package_dir": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/e8728a7deb68",
+      "compliance_status": "needs_review",
+      "queue_status": "needs_edit",
+      "usage": [
+        "[usage] openrouter deepseek/deepseek-chat {\"prompt_tokens\": 1323, \"completion_tokens\": 641, \"total_tokens\": 1964, \"cost\": 0.00099385}",
+        "[usage] openrouter deepseek/deepseek-chat {\"prompt_tokens\": 1276, \"completion_tokens\": 268, \"total_tokens\": 1544, \"cost\": 0.0008588}",
+        "[usage] openrouter deepseek/deepseek-chat {\"prompt_tokens\": 1304, \"completion_tokens\": 285, \"total_tokens\": 1589, \"cost\": 0.0004890893}",
+        "[usage] openrouter openai/gpt-4.1-mini {\"prompt_tokens\": 1386, \"completion_tokens\": 736, \"total_tokens\": 2122, \"cost\": 0.001732}",
+        "[usage] openrouter openai/gpt-4.1-mini {\"prompt_tokens\": 929, \"completion_tokens\": 17, \"total_tokens\": 946, \"cost\": 0.0003988}",
+        "[usage] openrouter openai/gpt-4.1-mini {\"prompt_tokens\": 1083, \"completion_tokens\": 17, \"total_tokens\": 1100, \"cost\": 0.0004604}"
+      ]
+    },
+    {
+      "id": 5,
+      "pillar": "research_summaries",
+      "angle": "I read the BPC-157 literature so you don't have to  (already run — include for a clean set)",
+      "returncode": 0,
+      "started_at": "2026-07-21T12:34:08",
+      "finished_at": "2026-07-21T12:35:06",
+      "post_id": "783f97789b1f",
+      "package_dir": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/783f97789b1f",
+      "compliance_status": "needs_review",
+      "queue_status": "needs_edit",
+      "usage": [
+        "[usage] openrouter deepseek/deepseek-chat {\"prompt_tokens\": 1329, \"completion_tokens\": 447, \"total_tokens\": 1776, \"cost\": 0.00082311}",
+        "[usage] openrouter deepseek/deepseek-chat {\"prompt_tokens\": 1282, \"completion_tokens\": 207, \"total_tokens\": 1489, \"cost\": 0.0004222771}",
+        "[usage] openrouter deepseek/deepseek-chat {\"prompt_tokens\": 1310, \"completion_tokens\": 230, \"total_tokens\": 1540, \"cost\": 0.000446285}",
+        "[usage] openrouter openai/gpt-4.1-mini {\"prompt_tokens\": 1316, \"completion_tokens\": 458, \"total_tokens\": 1774, \"cost\": 0.0012592}",
+        "[usage] openrouter openai/gpt-4.1-mini {\"prompt_tokens\": 911, \"completion_tokens\": 247, \"total_tokens\": 1158, \"cost\": 0.0007596}",
+        "[usage] openrouter openai/gpt-4.1-mini {\"prompt_tokens\": 894, \"completion_tokens\": 245, \"total_tokens\": 1139, \"cost\": 0.0007496}",
+        "[usage] openrouter openai/gpt-4.1-mini {\"prompt_tokens\": 980, \"completion_tokens\": 17, \"total_tokens\": 997, \"cost\": 0.0004192}"
+      ]
+    },
+    {
+      "id": 6,
+      "pillar": "research_summaries",
+      "angle": "NAD+ precursors vs injections — what human trials actually show",
+      "returncode": 0,
+      "started_at": "2026-07-21T12:35:06",
+      "finished_at": "2026-07-21T12:35:56",
+      "post_id": "72d71c1cc79e",
+      "package_dir": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/72d71c1cc79e",
+      "compliance_status": "pass",
+      "queue_status": "ready_to_post",
+      "usage": [
+        "[usage] openrouter deepseek/deepseek-chat {\"prompt_tokens\": 1285, \"completion_tokens\": 683, \"total_tokens\": 1968, \"cost\": 0.0008037253}",
+        "[usage] openrouter deepseek/deepseek-chat {\"prompt_tokens\": 1238, \"completion_tokens\": 262, \"total_tokens\": 1500, \"cost\": 0.0004574738}",
+        "[usage] openrouter deepseek/deepseek-chat {\"prompt_tokens\": 1266, \"completion_tokens\": 250, \"total_tokens\": 1516, \"cost\": 0.0004534782}",
+        "[usage] openrouter openai/gpt-4.1-mini {\"prompt_tokens\": 1458, \"completion_tokens\": 17, \"total_tokens\": 1475, \"cost\": 0.0006104}",
+        "[usage] openrouter openai/gpt-4.1-mini {\"prompt_tokens\": 902, \"completion_tokens\": 17, \"total_tokens\": 919, \"cost\": 0.000388}",
+        "[usage] openrouter openai/gpt-4.1-mini {\"prompt_tokens\": 990, \"completion_tokens\": 17, \"total_tokens\": 1007, \"cost\": 0.0004232}"
+      ]
+    },
+    {
+      "id": 7,
+      "pillar": "research_summaries",
+      "angle": "Sermorelin and secretagogues vs direct GH — why the category exists",
+      "returncode": 0,
+      "started_at": "2026-07-21T12:35:56",
+      "finished_at": "2026-07-21T12:36:43",
+      "post_id": "060e44d9cbfa",
+      "package_dir": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/060e44d9cbfa",
+      "compliance_status": "pass",
+      "queue_status": "ready_to_post",
+      "usage": [
+        "[usage] openrouter deepseek/deepseek-chat {\"prompt_tokens\": 1293, \"completion_tokens\": 500, \"total_tokens\": 1793, \"cost\": 0.0006589086}",
+        "[usage] openrouter deepseek/deepseek-chat {\"prompt_tokens\": 1246, \"completion_tokens\": 228, \"total_tokens\": 1474, \"cost\": 0.00060164}",
+        "[usage] openrouter deepseek/deepseek-chat {\"prompt_tokens\": 1274, \"completion_tokens\": 170, \"total_tokens\": 1444, \"cost\": 0.0003910718}",
+        "[usage] openrouter openai/gpt-4.1-mini {\"prompt_tokens\": 1239, \"completion_tokens\": 17, \"total_tokens\": 1256, \"cost\": 0.0005228}",
+        "[usage] openrouter openai/gpt-4.1-mini {\"prompt_tokens\": 887, \"completion_tokens\": 17, \"total_tokens\": 904, \"cost\": 0.000382}",
+        "[usage] openrouter openai/gpt-4.1-mini {\"prompt_tokens\": 898, \"completion_tokens\": 17, \"total_tokens\": 915, \"cost\": 0.0003864}"
+      ]
+    },
+    {
+      "id": 8,
+      "pillar": "research_summaries",
+      "angle": "GLP-1s beyond weight loss — cardiovascular + addiction-signal research, framed cautiously",
+      "returncode": 0,
+      "started_at": "2026-07-21T12:36:43",
+      "finished_at": "2026-07-21T12:37:38",
+      "post_id": "445e034b5fd0",
+      "package_dir": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/445e034b5fd0",
+      "compliance_status": "pass",
+      "queue_status": "ready_to_post",
+      "usage": [
+        "[usage] openrouter deepseek/deepseek-chat {\"prompt_tokens\": 1298, \"completion_tokens\": 461, \"total_tokens\": 1759, \"cost\": 0.0006287057}",
+        "[usage] openrouter deepseek/deepseek-chat {\"prompt_tokens\": 1251, \"completion_tokens\": 332, \"total_tokens\": 1583, \"cost\": 0.000932}",
+        "[usage] openrouter deepseek/deepseek-chat {\"prompt_tokens\": 1279, \"completion_tokens\": 265, \"total_tokens\": 1544, \"cost\": 0.0004680823}",
+        "[usage] openrouter openai/gpt-4.1-mini {\"prompt_tokens\": 1222, \"completion_tokens\": 17, \"total_tokens\": 1239, \"cost\": 0.000516}",
+        "[usage] openrouter openai/gpt-4.1-mini {\"prompt_tokens\": 975, \"completion_tokens\": 17, \"total_tokens\": 992, \"cost\": 0.0004172}",
+        "[usage] openrouter openai/gpt-4.1-mini {\"prompt_tokens\": 993, \"completion_tokens\": 17, \"total_tokens\": 1010, \"cost\": 0.0004244}"
+      ]
+    },
+    {
+      "id": 9,
+      "pillar": "research_summaries",
+      "angle": "\"Peptide\" means nothing — insulin is a peptide, collagen is peptides; the molecule is what matters",
+      "returncode": 0,
+      "started_at": "2026-07-21T12:37:38",
+      "finished_at": "2026-07-21T12:38:19",
+      "post_id": "c9a683a62429",
+      "package_dir": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/c9a683a62429",
+      "compliance_status": "pass",
+      "queue_status": "ready_to_post",
+      "usage": [
+        "[usage] openrouter deepseek/deepseek-chat {\"prompt_tokens\": 1304, \"completion_tokens\": 497, \"total_tokens\": 1801, \"cost\": 0.0011677}",
+        "[usage] openrouter deepseek/deepseek-chat {\"prompt_tokens\": 1257, \"completion_tokens\": 261, \"total_tokens\": 1518, \"cost\": 0.0004604775}",
+        "[usage] openrouter deepseek/deepseek-chat {\"prompt_tokens\": 1285, \"completion_tokens\": 163, \"total_tokens\": 1448, \"cost\": 0.0007259}",
+        "[usage] openrouter openai/gpt-4.1-mini {\"prompt_tokens\": 1268, \"completion_tokens\": 17, \"total_tokens\": 1285, \"cost\": 0.0005344}",
+        "[usage] openrouter openai/gpt-4.1-mini {\"prompt_tokens\": 957, \"completion_tokens\": 17, \"total_tokens\": 974, \"cost\": 0.00041}",
+        "[usage] openrouter openai/gpt-4.1-mini {\"prompt_tokens\": 900, \"completion_tokens\": 17, \"total_tokens\": 917, \"cost\": 0.0003872}"
+      ]
+    },
+    {
+      "id": 10,
+      "pillar": "peptide_explainers",
+      "angle": "How GLP-1 agonists actually work — satiety signaling + gastric emptying, plain English",
+      "returncode": 0,
+      "started_at": "2026-07-21T12:38:19",
+      "finished_at": "2026-07-21T12:39:16",
+      "post_id": "cf3c30972074",
+      "package_dir": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/cf3c30972074",
+      "compliance_status": "pass",
+      "queue_status": "ready_to_post",
+      "usage": [
+        "[usage] openrouter deepseek/deepseek-chat {\"prompt_tokens\": 1300, \"completion_tokens\": 532, \"total_tokens\": 1832, \"cost\": 0.0012116}",
+        "[usage] openrouter deepseek/deepseek-chat {\"prompt_tokens\": 1253, \"completion_tokens\": 327, \"total_tokens\": 1580, \"cost\": 0.00069199}",
+        "[usage] openrouter deepseek/deepseek-chat {\"prompt_tokens\": 1281, \"completion_tokens\": 260, \"total_tokens\": 1541, \"cost\": 0.0004644822}",
+        "[usage] openrouter openai/gpt-4.1-mini {\"prompt_tokens\": 1350, \"completion_tokens\": 17, \"total_tokens\": 1367, \"cost\": 0.0005672}",
+        "[usage] openrouter openai/gpt-4.1-mini {\"prompt_tokens\": 987, \"completion_tokens\": 430, \"total_tokens\": 1417, \"cost\": 0.0010828}",
+        "[usage] openrouter openai/gpt-4.1-mini {\"prompt_tokens\": 890, \"completion_tokens\": 17, \"total_tokens\": 907, \"cost\": 0.0003832}",
+        "[usage] openrouter openai/gpt-4.1-mini {\"prompt_tokens\": 993, \"completion_tokens\": 19, \"total_tokens\": 1012, \"cost\": 0.0004276}"
+      ]
+    },
+    {
+      "id": 11,
+      "pillar": "peptide_explainers",
+      "angle": "Why peptides are injected — oral bioavailability, SNAC tech, what that implies about peptide pills",
+      "returncode": 0,
+      "started_at": "2026-07-21T12:39:16",
+      "finished_at": "2026-07-21T12:40:10",
+      "post_id": "9a28067417b2",
+      "package_dir": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/9a28067417b2",
+      "compliance_status": "pass",
+      "queue_status": "ready_to_post",
+      "usage": [
+        "[usage] openrouter deepseek/deepseek-chat {\"prompt_tokens\": 1298, \"completion_tokens\": 480, \"total_tokens\": 1778, \"cost\": 0.0006439076}",
+        "[usage] openrouter deepseek/deepseek-chat {\"prompt_tokens\": 1251, \"completion_tokens\": 225, \"total_tokens\": 1476, \"cost\": 0.0007929}",
+        "[usage] openrouter deepseek/deepseek-chat {\"prompt_tokens\": 1279, \"completion_tokens\": 235, \"total_tokens\": 1514, \"cost\": 0.00061843}",
+        "[usage] openrouter deepseek/deepseek-chat {\"prompt_tokens\": 1307, \"completion_tokens\": 207, \"total_tokens\": 1514, \"cost\": 0.00060247}",
+        "[usage] openrouter openai/gpt-4.1-mini {\"prompt_tokens\": 1232, \"completion_tokens\": 17, \"total_tokens\": 1249, \"cost\": 0.00052}",
+        "[usage] openrouter openai/gpt-4.1-mini {\"prompt_tokens\": 880, \"completion_tokens\": 17, \"total_tokens\": 897, \"cost\": 0.0003792}",
+        "[usage] openrouter openai/gpt-4.1-mini {\"prompt_tokens\": 954, \"completion_tokens\": 17, \"total_tokens\": 971, \"cost\": 0.0004088}"
+      ]
+    },
+    {
+      "id": 12,
+      "pillar": "peptide_explainers",
+      "angle": "GHK-Cu topical vs injected — where evidence exists and where it's thin",
+      "returncode": 0,
+      "started_at": "2026-07-21T12:40:10",
+      "finished_at": "2026-07-21T12:41:26",
+      "post_id": "8d4fb8225255",
+      "package_dir": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/8d4fb8225255",
+      "compliance_status": "needs_review",
+      "queue_status": "needs_edit",
+      "usage": [
+        "[usage] openrouter deepseek/deepseek-chat {\"prompt_tokens\": 1294, \"completion_tokens\": 581, \"total_tokens\": 1875, \"cost\": 0.00093117}",
+        "[usage] openrouter deepseek/deepseek-chat {\"prompt_tokens\": 1247, \"completion_tokens\": 186, \"total_tokens\": 1433, \"cost\": 0.00056458}",
+        "[usage] openrouter deepseek/deepseek-chat {\"prompt_tokens\": 1275, \"completion_tokens\": 203, \"total_tokens\": 1478, \"cost\": 0.0004176753}",
+        "[usage] openrouter openai/gpt-4.1-mini {\"prompt_tokens\": 1336, \"completion_tokens\": 931, \"total_tokens\": 2267, \"cost\": 0.002024}",
+        "[usage] openrouter openai/gpt-4.1-mini {\"prompt_tokens\": 882, \"completion_tokens\": 17, \"total_tokens\": 899, \"cost\": 0.00038}",
+        "[usage] openrouter openai/gpt-4.1-mini {\"prompt_tokens\": 920, \"completion_tokens\": 17, \"total_tokens\": 937, \"cost\": 0.0003952}"
+      ]
+    },
+    {
+      "id": 13,
+      "pillar": "build_in_public",
+      "angle": "Building a compounded-peptide telehealth company — the regulatory gauntlet (series opener)",
+      "returncode": 0,
+      "started_at": "2026-07-21T12:41:26",
+      "finished_at": "2026-07-21T12:42:00",
+      "post_id": "d24423d53722",
+      "package_dir": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/d24423d53722",
+      "compliance_status": "pass",
+      "queue_status": "ready_to_post",
+      "usage": [
+        "[usage] openrouter deepseek/deepseek-chat {\"prompt_tokens\": 1295, \"completion_tokens\": 442, \"total_tokens\": 1737, \"cost\": 0.0006129032}",
+        "[usage] openrouter deepseek/deepseek-chat {\"prompt_tokens\": 1248, \"completion_tokens\": 265, \"total_tokens\": 1513, \"cost\": 0.0004618761}",
+        "[usage] openrouter deepseek/deepseek-chat {\"prompt_tokens\": 1276, \"completion_tokens\": 232, \"total_tokens\": 1508, \"cost\": 0.000812}",
+        "[usage] openrouter openai/gpt-4.1-mini {\"prompt_tokens\": 1198, \"completion_tokens\": 17, \"total_tokens\": 1215, \"cost\": 0.0005064}",
+        "[usage] openrouter openai/gpt-4.1-mini {\"prompt_tokens\": 903, \"completion_tokens\": 17, \"total_tokens\": 920, \"cost\": 0.0003884}",
+        "[usage] openrouter openai/gpt-4.1-mini {\"prompt_tokens\": 967, \"completion_tokens\": 17, \"total_tokens\": 984, \"cost\": 0.000414}"
+      ]
+    },
+    {
+      "id": 14,
+      "pillar": "build_in_public",
+      "angle": "Why we're building a waitlist before signing a provider — clinical-infra minimums, unit economics of not paying for idle capacity",
+      "returncode": 0,
+      "started_at": "2026-07-21T12:42:00",
+      "finished_at": "2026-07-21T12:43:00",
+      "post_id": "bd00efab6940",
+      "package_dir": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/bd00efab6940",
+      "compliance_status": "pass",
+      "queue_status": "ready_to_post",
+      "usage": [
+        "[usage] openrouter deepseek/deepseek-chat {\"prompt_tokens\": 1314, \"completion_tokens\": 580, \"total_tokens\": 1894, \"cost\": 0.00093668}",
+        "[usage] openrouter deepseek/deepseek-chat {\"prompt_tokens\": 1267, \"completion_tokens\": 211, \"total_tokens\": 1478, \"cost\": 0.00059323}",
+        "[usage] openrouter deepseek/deepseek-chat {\"prompt_tokens\": 1295, \"completion_tokens\": 265, \"total_tokens\": 1560, \"cost\": 0.0004712855}",
+        "[usage] openrouter openai/gpt-4.1-mini {\"prompt_tokens\": 1299, \"completion_tokens\": 17, \"total_tokens\": 1316, \"cost\": 0.0005468}",
+        "[usage] openrouter openai/gpt-4.1-mini {\"prompt_tokens\": 908, \"completion_tokens\": 17, \"total_tokens\": 925, \"cost\": 0.0003904}",
+        "[usage] openrouter openai/gpt-4.1-mini {\"prompt_tokens\": 1004, \"completion_tokens\": 17, \"total_tokens\": 1021, \"cost\": 0.0004288}"
+      ]
+    }
+  ]
+}

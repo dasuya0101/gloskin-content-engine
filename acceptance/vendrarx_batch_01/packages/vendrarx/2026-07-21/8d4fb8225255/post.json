@@ -1,0 +1,224 @@
+{
+  "post_id": "8d4fb8225255",
+  "brand": "vendrarx",
+  "created_at": "2026-07-21T12:40:10",
+  "format": "text_native",
+  "character": {},
+  "hook": "GHK-Cu topical vs injected \u2014 where evidence exists and where it's thin",
+  "slides": [],
+  "assets": {},
+  "outputs": {
+    "formats": {
+      "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/8d4fb8225255/reddit.md",
+      "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/8d4fb8225255/thread.json",
+      "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/8d4fb8225255/tiktok_script.md"
+    },
+    "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/8d4fb8225255/reddit.md",
+    "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/8d4fb8225255/thread.json",
+    "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/8d4fb8225255/tiktok_script.md"
+  },
+  "caption": "GHK-Cu topical vs injected \u2014 where evidence exists and where it's thin\n\nTake the 60-second quiz.\n\nEducational only. Not medical advice. Compounded medications are not FDA-approved. Suitability is determined by a licensed clinician.\n\nTracking: vendra_20260721124010_01_01",
+  "package": {
+    "dir": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/8d4fb8225255",
+    "slides_dir": null,
+    "video": null,
+    "caption": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/8d4fb8225255/caption.txt",
+    "brief": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/8d4fb8225255/brief.json",
+    "assets_dir": null,
+    "assets": {},
+    "metadata": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/8d4fb8225255/post.json",
+    "formats": {
+      "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/8d4fb8225255/reddit.md",
+      "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/8d4fb8225255/thread.json",
+      "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/8d4fb8225255/tiktok_script.md"
+    }
+  },
+  "variant_of": null,
+  "tracking_code": "vendra_20260721124010_01_01",
+  "publish": {
+    "platform": null,
+    "account": null,
+    "url": null,
+    "posted_at": null
+  },
+  "publish_queue": {
+    "status": "needs_edit",
+    "target_account": "TODO",
+    "notes": null,
+    "updated_at": "2026-07-21T12:41:26"
+  },
+  "compliance": {
+    "status": "needs_review",
+    "violations": [
+      {
+        "text": "Most of this research involves small trials or case studies, but the results are directionally consistent: GHK-Cu applied to the skin *may* support collagen production and skin barrier function.",
+        "rule": "fabricated_evidence",
+        "severity": "block",
+        "output": "reddit_longform"
+      },
+      {
+        "text": "The caveat? Quality matters. A lot. GHK-Cu is unstable in solution and degrades quickly without proper formulation \u2014 so buying a random peptide vial and mixing it into your moisturizer probably won\u2019t cut it.",
+        "rule": "unverifiable_operational_claim",
+        "severity": "warn",
+        "output": "reddit_longform"
+      },
+      {
+        "text": "Clinical-grade topicals are formulated to stabilize the peptide and enhance absorption, which matters if you\u2019re expecting results.",
+        "rule": "unverifiable_operational_claim",
+        "severity": "warn",
+        "output": "reddit_longform"
+      },
+      {
+        "text": "In preclinical models, GHK-Cu injection *may* support tissue repair and reduce inflammation, but we don\u2019t know if those effects occur in humans at safe doses.",
+        "rule": "fabricated_evidence",
+        "severity": "block",
+        "output": "reddit_longform"
+      },
+      {
+        "text": "There\u2019s also almost no safety data for injectable GHK-Cu, which is a red flag.",
+        "rule": "fabricated_evidence",
+        "severity": "block",
+        "output": "reddit_longform"
+      },
+      {
+        "text": "We\u2019re building a clinician-guided telehealth practice for peptide therapy, and we only work with US-licensed physicians who evaluate suitability on a case-by-case basis.",
+        "rule": "unverifiable_operational_claim",
+        "severity": "warn",
+        "output": "reddit_longform"
+      },
+      {
+        "text": "If GHK-Cu is appropriate for your goals, we\u2019ll connect you with a clinician who can guide you safely \u2014 and we\u2019ll source it from a 503A compounding pharmacy that meets strict quality standards.",
+        "rule": "unverifiable_operational_claim",
+        "severity": "warn",
+        "output": "reddit_longform"
+      },
+      {
+        "text": "If labs or follow-up are needed, we\u2019ll make that part of the plan too.",
+        "rule": "unverifiable_operational_claim",
+        "severity": "warn",
+        "output": "reddit_longform"
+      },
+      {
+        "text": "Here\u2019s the bottom line: GHK-Cu\u2019s skin-level benefits are plausible, but systemic injection is still speculative.",
+        "rule": "fabricated_evidence",
+        "severity": "block",
+        "output": "reddit_longform"
+      },
+      {
+        "text": "",
+        "rule": "rewrite_render_error",
+        "severity": "warn",
+        "detail": "reddit_longform body must be 300-800 words; got 147",
+        "output": "reddit_longform"
+      }
+    ],
+    "checked_at": "2026-07-21T12:41:26",
+    "outputs": {
+      "reddit_longform": {
+        "status": "needs_review",
+        "violations": [
+          {
+            "text": "Most of this research involves small trials or case studies, but the results are directionally consistent: GHK-Cu applied to the skin *may* support collagen production and skin barrier function.",
+            "rule": "fabricated_evidence",
+            "severity": "block"
+          },
+          {
+            "text": "The caveat? Quality matters. A lot. GHK-Cu is unstable in solution and degrades quickly without proper formulation \u2014 so buying a random peptide vial and mixing it into your moisturizer probably won\u2019t cut it.",
+            "rule": "unverifiable_operational_claim",
+            "severity": "warn"
+          },
+          {
+            "text": "Clinical-grade topicals are formulated to stabilize the peptide and enhance absorption, which matters if you\u2019re expecting results.",
+            "rule": "unverifiable_operational_claim",
+            "severity": "warn"
+          },
+          {
+            "text": "In preclinical models, GHK-Cu injection *may* support tissue repair and reduce inflammation, but we don\u2019t know if those effects occur in humans at safe doses.",
+            "rule": "fabricated_evidence",
+            "severity": "block"
+          },
+          {
+            "text": "There\u2019s also almost no safety data for injectable GHK-Cu, which is a red flag.",
+            "rule": "fabricated_evidence",
+            "severity": "block"
+          },
+          {
+            "text": "We\u2019re building a clinician-guided telehealth practice for peptide therapy, and we only work with US-licensed physicians who evaluate suitability on a case-by-case basis.",
+            "rule": "unverifiable_operational_claim",
+            "severity": "warn"
+          },
+          {
+            "text": "If GHK-Cu is appropriate for your goals, we\u2019ll connect you with a clinician who can guide you safely \u2014 and we\u2019ll source it from a 503A compounding pharmacy that meets strict quality standards.",
+            "rule": "unverifiable_operational_claim",
+            "severity": "warn"
+          },
+          {
+            "text": "If labs or follow-up are needed, we\u2019ll make that part of the plan too.",
+            "rule": "unverifiable_operational_claim",
+            "severity": "warn"
+          },
+          {
+            "text": "Here\u2019s the bottom line: GHK-Cu\u2019s skin-level benefits are plausible, but systemic injection is still speculative.",
+            "rule": "fabricated_evidence",
+            "severity": "block"
+          },
+          {
+            "text": "",
+            "rule": "rewrite_render_error",
+            "severity": "warn",
+            "detail": "reddit_longform body must be 300-800 words; got 147"
+          }
+        ],
+        "checked_at": "2026-07-21T12:41:23",
+        "candidates": [
+          {
+            "text": "cure",
+            "rule": "review",
+            "pattern": "\\b(cure|cures|treat|treats|prevent|prevents|heal|heals)\\b"
+          }
+        ],
+        "notes": [
+          "context-cleared Layer-2 violation: If you\u2019ve looked into GHK-Cu, you\u2019ve probably noticed it\u2019s marketed both as a topical serum and an injectable peptide.",
+          "context-cleared Layer-2 violation: The reality? These are two very different applications with different evidence bases \u2014 and different levels of clinical support.",
+          "context-cleared Layer-2 violation: Here\u2019s what the research landscape shows so far:",
+          "context-cleared Layer-2 violation: It\u2019s not a miracle cure, but the limited evidence we have suggests it\u2019s worth considering for topical use.",
+          "context-cleared Layer-2 violation: So why inject it? Mostly because someone said so.",
+          "context-cleared Layer-2 violation: Injectables are trendy in peptide groups, but trendy doesn\u2019t mean supported.",
+          "context-cleared Layer-2 violation: Without robust human safety and efficacy data, injectable GHK-Cu is still an experimental use case \u2014 not a clinical treatment.",
+          "context-cleared Layer-2 violation: At VendraRx, we focus on applications with at least *some* human evidence \u2014 and that means starting with topical GHK-Cu.",
+          "context-cleared Layer-1 candidate: cure"
+        ],
+        "suggested_rewrite": "# GHK-Cu: Where Topical and Injected Evidence Differs\n\nGHK-Cu is marketed both as a topical serum and an injectable peptide. These represent different applications with varying levels of evidence.\n\nTopical GHK-Cu has some human data related to skin elasticity, wound healing, and anti-aging effects. Limited studies suggest it may support collagen production and skin barrier function, but evidence is not conclusive.\n\nGHK-Cu is unstable in solution and may degrade without proper formulation. Clinical-grade topicals are designed to stabilize the peptide and enhance absorption.\n\nInjectable GHK-Cu has limited human data, with most evidence from animal studies. Effects observed in preclinical models may not translate to humans, and safety data for injectable use is limited.\n\nDue to limited human safety and efficacy data, injectable GHK-Cu remains experimental.\n\nCompounded medications are prepared by licensed pharmacies and are not FDA-approved. Individual suitability is determined by a licensed clinician.\n\n[Take the 60-second quiz](https://vendrarx.com/?utm_source=reddit&utm_campaign=vendra_20260721124010_01_01)\n",
+        "rewrite_attempted": true
+      },
+      "x_thread": {
+        "status": "pass",
+        "violations": [],
+        "checked_at": "2026-07-21T12:41:25",
+        "candidates": [],
+        "notes": [],
+        "suggested_rewrite": "",
+        "rewrite_attempted": false
+      },
+      "tiktok_script": {
+        "status": "pass",
+        "violations": [],
+        "checked_at": "2026-07-21T12:41:26",
+        "candidates": [],
+        "notes": [],
+        "suggested_rewrite": "",
+        "rewrite_attempted": false
+      }
+    }
+  },
+  "metrics": {
+    "views": null,
+    "likes": null,
+    "shares": null,
+    "saves": null,
+    "ctr": null,
+    "installs": null,
+    "updated_at": null
+  },
+  "is_winner": null
+}

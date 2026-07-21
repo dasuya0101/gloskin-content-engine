@@ -1,0 +1,323 @@
+{
+  "post_count": 14,
+  "output_file_count": 42,
+  "status_distribution": {
+    "pass": 11,
+    "needs_review": 3
+  },
+  "execution_failures": 0,
+  "api_calls_with_usage": 88,
+  "total_tokens": 121594,
+  "reported_cost_usd": 0.053303,
+  "errors": [],
+  "rows": [
+    {
+      "id": 1,
+      "post_id": "1e203377f89a",
+      "status": "pass",
+      "queue": "ready_to_post",
+      "reddit_words": 314,
+      "tweet_count": 6,
+      "max_tweet_chars": 257,
+      "checks": {
+        "angle_verbatim": true,
+        "reddit_words_300_800": true,
+        "tweets_at_most_275": true,
+        "tiktok_sections": true,
+        "cta_once_each": true,
+        "utm_sources": true,
+        "disclaimers": true,
+        "metadata_parity": true,
+        "no_placeholder_residue": true,
+        "not_published": true,
+        "no_override": true
+      }
+    },
+    {
+      "id": 2,
+      "post_id": "07d02d0b7f87",
+      "status": "pass",
+      "queue": "ready_to_post",
+      "reddit_words": 363,
+      "tweet_count": 5,
+      "max_tweet_chars": 219,
+      "checks": {
+        "angle_verbatim": true,
+        "reddit_words_300_800": true,
+        "tweets_at_most_275": true,
+        "tiktok_sections": true,
+        "cta_once_each": true,
+        "utm_sources": true,
+        "disclaimers": true,
+        "metadata_parity": true,
+        "no_placeholder_residue": true,
+        "not_published": true,
+        "no_override": true
+      }
+    },
+    {
+      "id": 3,
+      "post_id": "de65946192a7",
+      "status": "pass",
+      "queue": "ready_to_post",
+      "reddit_words": 463,
+      "tweet_count": 8,
+      "max_tweet_chars": 169,
+      "checks": {
+        "angle_verbatim": true,
+        "reddit_words_300_800": true,
+        "tweets_at_most_275": true,
+        "tiktok_sections": true,
+        "cta_once_each": true,
+        "utm_sources": true,
+        "disclaimers": true,
+        "metadata_parity": true,
+        "no_placeholder_residue": true,
+        "not_published": true,
+        "no_override": true
+      }
+    },
+    {
+      "id": 4,
+      "post_id": "e8728a7deb68",
+      "status": "needs_review",
+      "queue": "needs_edit",
+      "reddit_words": 466,
+      "tweet_count": 7,
+      "max_tweet_chars": 172,
+      "checks": {
+        "angle_verbatim": true,
+        "reddit_words_300_800": true,
+        "tweets_at_most_275": true,
+        "tiktok_sections": true,
+        "cta_once_each": true,
+        "utm_sources": true,
+        "disclaimers": true,
+        "metadata_parity": true,
+        "no_placeholder_residue": true,
+        "not_published": true,
+        "no_override": true
+      }
+    },
+    {
+      "id": 5,
+      "post_id": "783f97789b1f",
+      "status": "needs_review",
+      "queue": "needs_edit",
+      "reddit_words": 341,
+      "tweet_count": 5,
+      "max_tweet_chars": 255,
+      "checks": {
+        "angle_verbatim": true,
+        "reddit_words_300_800": true,
+        "tweets_at_most_275": true,
+        "tiktok_sections": true,
+        "cta_once_each": true,
+        "utm_sources": true,
+        "disclaimers": true,
+        "metadata_parity": true,
+        "no_placeholder_residue": true,
+        "not_published": true,
+        "no_override": true
+      }
+    },
+    {
+      "id": 6,
+      "post_id": "72d71c1cc79e",
+      "status": "pass",
+      "queue": "ready_to_post",
+      "reddit_words": 474,
+      "tweet_count": 7,
+      "max_tweet_chars": 163,
+      "checks": {
+        "angle_verbatim": true,
+        "reddit_words_300_800": true,
+        "tweets_at_most_275": true,
+        "tiktok_sections": true,
+        "cta_once_each": true,
+        "utm_sources": true,
+        "disclaimers": true,
+        "metadata_parity": true,
+        "no_placeholder_residue": true,
+        "not_published": true,
+        "no_override": true
+      }
+    },
+    {
+      "id": 7,
+      "post_id": "060e44d9cbfa",
+      "status": "pass",
+      "queue": "ready_to_post",
+      "reddit_words": 373,
+      "tweet_count": 6,
+      "max_tweet_chars": 190,
+      "checks": {
+        "angle_verbatim": true,
+        "reddit_words_300_800": true,
+        "tweets_at_most_275": true,
+        "tiktok_sections": true,
+        "cta_once_each": true,
+        "utm_sources": true,
+        "disclaimers": true,
+        "metadata_parity": true,
+        "no_placeholder_residue": true,
+        "not_published": true,
+        "no_override": true
+      }
+    },
+    {
+      "id": 8,
+      "post_id": "445e034b5fd0",
+      "status": "pass",
+      "queue": "ready_to_post",
+      "reddit_words": 322,
+      "tweet_count": 6,
+      "max_tweet_chars": 264,
+      "checks": {
+        "angle_verbatim": true,
+        "reddit_words_300_800": true,
+        "tweets_at_most_275": true,
+        "tiktok_sections": true,
+        "cta_once_each": true,
+        "utm_sources": true,
+        "disclaimers": true,
+        "metadata_parity": true,
+        "no_placeholder_residue": true,
+        "not_published": true,
+        "no_override": true
+      }
+    },
+    {
+      "id": 9,
+      "post_id": "c9a683a62429",
+      "status": "pass",
+      "queue": "ready_to_post",
+      "reddit_words": 319,
+      "tweet_count": 5,
+      "max_tweet_chars": 247,
+      "checks": {
+        "angle_verbatim": true,
+        "reddit_words_300_800": true,
+        "tweets_at_most_275": true,
+        "tiktok_sections": true,
+        "cta_once_each": true,
+        "utm_sources": true,
+        "disclaimers": true,
+        "metadata_parity": true,
+        "no_placeholder_residue": true,
+        "not_published": true,
+        "no_override": true
+      }
+    },
+    {
+      "id": 10,
+      "post_id": "cf3c30972074",
+      "status": "pass",
+      "queue": "ready_to_post",
+      "reddit_words": 336,
+      "tweet_count": 7,
+      "max_tweet_chars": 202,
+      "checks": {
+        "angle_verbatim": true,
+        "reddit_words_300_800": true,
+        "tweets_at_most_275": true,
+        "tiktok_sections": true,
+        "cta_once_each": true,
+        "utm_sources": true,
+        "disclaimers": true,
+        "metadata_parity": true,
+        "no_placeholder_residue": true,
+        "not_published": true,
+        "no_override": true
+      }
+    },
+    {
+      "id": 11,
+      "post_id": "9a28067417b2",
+      "status": "pass",
+      "queue": "ready_to_post",
+      "reddit_words": 341,
+      "tweet_count": 5,
+      "max_tweet_chars": 222,
+      "checks": {
+        "angle_verbatim": true,
+        "reddit_words_300_800": true,
+        "tweets_at_most_275": true,
+        "tiktok_sections": true,
+        "cta_once_each": true,
+        "utm_sources": true,
+        "disclaimers": true,
+        "metadata_parity": true,
+        "no_placeholder_residue": true,
+        "not_published": true,
+        "no_override": true
+      }
+    },
+    {
+      "id": 12,
+      "post_id": "8d4fb8225255",
+      "status": "needs_review",
+      "queue": "needs_edit",
+      "reddit_words": 436,
+      "tweet_count": 7,
+      "max_tweet_chars": 133,
+      "checks": {
+        "angle_verbatim": true,
+        "reddit_words_300_800": true,
+        "tweets_at_most_275": true,
+        "tiktok_sections": true,
+        "cta_once_each": true,
+        "utm_sources": true,
+        "disclaimers": true,
+        "metadata_parity": true,
+        "no_placeholder_residue": true,
+        "not_published": true,
+        "no_override": true
+      }
+    },
+    {
+      "id": 13,
+      "post_id": "d24423d53722",
+      "status": "pass",
+      "queue": "ready_to_post",
+      "reddit_words": 306,
+      "tweet_count": 5,
+      "max_tweet_chars": 237,
+      "checks": {
+        "angle_verbatim": true,
+        "reddit_words_300_800": true,
+        "tweets_at_most_275": true,
+        "tiktok_sections": true,
+        "cta_once_each": true,
+        "utm_sources": true,
+        "disclaimers": true,
+        "metadata_parity": true,
+        "no_placeholder_residue": true,
+        "not_published": true,
+        "no_override": true
+      }
+    },
+    {
+      "id": 14,
+      "post_id": "bd00efab6940",
+      "status": "pass",
+      "queue": "ready_to_post",
+      "reddit_words": 427,
+      "tweet_count": 6,
+      "max_tweet_chars": 219,
+      "checks": {
+        "angle_verbatim": true,
+        "reddit_words_300_800": true,
+        "tweets_at_most_275": true,
+        "tiktok_sections": true,
+        "cta_once_each": true,
+        "utm_sources": true,
+        "disclaimers": true,
+        "metadata_parity": true,
+        "no_placeholder_residue": true,
+        "not_published": true,
+        "no_override": true
+      }
+    }
+  ]
+}

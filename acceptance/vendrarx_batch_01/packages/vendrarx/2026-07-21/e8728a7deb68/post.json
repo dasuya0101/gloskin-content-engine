@@ -1,0 +1,115 @@
+{
+  "post_id": "e8728a7deb68",
+  "brand": "vendrarx",
+  "created_at": "2026-07-21T12:33:02",
+  "format": "text_native",
+  "character": {},
+  "hook": "Anatomy of a legitimate telehealth Rx flow \u2014 intake \u2192 clinician \u2192 prescription \u2192 compounding pharmacy \u2192 shipment, and why each step exists",
+  "slides": [],
+  "assets": {},
+  "outputs": {
+    "formats": {
+      "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/e8728a7deb68/reddit.md",
+      "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/e8728a7deb68/thread.json",
+      "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/e8728a7deb68/tiktok_script.md"
+    },
+    "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/e8728a7deb68/reddit.md",
+    "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/e8728a7deb68/thread.json",
+    "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/e8728a7deb68/tiktok_script.md"
+  },
+  "caption": "Anatomy of a legitimate telehealth Rx flow \u2014 intake \u2192 clinician \u2192 prescription \u2192 compounding pharmacy \u2192 shipment, and why each step exists\n\nTake the 60-second quiz.\n\nEducational only. Not medical advice. Compounded medications are not FDA-approved. Suitability is determined by a licensed clinician.\n\nTracking: vendra_20260721123302_01_01",
+  "package": {
+    "dir": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/e8728a7deb68",
+    "slides_dir": null,
+    "video": null,
+    "caption": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/e8728a7deb68/caption.txt",
+    "brief": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/e8728a7deb68/brief.json",
+    "assets_dir": null,
+    "assets": {},
+    "metadata": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/e8728a7deb68/post.json",
+    "formats": {
+      "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/e8728a7deb68/reddit.md",
+      "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/e8728a7deb68/thread.json",
+      "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/e8728a7deb68/tiktok_script.md"
+    }
+  },
+  "variant_of": null,
+  "tracking_code": "vendra_20260721123302_01_01",
+  "publish": {
+    "platform": null,
+    "account": null,
+    "url": null,
+    "posted_at": null
+  },
+  "publish_queue": {
+    "status": "needs_edit",
+    "target_account": "TODO",
+    "notes": null,
+    "updated_at": "2026-07-21T12:34:08"
+  },
+  "compliance": {
+    "status": "needs_review",
+    "violations": [
+      {
+        "text": "temperature-controlled",
+        "rule": "unverifiable_operational_claim",
+        "severity": "warn",
+        "output": "tiktok_script"
+      }
+    ],
+    "checked_at": "2026-07-21T12:34:08",
+    "outputs": {
+      "reddit_longform": {
+        "status": "pass",
+        "violations": [],
+        "checked_at": "2026-07-21T12:34:05",
+        "candidates": [],
+        "notes": [
+          "context-cleared Layer-2 violation: I\u2019m writing this as someone building a telehealth operation focused on peptide therapy, so I\u2019ll keep it concrete and skip the hype."
+        ],
+        "suggested_rewrite": "# Anatomy of a Legitimate Telehealth Rx Flow \u2014 Intake \u2192 Clinician \u2192 Prescription \u2192 Compounding Pharmacy \u2192 Shipment, and Why Each Step Exists\n\nLet\u2019s break down what a legitimate telehealth peptide therapy process looks like, step by step, and why each piece matters.\n\n### 1. **Intake**  \nThis isn\u2019t a quiz or a chatbot. It\u2019s a detailed clinical questionnaire that gives the physician a snapshot of your health history, current status, and goals. Think labs (if you\u2019ve got them), medications, conditions, and any peptides you\u2019ve tried before. The goal is to make the physician\u2019s review efficient and thorough \u2014 not to auto-qualify you for anything.\n\n### 2. **Clinician Review**  \nNo AI, no shortcuts \u2014 asynchronous physician review by a US-licensed clinician where available. This is where they determine suitability based on your intake and any labs you\u2019ve provided. The clinician might also recommend additional tests (e.g., hormone panels, metabolic markers) if needed to inform their decision.  \n\nThis step exists because peptide therapy isn\u2019t one-size-fits-all. What works for someone else might not be appropriate for you, and vice versa. The clinician\u2019s role is to ensure safety and appropriateness, not to rubber-stamp prescriptions.\n\n### 3. **Prescription**  \nIf the clinician determines a peptide is appropriate for you, they\u2019ll issue a prescription. This isn\u2019t a blanket \u201cyes\u201d \u2014 it\u2019s a specific prescription for a specific peptide at a specific dose, tailored to your needs.  \n\nThe prescription is routed to a 503A compounding pharmacy. Why compounding? Because peptides aren\u2019t mass-produced pharmaceuticals. They\u2019re typically compounded to order in sterile labs under FDA oversight, ensuring potency and safety.\n\n### 4. **Compounding Pharmacy**  \nCompounding pharmacies exist to prepare medications that aren\u2019t commercially available in the exact form or dosage needed. For peptides, this means sterile compounding of vials or injectables tailored to your prescription.  \n\nThis step is regulated under FDA guidelines, but it\u2019s important to note that compounded medications aren\u2019t FDA-approved. That doesn\u2019t mean they\u2019re unsafe \u2014 it means they\u2019re prepared on a per-prescription basis rather than mass-produced.\n\n### 5. **Shipment**  \nOnce compounded, your order ships directly from the pharmacy to you. This is the final step in the chain of custody, ensuring that what was prescribed is what you receive.  \n\n---\n\n### Why This Process Matters  \nEvery step exists to prioritize safety, appropriateness, and clinician oversight. Telehealth isn\u2019t meant to replace in-person care \u2014 it\u2019s meant to make access more efficient while maintaining clinical rigor.  \n\nIf you\u2019re exploring peptide therapy, look for operations that follow this kind of process. It\u2019s not flashy, but it\u2019s the foundation of legitimate care.  \n\nCompounded medications are prepared by licensed pharmacies and are not FDA-approved. Individual suitability is determined by a licensed clinician.  \n[Take the 60-second quiz](https://vendrarx.com/?utm_source=reddit&utm_campaign=vendra_20260721123302_01_01)\n",
+        "rewrite_attempted": false
+      },
+      "x_thread": {
+        "status": "pass",
+        "violations": [],
+        "checked_at": "2026-07-21T12:34:06",
+        "candidates": [],
+        "notes": [],
+        "suggested_rewrite": "",
+        "rewrite_attempted": false
+      },
+      "tiktok_script": {
+        "status": "needs_review",
+        "violations": [
+          {
+            "text": "temperature-controlled",
+            "rule": "unverifiable_operational_claim",
+            "severity": "warn"
+          }
+        ],
+        "checked_at": "2026-07-21T12:34:08",
+        "candidates": [
+          {
+            "text": "temperature-controlled",
+            "rule": "shipping_or_storage",
+            "pattern": "\\b(?:cold[- ]chain|refrigerated shipping|temperature[- ]controlled)\\b"
+          }
+        ],
+        "notes": [],
+        "suggested_rewrite": "",
+        "rewrite_attempted": false
+      }
+    }
+  },
+  "metrics": {
+    "views": null,
+    "likes": null,
+    "shares": null,
+    "saves": null,
+    "ctr": null,
+    "installs": null,
+    "updated_at": null
+  },
+  "is_winner": null
+}

@@ -1,0 +1,1566 @@
+[
+  {
+    "post_id": "1e203377f89a",
+    "brand": "vendrarx",
+    "created_at": "2026-07-21T12:30:26",
+    "format": "text_native",
+    "character": {},
+    "hook": "Why your peptide vendor disappeared overnight \u2014 the 503A compounding crackdown, what's still legal, where the gray market went",
+    "slides": [],
+    "assets": {},
+    "outputs": {
+      "formats": {
+        "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/1e203377f89a/reddit.md",
+        "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/1e203377f89a/thread.json",
+        "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/1e203377f89a/tiktok_script.md"
+      },
+      "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/1e203377f89a/reddit.md",
+      "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/1e203377f89a/thread.json",
+      "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/1e203377f89a/tiktok_script.md"
+    },
+    "caption": "Why your peptide vendor disappeared overnight \u2014 the 503A compounding crackdown, what's still legal, where the gray market went\n\nTake the 60-second quiz.\n\nEducational only. Not medical advice. Compounded medications are not FDA-approved. Suitability is determined by a licensed clinician.\n\nTracking: vendra_20260721123026_01_01",
+    "package": {
+      "dir": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/1e203377f89a",
+      "slides_dir": null,
+      "video": null,
+      "caption": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/1e203377f89a/caption.txt",
+      "brief": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/1e203377f89a/brief.json",
+      "assets_dir": null,
+      "assets": {},
+      "metadata": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/1e203377f89a/post.json",
+      "formats": {
+        "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/1e203377f89a/reddit.md",
+        "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/1e203377f89a/thread.json",
+        "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/1e203377f89a/tiktok_script.md"
+      }
+    },
+    "variant_of": null,
+    "tracking_code": "vendra_20260721123026_01_01",
+    "publish": {
+      "platform": null,
+      "account": null,
+      "url": null,
+      "posted_at": null
+    },
+    "publish_queue": {
+      "status": "ready_to_post",
+      "target_account": "TODO",
+      "notes": null,
+      "updated_at": "2026-07-21T12:31:06"
+    },
+    "compliance": {
+      "status": "pass",
+      "violations": [],
+      "checked_at": "2026-07-21T12:31:06",
+      "outputs": {
+        "reddit_longform": {
+          "status": "pass",
+          "violations": [],
+          "checked_at": "2026-07-21T12:31:04",
+          "candidates": [],
+          "notes": [],
+          "suggested_rewrite": "",
+          "rewrite_attempted": false
+        },
+        "x_thread": {
+          "status": "pass",
+          "violations": [],
+          "checked_at": "2026-07-21T12:31:05",
+          "candidates": [],
+          "notes": [],
+          "suggested_rewrite": "",
+          "rewrite_attempted": false
+        },
+        "tiktok_script": {
+          "status": "pass",
+          "violations": [],
+          "checked_at": "2026-07-21T12:31:06",
+          "candidates": [],
+          "notes": [],
+          "suggested_rewrite": "",
+          "rewrite_attempted": false
+        }
+      }
+    },
+    "metrics": {
+      "views": null,
+      "likes": null,
+      "shares": null,
+      "saves": null,
+      "ctr": null,
+      "installs": null,
+      "updated_at": null
+    },
+    "is_winner": null
+  },
+  {
+    "post_id": "07d02d0b7f87",
+    "brand": "vendrarx",
+    "created_at": "2026-07-21T12:31:06",
+    "format": "text_native",
+    "character": {},
+    "hook": "503A vs 503B pharmacies \u2014 what the distinction means for what's in your vial",
+    "slides": [],
+    "assets": {},
+    "outputs": {
+      "formats": {
+        "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/07d02d0b7f87/reddit.md",
+        "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/07d02d0b7f87/thread.json",
+        "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/07d02d0b7f87/tiktok_script.md"
+      },
+      "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/07d02d0b7f87/reddit.md",
+      "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/07d02d0b7f87/thread.json",
+      "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/07d02d0b7f87/tiktok_script.md"
+    },
+    "caption": "503A vs 503B pharmacies \u2014 what the distinction means for what's in your vial\n\nTake the 60-second quiz.\n\nEducational only. Not medical advice. Compounded medications are not FDA-approved. Suitability is determined by a licensed clinician.\n\nTracking: vendra_20260721123106_01_01",
+    "package": {
+      "dir": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/07d02d0b7f87",
+      "slides_dir": null,
+      "video": null,
+      "caption": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/07d02d0b7f87/caption.txt",
+      "brief": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/07d02d0b7f87/brief.json",
+      "assets_dir": null,
+      "assets": {},
+      "metadata": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/07d02d0b7f87/post.json",
+      "formats": {
+        "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/07d02d0b7f87/reddit.md",
+        "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/07d02d0b7f87/thread.json",
+        "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/07d02d0b7f87/tiktok_script.md"
+      }
+    },
+    "variant_of": null,
+    "tracking_code": "vendra_20260721123106_01_01",
+    "publish": {
+      "platform": null,
+      "account": null,
+      "url": null,
+      "posted_at": null
+    },
+    "publish_queue": {
+      "status": "ready_to_post",
+      "target_account": "TODO",
+      "notes": null,
+      "updated_at": "2026-07-21T12:31:54"
+    },
+    "compliance": {
+      "status": "pass",
+      "violations": [],
+      "checked_at": "2026-07-21T12:31:54",
+      "outputs": {
+        "reddit_longform": {
+          "status": "pass",
+          "violations": [],
+          "checked_at": "2026-07-21T12:31:52",
+          "candidates": [],
+          "notes": [],
+          "suggested_rewrite": "",
+          "rewrite_attempted": false
+        },
+        "x_thread": {
+          "status": "pass",
+          "violations": [],
+          "checked_at": "2026-07-21T12:31:53",
+          "candidates": [],
+          "notes": [],
+          "suggested_rewrite": "",
+          "rewrite_attempted": false
+        },
+        "tiktok_script": {
+          "status": "pass",
+          "violations": [],
+          "checked_at": "2026-07-21T12:31:54",
+          "candidates": [],
+          "notes": [],
+          "suggested_rewrite": "",
+          "rewrite_attempted": false
+        }
+      }
+    },
+    "metrics": {
+      "views": null,
+      "likes": null,
+      "shares": null,
+      "saves": null,
+      "ctr": null,
+      "installs": null,
+      "updated_at": null
+    },
+    "is_winner": null
+  },
+  {
+    "post_id": "de65946192a7",
+    "brand": "vendrarx",
+    "created_at": "2026-07-21T12:31:54",
+    "format": "text_native",
+    "character": {},
+    "hook": "What \"research use only\" legally means \u2014 the fiction behind RUO peptide sites",
+    "slides": [],
+    "assets": {},
+    "outputs": {
+      "formats": {
+        "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/de65946192a7/reddit.md",
+        "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/de65946192a7/thread.json",
+        "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/de65946192a7/tiktok_script.md"
+      },
+      "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/de65946192a7/reddit.md",
+      "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/de65946192a7/thread.json",
+      "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/de65946192a7/tiktok_script.md"
+    },
+    "caption": "What \"research use only\" legally means \u2014 the fiction behind RUO peptide sites\n\nTake the 60-second quiz.\n\nEducational only. Not medical advice. Compounded medications are not FDA-approved. Suitability is determined by a licensed clinician.\n\nTracking: vendra_20260721123154_01_01",
+    "package": {
+      "dir": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/de65946192a7",
+      "slides_dir": null,
+      "video": null,
+      "caption": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/de65946192a7/caption.txt",
+      "brief": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/de65946192a7/brief.json",
+      "assets_dir": null,
+      "assets": {},
+      "metadata": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/de65946192a7/post.json",
+      "formats": {
+        "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/de65946192a7/reddit.md",
+        "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/de65946192a7/thread.json",
+        "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/de65946192a7/tiktok_script.md"
+      }
+    },
+    "variant_of": null,
+    "tracking_code": "vendra_20260721123154_01_01",
+    "publish": {
+      "platform": null,
+      "account": null,
+      "url": null,
+      "posted_at": null
+    },
+    "publish_queue": {
+      "status": "ready_to_post",
+      "target_account": "TODO",
+      "notes": null,
+      "updated_at": "2026-07-21T12:33:02"
+    },
+    "compliance": {
+      "status": "pass",
+      "violations": [],
+      "checked_at": "2026-07-21T12:33:02",
+      "outputs": {
+        "reddit_longform": {
+          "status": "pass",
+          "violations": [],
+          "checked_at": "2026-07-21T12:32:56",
+          "candidates": [],
+          "notes": [],
+          "suggested_rewrite": "",
+          "rewrite_attempted": false
+        },
+        "x_thread": {
+          "status": "pass",
+          "violations": [],
+          "checked_at": "2026-07-21T12:32:59",
+          "candidates": [],
+          "notes": [],
+          "suggested_rewrite": "",
+          "rewrite_attempted": false
+        },
+        "tiktok_script": {
+          "status": "pass",
+          "violations": [],
+          "checked_at": "2026-07-21T12:33:02",
+          "candidates": [],
+          "notes": [],
+          "suggested_rewrite": "",
+          "rewrite_attempted": false
+        }
+      }
+    },
+    "metrics": {
+      "views": null,
+      "likes": null,
+      "shares": null,
+      "saves": null,
+      "ctr": null,
+      "installs": null,
+      "updated_at": null
+    },
+    "is_winner": null
+  },
+  {
+    "post_id": "e8728a7deb68",
+    "brand": "vendrarx",
+    "created_at": "2026-07-21T12:33:02",
+    "format": "text_native",
+    "character": {},
+    "hook": "Anatomy of a legitimate telehealth Rx flow \u2014 intake \u2192 clinician \u2192 prescription \u2192 compounding pharmacy \u2192 shipment, and why each step exists",
+    "slides": [],
+    "assets": {},
+    "outputs": {
+      "formats": {
+        "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/e8728a7deb68/reddit.md",
+        "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/e8728a7deb68/thread.json",
+        "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/e8728a7deb68/tiktok_script.md"
+      },
+      "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/e8728a7deb68/reddit.md",
+      "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/e8728a7deb68/thread.json",
+      "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/e8728a7deb68/tiktok_script.md"
+    },
+    "caption": "Anatomy of a legitimate telehealth Rx flow \u2014 intake \u2192 clinician \u2192 prescription \u2192 compounding pharmacy \u2192 shipment, and why each step exists\n\nTake the 60-second quiz.\n\nEducational only. Not medical advice. Compounded medications are not FDA-approved. Suitability is determined by a licensed clinician.\n\nTracking: vendra_20260721123302_01_01",
+    "package": {
+      "dir": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/e8728a7deb68",
+      "slides_dir": null,
+      "video": null,
+      "caption": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/e8728a7deb68/caption.txt",
+      "brief": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/e8728a7deb68/brief.json",
+      "assets_dir": null,
+      "assets": {},
+      "metadata": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/e8728a7deb68/post.json",
+      "formats": {
+        "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/e8728a7deb68/reddit.md",
+        "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/e8728a7deb68/thread.json",
+        "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/e8728a7deb68/tiktok_script.md"
+      }
+    },
+    "variant_of": null,
+    "tracking_code": "vendra_20260721123302_01_01",
+    "publish": {
+      "platform": null,
+      "account": null,
+      "url": null,
+      "posted_at": null
+    },
+    "publish_queue": {
+      "status": "needs_edit",
+      "target_account": "TODO",
+      "notes": null,
+      "updated_at": "2026-07-21T12:34:08"
+    },
+    "compliance": {
+      "status": "needs_review",
+      "violations": [
+        {
+          "text": "temperature-controlled",
+          "rule": "unverifiable_operational_claim",
+          "severity": "warn",
+          "output": "tiktok_script"
+        }
+      ],
+      "checked_at": "2026-07-21T12:34:08",
+      "outputs": {
+        "reddit_longform": {
+          "status": "pass",
+          "violations": [],
+          "checked_at": "2026-07-21T12:34:05",
+          "candidates": [],
+          "notes": [
+            "context-cleared Layer-2 violation: I\u2019m writing this as someone building a telehealth operation focused on peptide therapy, so I\u2019ll keep it concrete and skip the hype."
+          ],
+          "suggested_rewrite": "# Anatomy of a Legitimate Telehealth Rx Flow \u2014 Intake \u2192 Clinician \u2192 Prescription \u2192 Compounding Pharmacy \u2192 Shipment, and Why Each Step Exists\n\nLet\u2019s break down what a legitimate telehealth peptide therapy process looks like, step by step, and why each piece matters.\n\n### 1. **Intake**  \nThis isn\u2019t a quiz or a chatbot. It\u2019s a detailed clinical questionnaire that gives the physician a snapshot of your health history, current status, and goals. Think labs (if you\u2019ve got them), medications, conditions, and any peptides you\u2019ve tried before. The goal is to make the physician\u2019s review efficient and thorough \u2014 not to auto-qualify you for anything.\n\n### 2. **Clinician Review**  \nNo AI, no shortcuts \u2014 asynchronous physician review by a US-licensed clinician where available. This is where they determine suitability based on your intake and any labs you\u2019ve provided. The clinician might also recommend additional tests (e.g., hormone panels, metabolic markers) if needed to inform their decision.  \n\nThis step exists because peptide therapy isn\u2019t one-size-fits-all. What works for someone else might not be appropriate for you, and vice versa. The clinician\u2019s role is to ensure safety and appropriateness, not to rubber-stamp prescriptions.\n\n### 3. **Prescription**  \nIf the clinician determines a peptide is appropriate for you, they\u2019ll issue a prescription. This isn\u2019t a blanket \u201cyes\u201d \u2014 it\u2019s a specific prescription for a specific peptide at a specific dose, tailored to your needs.  \n\nThe prescription is routed to a 503A compounding pharmacy. Why compounding? Because peptides aren\u2019t mass-produced pharmaceuticals. They\u2019re typically compounded to order in sterile labs under FDA oversight, ensuring potency and safety.\n\n### 4. **Compounding Pharmacy**  \nCompounding pharmacies exist to prepare medications that aren\u2019t commercially available in the exact form or dosage needed. For peptides, this means sterile compounding of vials or injectables tailored to your prescription.  \n\nThis step is regulated under FDA guidelines, but it\u2019s important to note that compounded medications aren\u2019t FDA-approved. That doesn\u2019t mean they\u2019re unsafe \u2014 it means they\u2019re prepared on a per-prescription basis rather than mass-produced.\n\n### 5. **Shipment**  \nOnce compounded, your order ships directly from the pharmacy to you. This is the final step in the chain of custody, ensuring that what was prescribed is what you receive.  \n\n---\n\n### Why This Process Matters  \nEvery step exists to prioritize safety, appropriateness, and clinician oversight. Telehealth isn\u2019t meant to replace in-person care \u2014 it\u2019s meant to make access more efficient while maintaining clinical rigor.  \n\nIf you\u2019re exploring peptide therapy, look for operations that follow this kind of process. It\u2019s not flashy, but it\u2019s the foundation of legitimate care.  \n\nCompounded medications are prepared by licensed pharmacies and are not FDA-approved. Individual suitability is determined by a licensed clinician.  \n[Take the 60-second quiz](https://vendrarx.com/?utm_source=reddit&utm_campaign=vendra_20260721123302_01_01)\n",
+          "rewrite_attempted": false
+        },
+        "x_thread": {
+          "status": "pass",
+          "violations": [],
+          "checked_at": "2026-07-21T12:34:06",
+          "candidates": [],
+          "notes": [],
+          "suggested_rewrite": "",
+          "rewrite_attempted": false
+        },
+        "tiktok_script": {
+          "status": "needs_review",
+          "violations": [
+            {
+              "text": "temperature-controlled",
+              "rule": "unverifiable_operational_claim",
+              "severity": "warn"
+            }
+          ],
+          "checked_at": "2026-07-21T12:34:08",
+          "candidates": [
+            {
+              "text": "temperature-controlled",
+              "rule": "shipping_or_storage",
+              "pattern": "\\b(?:cold[- ]chain|refrigerated shipping|temperature[- ]controlled)\\b"
+            }
+          ],
+          "notes": [],
+          "suggested_rewrite": "",
+          "rewrite_attempted": false
+        }
+      }
+    },
+    "metrics": {
+      "views": null,
+      "likes": null,
+      "shares": null,
+      "saves": null,
+      "ctr": null,
+      "installs": null,
+      "updated_at": null
+    },
+    "is_winner": null
+  },
+  {
+    "post_id": "783f97789b1f",
+    "brand": "vendrarx",
+    "created_at": "2026-07-21T12:34:09",
+    "format": "text_native",
+    "character": {},
+    "hook": "I read the BPC-157 literature so you don't have to  (already run \u2014 include for a clean set)",
+    "slides": [],
+    "assets": {},
+    "outputs": {
+      "formats": {
+        "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/783f97789b1f/reddit.md",
+        "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/783f97789b1f/thread.json",
+        "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/783f97789b1f/tiktok_script.md"
+      },
+      "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/783f97789b1f/reddit.md",
+      "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/783f97789b1f/thread.json",
+      "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/783f97789b1f/tiktok_script.md"
+    },
+    "caption": "I read the BPC-157 literature so you don't have to (already run \u2014 include for a clean set)\n\nTake the 60-second quiz.\n\nEducational only. Not medical advice. Compounded medications are not FDA-approved. Suitability is determined by a licensed clinician.\n\nTracking: vendra_20260721123409_01_01",
+    "package": {
+      "dir": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/783f97789b1f",
+      "slides_dir": null,
+      "video": null,
+      "caption": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/783f97789b1f/caption.txt",
+      "brief": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/783f97789b1f/brief.json",
+      "assets_dir": null,
+      "assets": {},
+      "metadata": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/783f97789b1f/post.json",
+      "formats": {
+        "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/783f97789b1f/reddit.md",
+        "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/783f97789b1f/thread.json",
+        "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/783f97789b1f/tiktok_script.md"
+      }
+    },
+    "variant_of": null,
+    "tracking_code": "vendra_20260721123409_01_01",
+    "publish": {
+      "platform": null,
+      "account": null,
+      "url": null,
+      "posted_at": null
+    },
+    "publish_queue": {
+      "status": "needs_edit",
+      "target_account": "TODO",
+      "notes": null,
+      "updated_at": "2026-07-21T12:35:06"
+    },
+    "compliance": {
+      "status": "needs_review",
+      "violations": [
+        {
+          "text": "I Read the BPC-157 Literature So You Don\u2019t Have To",
+          "rule": "fabricated_research_act",
+          "severity": "block",
+          "output": "reddit_longform"
+        },
+        {
+          "text": "Every case is reviewed by a US-licensed physician",
+          "rule": "unverifiable_operational_claim",
+          "severity": "warn",
+          "output": "reddit_longform"
+        },
+        {
+          "text": "",
+          "rule": "rewrite_render_error",
+          "severity": "warn",
+          "detail": "reddit_longform body must be 300-800 words; got 186",
+          "output": "reddit_longform"
+        }
+      ],
+      "checked_at": "2026-07-21T12:35:06",
+      "outputs": {
+        "reddit_longform": {
+          "status": "needs_review",
+          "violations": [
+            {
+              "text": "I Read the BPC-157 Literature So You Don\u2019t Have To",
+              "rule": "fabricated_research_act",
+              "severity": "block"
+            },
+            {
+              "text": "Every case is reviewed by a US-licensed physician",
+              "rule": "unverifiable_operational_claim",
+              "severity": "warn"
+            },
+            {
+              "text": "",
+              "rule": "rewrite_render_error",
+              "severity": "warn",
+              "detail": "reddit_longform body must be 300-800 words; got 186"
+            }
+          ],
+          "checked_at": "2026-07-21T12:34:58",
+          "candidates": [
+            {
+              "text": "cure",
+              "rule": "review",
+              "pattern": "\\b(cure|cures|treat|treats|prevent|prevents|heal|heals)\\b"
+            },
+            {
+              "text": "Every case is reviewed by a US-licensed physician",
+              "rule": "physician_availability",
+              "pattern": "\\b(?:(?:physicians?|clinicians?) available (?:24/7|today|now)|(?:every|each) (?:case|patient).{0,80}(?:reviewed|seen) by.{0,40}(?:physician|clinician))\\b"
+            }
+          ],
+          "notes": [
+            "context-cleared Layer-1 candidate: cure"
+          ],
+          "suggested_rewrite": "Let\u2019s talk BPC-157. It\u2019s got a lot of buzz online, but separating fact from hype isn\u2019t easy. BPC-157 is a peptide studied primarily in animal models. Most of the research focuses on its potential to support tissue-repair pathways and modulate inflammation. While the results in rodents look promising, the big caveat is that rodent biology doesn\u2019t always translate to humans. The human data is sparse, with only a handful of small studies out there. It\u2019s early days, and we\u2019re not at the point of definitive conclusions.\n\nPeptide therapy is an area worth exploring with the right clinical guardrails. VendraRx is building a telehealth practice focused on clinically supervised peptide therapy \u2014 no research chemicals, no shortcuts. The approach includes:\n\n- 503A Compounding: Medications are compounded in-house under FDA\u2019s 503A framework. This means they\u2019re tailored to individual needs and overseen by licensed pharmacists.\n- Labs & Follow-Up: Where clinically appropriate, labs and follow-up monitoring may be recommended to track progress. This isn\u2019t a \u201cset it and forget it\u201d approach \u2014 it\u2019s proactive care.\n\nWhen it comes to BPC-157, there is cautious optimism but the evidence is limited. The research suggests potential, but it\u2019s not a miracle cure. The goal is to provide access responsibly, with transparency about what is known and what is not.\n\nCompounded medications are prepared by licensed pharmacies and are not FDA-approved. Individual suitability is determined by a licensed clinician.\n\nFor those curious about peptide therapy and wanting to learn more, questions can be answered. This operation is being built in public, with a commitment to doing it right.\n\n[Take the 60-second quiz](https://vendrarx.com/?utm_source=reddit&utm_campaign=vendra_20260721123409_01_01)",
+          "rewrite_attempted": true
+        },
+        "x_thread": {
+          "status": "pass",
+          "violations": [],
+          "checked_at": "2026-07-21T12:35:05",
+          "candidates": [],
+          "notes": [
+            "discarded source-only Layer-2 violation: I read the BPC-157 literature so you don't have to"
+          ],
+          "suggested_rewrite": "{\"tweets\": [\"BPC-157 gets hyped as a 'healing peptide'\u2014but what does the actual research show? Most BPC-157 data comes from animal studies. It's been looked at for tissue repair and inflammation in rodents, but human evidence is sparse. Rodent biology \u2260 human biology.\", \"No large randomized human trials exist yet. What's out there is preliminary\u2014mostly small studies with mixed results. That's why physician supervision matters.\", \"We approach BPC-157 clinically: 503A-compounded, labs/follow-up where appropriate, no research peptides. Not a refill mill\u2014actual telehealth with licensed physicians.\", \"The takeaway? Interesting early signals, but we're years away from definitive answers. If you're considering it, do it under medical supervision with realistic expectations.\", \"Take the 60-second quiz: https://vendrarx.com/?utm_source=twitter&utm_campaign=vendra_20260721123409_01_01\"]}",
+          "rewrite_attempted": true,
+          "initial_violations": [
+            {
+              "text": "Here's what I found digging through the literature (so you don't have to).",
+              "rule": "fabricated_research_act",
+              "severity": "block"
+            }
+          ]
+        },
+        "tiktok_script": {
+          "status": "pass",
+          "violations": [],
+          "checked_at": "2026-07-21T12:35:06",
+          "candidates": [],
+          "notes": [],
+          "suggested_rewrite": "",
+          "rewrite_attempted": false
+        }
+      }
+    },
+    "metrics": {
+      "views": null,
+      "likes": null,
+      "shares": null,
+      "saves": null,
+      "ctr": null,
+      "installs": null,
+      "updated_at": null
+    },
+    "is_winner": null
+  },
+  {
+    "post_id": "72d71c1cc79e",
+    "brand": "vendrarx",
+    "created_at": "2026-07-21T12:35:07",
+    "format": "text_native",
+    "character": {},
+    "hook": "NAD+ precursors vs injections \u2014 what human trials actually show",
+    "slides": [],
+    "assets": {},
+    "outputs": {
+      "formats": {
+        "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/72d71c1cc79e/reddit.md",
+        "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/72d71c1cc79e/thread.json",
+        "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/72d71c1cc79e/tiktok_script.md"
+      },
+      "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/72d71c1cc79e/reddit.md",
+      "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/72d71c1cc79e/thread.json",
+      "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/72d71c1cc79e/tiktok_script.md"
+    },
+    "caption": "NAD+ precursors vs injections \u2014 what human trials actually show\n\nTake the 60-second quiz.\n\nEducational only. Not medical advice. Compounded medications are not FDA-approved. Suitability is determined by a licensed clinician.\n\nTracking: vendra_20260721123507_01_01",
+    "package": {
+      "dir": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/72d71c1cc79e",
+      "slides_dir": null,
+      "video": null,
+      "caption": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/72d71c1cc79e/caption.txt",
+      "brief": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/72d71c1cc79e/brief.json",
+      "assets_dir": null,
+      "assets": {},
+      "metadata": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/72d71c1cc79e/post.json",
+      "formats": {
+        "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/72d71c1cc79e/reddit.md",
+        "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/72d71c1cc79e/thread.json",
+        "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/72d71c1cc79e/tiktok_script.md"
+      }
+    },
+    "variant_of": null,
+    "tracking_code": "vendra_20260721123507_01_01",
+    "publish": {
+      "platform": null,
+      "account": null,
+      "url": null,
+      "posted_at": null
+    },
+    "publish_queue": {
+      "status": "ready_to_post",
+      "target_account": "TODO",
+      "notes": null,
+      "updated_at": "2026-07-21T12:35:56"
+    },
+    "compliance": {
+      "status": "pass",
+      "violations": [],
+      "checked_at": "2026-07-21T12:35:56",
+      "outputs": {
+        "reddit_longform": {
+          "status": "pass",
+          "violations": [],
+          "checked_at": "2026-07-21T12:35:53",
+          "candidates": [],
+          "notes": [],
+          "suggested_rewrite": "",
+          "rewrite_attempted": false
+        },
+        "x_thread": {
+          "status": "pass",
+          "violations": [],
+          "checked_at": "2026-07-21T12:35:54",
+          "candidates": [],
+          "notes": [],
+          "suggested_rewrite": "",
+          "rewrite_attempted": false
+        },
+        "tiktok_script": {
+          "status": "pass",
+          "violations": [],
+          "checked_at": "2026-07-21T12:35:56",
+          "candidates": [],
+          "notes": [],
+          "suggested_rewrite": "",
+          "rewrite_attempted": false
+        }
+      }
+    },
+    "metrics": {
+      "views": null,
+      "likes": null,
+      "shares": null,
+      "saves": null,
+      "ctr": null,
+      "installs": null,
+      "updated_at": null
+    },
+    "is_winner": null
+  },
+  {
+    "post_id": "060e44d9cbfa",
+    "brand": "vendrarx",
+    "created_at": "2026-07-21T12:35:56",
+    "format": "text_native",
+    "character": {},
+    "hook": "Sermorelin and secretagogues vs direct GH \u2014 why the category exists",
+    "slides": [],
+    "assets": {},
+    "outputs": {
+      "formats": {
+        "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/060e44d9cbfa/reddit.md",
+        "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/060e44d9cbfa/thread.json",
+        "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/060e44d9cbfa/tiktok_script.md"
+      },
+      "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/060e44d9cbfa/reddit.md",
+      "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/060e44d9cbfa/thread.json",
+      "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/060e44d9cbfa/tiktok_script.md"
+    },
+    "caption": "Sermorelin and secretagogues vs direct GH \u2014 why the category exists\n\nTake the 60-second quiz.\n\nEducational only. Not medical advice. Compounded medications are not FDA-approved. Suitability is determined by a licensed clinician.\n\nTracking: vendra_20260721123556_01_01",
+    "package": {
+      "dir": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/060e44d9cbfa",
+      "slides_dir": null,
+      "video": null,
+      "caption": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/060e44d9cbfa/caption.txt",
+      "brief": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/060e44d9cbfa/brief.json",
+      "assets_dir": null,
+      "assets": {},
+      "metadata": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/060e44d9cbfa/post.json",
+      "formats": {
+        "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/060e44d9cbfa/reddit.md",
+        "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/060e44d9cbfa/thread.json",
+        "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/060e44d9cbfa/tiktok_script.md"
+      }
+    },
+    "variant_of": null,
+    "tracking_code": "vendra_20260721123556_01_01",
+    "publish": {
+      "platform": null,
+      "account": null,
+      "url": null,
+      "posted_at": null
+    },
+    "publish_queue": {
+      "status": "ready_to_post",
+      "target_account": "TODO",
+      "notes": null,
+      "updated_at": "2026-07-21T12:36:43"
+    },
+    "compliance": {
+      "status": "pass",
+      "violations": [],
+      "checked_at": "2026-07-21T12:36:43",
+      "outputs": {
+        "reddit_longform": {
+          "status": "pass",
+          "violations": [],
+          "checked_at": "2026-07-21T12:36:33",
+          "candidates": [],
+          "notes": [],
+          "suggested_rewrite": "",
+          "rewrite_attempted": false
+        },
+        "x_thread": {
+          "status": "pass",
+          "violations": [],
+          "checked_at": "2026-07-21T12:36:35",
+          "candidates": [],
+          "notes": [],
+          "suggested_rewrite": "",
+          "rewrite_attempted": false
+        },
+        "tiktok_script": {
+          "status": "pass",
+          "violations": [],
+          "checked_at": "2026-07-21T12:36:43",
+          "candidates": [],
+          "notes": [],
+          "suggested_rewrite": "",
+          "rewrite_attempted": false
+        }
+      }
+    },
+    "metrics": {
+      "views": null,
+      "likes": null,
+      "shares": null,
+      "saves": null,
+      "ctr": null,
+      "installs": null,
+      "updated_at": null
+    },
+    "is_winner": null
+  },
+  {
+    "post_id": "445e034b5fd0",
+    "brand": "vendrarx",
+    "created_at": "2026-07-21T12:36:43",
+    "format": "text_native",
+    "character": {},
+    "hook": "GLP-1s beyond weight loss \u2014 cardiovascular + addiction-signal research, framed cautiously",
+    "slides": [],
+    "assets": {},
+    "outputs": {
+      "formats": {
+        "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/445e034b5fd0/reddit.md",
+        "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/445e034b5fd0/thread.json",
+        "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/445e034b5fd0/tiktok_script.md"
+      },
+      "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/445e034b5fd0/reddit.md",
+      "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/445e034b5fd0/thread.json",
+      "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/445e034b5fd0/tiktok_script.md"
+    },
+    "caption": "GLP-1s beyond weight loss \u2014 cardiovascular + addiction-signal research, framed cautiously\n\nTake the 60-second quiz.\n\nEducational only. Not medical advice. Compounded medications are not FDA-approved. Suitability is determined by a licensed clinician.\n\nTracking: vendra_20260721123643_01_01",
+    "package": {
+      "dir": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/445e034b5fd0",
+      "slides_dir": null,
+      "video": null,
+      "caption": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/445e034b5fd0/caption.txt",
+      "brief": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/445e034b5fd0/brief.json",
+      "assets_dir": null,
+      "assets": {},
+      "metadata": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/445e034b5fd0/post.json",
+      "formats": {
+        "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/445e034b5fd0/reddit.md",
+        "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/445e034b5fd0/thread.json",
+        "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/445e034b5fd0/tiktok_script.md"
+      }
+    },
+    "variant_of": null,
+    "tracking_code": "vendra_20260721123643_01_01",
+    "publish": {
+      "platform": null,
+      "account": null,
+      "url": null,
+      "posted_at": null
+    },
+    "publish_queue": {
+      "status": "ready_to_post",
+      "target_account": "TODO",
+      "notes": null,
+      "updated_at": "2026-07-21T12:37:38"
+    },
+    "compliance": {
+      "status": "pass",
+      "violations": [],
+      "checked_at": "2026-07-21T12:37:38",
+      "outputs": {
+        "reddit_longform": {
+          "status": "pass",
+          "violations": [],
+          "checked_at": "2026-07-21T12:37:25",
+          "candidates": [],
+          "notes": [],
+          "suggested_rewrite": "",
+          "rewrite_attempted": false
+        },
+        "x_thread": {
+          "status": "pass",
+          "violations": [],
+          "checked_at": "2026-07-21T12:37:32",
+          "candidates": [],
+          "notes": [],
+          "suggested_rewrite": "",
+          "rewrite_attempted": false
+        },
+        "tiktok_script": {
+          "status": "pass",
+          "violations": [],
+          "checked_at": "2026-07-21T12:37:38",
+          "candidates": [],
+          "notes": [],
+          "suggested_rewrite": "",
+          "rewrite_attempted": false
+        }
+      }
+    },
+    "metrics": {
+      "views": null,
+      "likes": null,
+      "shares": null,
+      "saves": null,
+      "ctr": null,
+      "installs": null,
+      "updated_at": null
+    },
+    "is_winner": null
+  },
+  {
+    "post_id": "c9a683a62429",
+    "brand": "vendrarx",
+    "created_at": "2026-07-21T12:37:38",
+    "format": "text_native",
+    "character": {},
+    "hook": "\"Peptide\" means nothing \u2014 insulin is a peptide, collagen is peptides; the molecule is what matters",
+    "slides": [],
+    "assets": {},
+    "outputs": {
+      "formats": {
+        "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/c9a683a62429/reddit.md",
+        "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/c9a683a62429/thread.json",
+        "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/c9a683a62429/tiktok_script.md"
+      },
+      "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/c9a683a62429/reddit.md",
+      "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/c9a683a62429/thread.json",
+      "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/c9a683a62429/tiktok_script.md"
+    },
+    "caption": "\"Peptide\" means nothing \u2014 insulin is a peptide, collagen is peptides; the molecule is what matters\n\nTake the 60-second quiz.\n\nEducational only. Not medical advice. Compounded medications are not FDA-approved. Suitability is determined by a licensed clinician.\n\nTracking: vendra_20260721123738_01_01",
+    "package": {
+      "dir": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/c9a683a62429",
+      "slides_dir": null,
+      "video": null,
+      "caption": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/c9a683a62429/caption.txt",
+      "brief": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/c9a683a62429/brief.json",
+      "assets_dir": null,
+      "assets": {},
+      "metadata": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/c9a683a62429/post.json",
+      "formats": {
+        "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/c9a683a62429/reddit.md",
+        "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/c9a683a62429/thread.json",
+        "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/c9a683a62429/tiktok_script.md"
+      }
+    },
+    "variant_of": null,
+    "tracking_code": "vendra_20260721123738_01_01",
+    "publish": {
+      "platform": null,
+      "account": null,
+      "url": null,
+      "posted_at": null
+    },
+    "publish_queue": {
+      "status": "ready_to_post",
+      "target_account": "TODO",
+      "notes": null,
+      "updated_at": "2026-07-21T12:38:19"
+    },
+    "compliance": {
+      "status": "pass",
+      "violations": [],
+      "checked_at": "2026-07-21T12:38:19",
+      "outputs": {
+        "reddit_longform": {
+          "status": "pass",
+          "violations": [],
+          "checked_at": "2026-07-21T12:38:10",
+          "candidates": [],
+          "notes": [],
+          "suggested_rewrite": "",
+          "rewrite_attempted": false
+        },
+        "x_thread": {
+          "status": "pass",
+          "violations": [],
+          "checked_at": "2026-07-21T12:38:13",
+          "candidates": [
+            {
+              "text": "treats",
+              "rule": "review",
+              "pattern": "\\b(cure|cures|treat|treats|prevent|prevents|heal|heals)\\b"
+            }
+          ],
+          "notes": [
+            "context-cleared Layer-1 candidate: treats"
+          ],
+          "suggested_rewrite": "",
+          "rewrite_attempted": false
+        },
+        "tiktok_script": {
+          "status": "pass",
+          "violations": [],
+          "checked_at": "2026-07-21T12:38:19",
+          "candidates": [],
+          "notes": [],
+          "suggested_rewrite": "",
+          "rewrite_attempted": false
+        }
+      }
+    },
+    "metrics": {
+      "views": null,
+      "likes": null,
+      "shares": null,
+      "saves": null,
+      "ctr": null,
+      "installs": null,
+      "updated_at": null
+    },
+    "is_winner": null
+  },
+  {
+    "post_id": "cf3c30972074",
+    "brand": "vendrarx",
+    "created_at": "2026-07-21T12:38:19",
+    "format": "text_native",
+    "character": {},
+    "hook": "How GLP-1 agonists actually work \u2014 satiety signaling + gastric emptying, plain English",
+    "slides": [],
+    "assets": {},
+    "outputs": {
+      "formats": {
+        "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/cf3c30972074/reddit.md",
+        "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/cf3c30972074/thread.json",
+        "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/cf3c30972074/tiktok_script.md"
+      },
+      "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/cf3c30972074/reddit.md",
+      "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/cf3c30972074/thread.json",
+      "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/cf3c30972074/tiktok_script.md"
+    },
+    "caption": "How GLP-1 agonists actually work \u2014 satiety signaling + gastric emptying, plain English\n\nTake the 60-second quiz.\n\nEducational only. Not medical advice. Compounded medications are not FDA-approved. Suitability is determined by a licensed clinician.\n\nTracking: vendra_20260721123819_01_01",
+    "package": {
+      "dir": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/cf3c30972074",
+      "slides_dir": null,
+      "video": null,
+      "caption": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/cf3c30972074/caption.txt",
+      "brief": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/cf3c30972074/brief.json",
+      "assets_dir": null,
+      "assets": {},
+      "metadata": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/cf3c30972074/post.json",
+      "formats": {
+        "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/cf3c30972074/reddit.md",
+        "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/cf3c30972074/thread.json",
+        "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/cf3c30972074/tiktok_script.md"
+      }
+    },
+    "variant_of": null,
+    "tracking_code": "vendra_20260721123819_01_01",
+    "publish": {
+      "platform": null,
+      "account": null,
+      "url": null,
+      "posted_at": null
+    },
+    "publish_queue": {
+      "status": "ready_to_post",
+      "target_account": "TODO",
+      "notes": null,
+      "updated_at": "2026-07-21T12:39:16"
+    },
+    "compliance": {
+      "status": "pass",
+      "violations": [],
+      "checked_at": "2026-07-21T12:39:16",
+      "outputs": {
+        "reddit_longform": {
+          "status": "pass",
+          "violations": [],
+          "checked_at": "2026-07-21T12:39:08",
+          "candidates": [
+            {
+              "text": "cures",
+              "rule": "review",
+              "pattern": "\\b(cure|cures|treat|treats|prevent|prevents|heal|heals)\\b"
+            }
+          ],
+          "notes": [
+            "context-cleared Layer-1 candidate: cures"
+          ],
+          "suggested_rewrite": "",
+          "rewrite_attempted": false
+        },
+        "x_thread": {
+          "status": "pass",
+          "violations": [],
+          "checked_at": "2026-07-21T12:39:15",
+          "candidates": [],
+          "notes": [],
+          "suggested_rewrite": "",
+          "rewrite_attempted": true,
+          "initial_violations": [
+            {
+              "text": "GLP-1 receptor agonists (GLP-1 RAs) mimic a naturally occurring hormone that regulates appetite. By activating these receptors, they signal fullness earlier and sustain it longer. Key mechanism: enhanced satiety signaling.",
+              "rule": "unsourced_mechanism",
+              "severity": "block"
+            },
+            {
+              "text": "Another lever: gastric emptying. GLP-1 agonists slow the rate at which food leaves your stomach. This prolongs digestion, keeps you feeling fuller longer, & reduces post-meal hunger spikes.",
+              "rule": "unsourced_mechanism",
+              "severity": "block"
+            },
+            {
+              "text": "GLP-1 RAs interact with complex pathways that regulate energy balance, insulin release, & glucose metabolism. This multi-target effect drives their metabolic impact.",
+              "rule": "unsourced_mechanism",
+              "severity": "block"
+            },
+            {
+              "text": "Their mechanisms address broader metabolic dysregulation \u2014 insulin resistance, glycemic control, & appetite hormones.",
+              "rule": "unsourced_mechanism",
+              "severity": "block"
+            }
+          ]
+        },
+        "tiktok_script": {
+          "status": "pass",
+          "violations": [],
+          "checked_at": "2026-07-21T12:39:16",
+          "candidates": [],
+          "notes": [],
+          "suggested_rewrite": "",
+          "rewrite_attempted": false
+        }
+      }
+    },
+    "metrics": {
+      "views": null,
+      "likes": null,
+      "shares": null,
+      "saves": null,
+      "ctr": null,
+      "installs": null,
+      "updated_at": null
+    },
+    "is_winner": null
+  },
+  {
+    "post_id": "9a28067417b2",
+    "brand": "vendrarx",
+    "created_at": "2026-07-21T12:39:16",
+    "format": "text_native",
+    "character": {},
+    "hook": "Why peptides are injected \u2014 oral bioavailability, SNAC tech, what that implies about peptide pills",
+    "slides": [],
+    "assets": {},
+    "outputs": {
+      "formats": {
+        "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/9a28067417b2/reddit.md",
+        "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/9a28067417b2/thread.json",
+        "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/9a28067417b2/tiktok_script.md"
+      },
+      "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/9a28067417b2/reddit.md",
+      "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/9a28067417b2/thread.json",
+      "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/9a28067417b2/tiktok_script.md"
+    },
+    "caption": "Why peptides are injected \u2014 oral bioavailability, SNAC tech, what that implies about peptide pills\n\nTake the 60-second quiz.\n\nEducational only. Not medical advice. Compounded medications are not FDA-approved. Suitability is determined by a licensed clinician.\n\nTracking: vendra_20260721123916_01_01",
+    "package": {
+      "dir": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/9a28067417b2",
+      "slides_dir": null,
+      "video": null,
+      "caption": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/9a28067417b2/caption.txt",
+      "brief": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/9a28067417b2/brief.json",
+      "assets_dir": null,
+      "assets": {},
+      "metadata": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/9a28067417b2/post.json",
+      "formats": {
+        "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/9a28067417b2/reddit.md",
+        "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/9a28067417b2/thread.json",
+        "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/9a28067417b2/tiktok_script.md"
+      }
+    },
+    "variant_of": null,
+    "tracking_code": "vendra_20260721123916_01_01",
+    "publish": {
+      "platform": null,
+      "account": null,
+      "url": null,
+      "posted_at": null
+    },
+    "publish_queue": {
+      "status": "ready_to_post",
+      "target_account": "TODO",
+      "notes": null,
+      "updated_at": "2026-07-21T12:40:10"
+    },
+    "compliance": {
+      "status": "pass",
+      "violations": [],
+      "checked_at": "2026-07-21T12:40:10",
+      "outputs": {
+        "reddit_longform": {
+          "status": "pass",
+          "violations": [],
+          "checked_at": "2026-07-21T12:40:08",
+          "candidates": [],
+          "notes": [],
+          "suggested_rewrite": "",
+          "rewrite_attempted": false
+        },
+        "x_thread": {
+          "status": "pass",
+          "violations": [],
+          "checked_at": "2026-07-21T12:40:09",
+          "candidates": [],
+          "notes": [],
+          "suggested_rewrite": "",
+          "rewrite_attempted": false
+        },
+        "tiktok_script": {
+          "status": "pass",
+          "violations": [],
+          "checked_at": "2026-07-21T12:40:10",
+          "candidates": [],
+          "notes": [],
+          "suggested_rewrite": "",
+          "rewrite_attempted": false
+        }
+      }
+    },
+    "metrics": {
+      "views": null,
+      "likes": null,
+      "shares": null,
+      "saves": null,
+      "ctr": null,
+      "installs": null,
+      "updated_at": null
+    },
+    "is_winner": null
+  },
+  {
+    "post_id": "8d4fb8225255",
+    "brand": "vendrarx",
+    "created_at": "2026-07-21T12:40:10",
+    "format": "text_native",
+    "character": {},
+    "hook": "GHK-Cu topical vs injected \u2014 where evidence exists and where it's thin",
+    "slides": [],
+    "assets": {},
+    "outputs": {
+      "formats": {
+        "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/8d4fb8225255/reddit.md",
+        "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/8d4fb8225255/thread.json",
+        "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/8d4fb8225255/tiktok_script.md"
+      },
+      "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/8d4fb8225255/reddit.md",
+      "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/8d4fb8225255/thread.json",
+      "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/8d4fb8225255/tiktok_script.md"
+    },
+    "caption": "GHK-Cu topical vs injected \u2014 where evidence exists and where it's thin\n\nTake the 60-second quiz.\n\nEducational only. Not medical advice. Compounded medications are not FDA-approved. Suitability is determined by a licensed clinician.\n\nTracking: vendra_20260721124010_01_01",
+    "package": {
+      "dir": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/8d4fb8225255",
+      "slides_dir": null,
+      "video": null,
+      "caption": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/8d4fb8225255/caption.txt",
+      "brief": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/8d4fb8225255/brief.json",
+      "assets_dir": null,
+      "assets": {},
+      "metadata": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/8d4fb8225255/post.json",
+      "formats": {
+        "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/8d4fb8225255/reddit.md",
+        "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/8d4fb8225255/thread.json",
+        "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/8d4fb8225255/tiktok_script.md"
+      }
+    },
+    "variant_of": null,
+    "tracking_code": "vendra_20260721124010_01_01",
+    "publish": {
+      "platform": null,
+      "account": null,
+      "url": null,
+      "posted_at": null
+    },
+    "publish_queue": {
+      "status": "needs_edit",
+      "target_account": "TODO",
+      "notes": null,
+      "updated_at": "2026-07-21T12:41:26"
+    },
+    "compliance": {
+      "status": "needs_review",
+      "violations": [
+        {
+          "text": "Most of this research involves small trials or case studies, but the results are directionally consistent: GHK-Cu applied to the skin *may* support collagen production and skin barrier function.",
+          "rule": "fabricated_evidence",
+          "severity": "block",
+          "output": "reddit_longform"
+        },
+        {
+          "text": "The caveat? Quality matters. A lot. GHK-Cu is unstable in solution and degrades quickly without proper formulation \u2014 so buying a random peptide vial and mixing it into your moisturizer probably won\u2019t cut it.",
+          "rule": "unverifiable_operational_claim",
+          "severity": "warn",
+          "output": "reddit_longform"
+        },
+        {
+          "text": "Clinical-grade topicals are formulated to stabilize the peptide and enhance absorption, which matters if you\u2019re expecting results.",
+          "rule": "unverifiable_operational_claim",
+          "severity": "warn",
+          "output": "reddit_longform"
+        },
+        {
+          "text": "In preclinical models, GHK-Cu injection *may* support tissue repair and reduce inflammation, but we don\u2019t know if those effects occur in humans at safe doses.",
+          "rule": "fabricated_evidence",
+          "severity": "block",
+          "output": "reddit_longform"
+        },
+        {
+          "text": "There\u2019s also almost no safety data for injectable GHK-Cu, which is a red flag.",
+          "rule": "fabricated_evidence",
+          "severity": "block",
+          "output": "reddit_longform"
+        },
+        {
+          "text": "We\u2019re building a clinician-guided telehealth practice for peptide therapy, and we only work with US-licensed physicians who evaluate suitability on a case-by-case basis.",
+          "rule": "unverifiable_operational_claim",
+          "severity": "warn",
+          "output": "reddit_longform"
+        },
+        {
+          "text": "If GHK-Cu is appropriate for your goals, we\u2019ll connect you with a clinician who can guide you safely \u2014 and we\u2019ll source it from a 503A compounding pharmacy that meets strict quality standards.",
+          "rule": "unverifiable_operational_claim",
+          "severity": "warn",
+          "output": "reddit_longform"
+        },
+        {
+          "text": "If labs or follow-up are needed, we\u2019ll make that part of the plan too.",
+          "rule": "unverifiable_operational_claim",
+          "severity": "warn",
+          "output": "reddit_longform"
+        },
+        {
+          "text": "Here\u2019s the bottom line: GHK-Cu\u2019s skin-level benefits are plausible, but systemic injection is still speculative.",
+          "rule": "fabricated_evidence",
+          "severity": "block",
+          "output": "reddit_longform"
+        },
+        {
+          "text": "",
+          "rule": "rewrite_render_error",
+          "severity": "warn",
+          "detail": "reddit_longform body must be 300-800 words; got 147",
+          "output": "reddit_longform"
+        }
+      ],
+      "checked_at": "2026-07-21T12:41:26",
+      "outputs": {
+        "reddit_longform": {
+          "status": "needs_review",
+          "violations": [
+            {
+              "text": "Most of this research involves small trials or case studies, but the results are directionally consistent: GHK-Cu applied to the skin *may* support collagen production and skin barrier function.",
+              "rule": "fabricated_evidence",
+              "severity": "block"
+            },
+            {
+              "text": "The caveat? Quality matters. A lot. GHK-Cu is unstable in solution and degrades quickly without proper formulation \u2014 so buying a random peptide vial and mixing it into your moisturizer probably won\u2019t cut it.",
+              "rule": "unverifiable_operational_claim",
+              "severity": "warn"
+            },
+            {
+              "text": "Clinical-grade topicals are formulated to stabilize the peptide and enhance absorption, which matters if you\u2019re expecting results.",
+              "rule": "unverifiable_operational_claim",
+              "severity": "warn"
+            },
+            {
+              "text": "In preclinical models, GHK-Cu injection *may* support tissue repair and reduce inflammation, but we don\u2019t know if those effects occur in humans at safe doses.",
+              "rule": "fabricated_evidence",
+              "severity": "block"
+            },
+            {
+              "text": "There\u2019s also almost no safety data for injectable GHK-Cu, which is a red flag.",
+              "rule": "fabricated_evidence",
+              "severity": "block"
+            },
+            {
+              "text": "We\u2019re building a clinician-guided telehealth practice for peptide therapy, and we only work with US-licensed physicians who evaluate suitability on a case-by-case basis.",
+              "rule": "unverifiable_operational_claim",
+              "severity": "warn"
+            },
+            {
+              "text": "If GHK-Cu is appropriate for your goals, we\u2019ll connect you with a clinician who can guide you safely \u2014 and we\u2019ll source it from a 503A compounding pharmacy that meets strict quality standards.",
+              "rule": "unverifiable_operational_claim",
+              "severity": "warn"
+            },
+            {
+              "text": "If labs or follow-up are needed, we\u2019ll make that part of the plan too.",
+              "rule": "unverifiable_operational_claim",
+              "severity": "warn"
+            },
+            {
+              "text": "Here\u2019s the bottom line: GHK-Cu\u2019s skin-level benefits are plausible, but systemic injection is still speculative.",
+              "rule": "fabricated_evidence",
+              "severity": "block"
+            },
+            {
+              "text": "",
+              "rule": "rewrite_render_error",
+              "severity": "warn",
+              "detail": "reddit_longform body must be 300-800 words; got 147"
+            }
+          ],
+          "checked_at": "2026-07-21T12:41:23",
+          "candidates": [
+            {
+              "text": "cure",
+              "rule": "review",
+              "pattern": "\\b(cure|cures|treat|treats|prevent|prevents|heal|heals)\\b"
+            }
+          ],
+          "notes": [
+            "context-cleared Layer-2 violation: If you\u2019ve looked into GHK-Cu, you\u2019ve probably noticed it\u2019s marketed both as a topical serum and an injectable peptide.",
+            "context-cleared Layer-2 violation: The reality? These are two very different applications with different evidence bases \u2014 and different levels of clinical support.",
+            "context-cleared Layer-2 violation: Here\u2019s what the research landscape shows so far:",
+            "context-cleared Layer-2 violation: It\u2019s not a miracle cure, but the limited evidence we have suggests it\u2019s worth considering for topical use.",
+            "context-cleared Layer-2 violation: So why inject it? Mostly because someone said so.",
+            "context-cleared Layer-2 violation: Injectables are trendy in peptide groups, but trendy doesn\u2019t mean supported.",
+            "context-cleared Layer-2 violation: Without robust human safety and efficacy data, injectable GHK-Cu is still an experimental use case \u2014 not a clinical treatment.",
+            "context-cleared Layer-2 violation: At VendraRx, we focus on applications with at least *some* human evidence \u2014 and that means starting with topical GHK-Cu.",
+            "context-cleared Layer-1 candidate: cure"
+          ],
+          "suggested_rewrite": "# GHK-Cu: Where Topical and Injected Evidence Differs\n\nGHK-Cu is marketed both as a topical serum and an injectable peptide. These represent different applications with varying levels of evidence.\n\nTopical GHK-Cu has some human data related to skin elasticity, wound healing, and anti-aging effects. Limited studies suggest it may support collagen production and skin barrier function, but evidence is not conclusive.\n\nGHK-Cu is unstable in solution and may degrade without proper formulation. Clinical-grade topicals are designed to stabilize the peptide and enhance absorption.\n\nInjectable GHK-Cu has limited human data, with most evidence from animal studies. Effects observed in preclinical models may not translate to humans, and safety data for injectable use is limited.\n\nDue to limited human safety and efficacy data, injectable GHK-Cu remains experimental.\n\nCompounded medications are prepared by licensed pharmacies and are not FDA-approved. Individual suitability is determined by a licensed clinician.\n\n[Take the 60-second quiz](https://vendrarx.com/?utm_source=reddit&utm_campaign=vendra_20260721124010_01_01)\n",
+          "rewrite_attempted": true
+        },
+        "x_thread": {
+          "status": "pass",
+          "violations": [],
+          "checked_at": "2026-07-21T12:41:25",
+          "candidates": [],
+          "notes": [],
+          "suggested_rewrite": "",
+          "rewrite_attempted": false
+        },
+        "tiktok_script": {
+          "status": "pass",
+          "violations": [],
+          "checked_at": "2026-07-21T12:41:26",
+          "candidates": [],
+          "notes": [],
+          "suggested_rewrite": "",
+          "rewrite_attempted": false
+        }
+      }
+    },
+    "metrics": {
+      "views": null,
+      "likes": null,
+      "shares": null,
+      "saves": null,
+      "ctr": null,
+      "installs": null,
+      "updated_at": null
+    },
+    "is_winner": null
+  },
+  {
+    "post_id": "d24423d53722",
+    "brand": "vendrarx",
+    "created_at": "2026-07-21T12:41:26",
+    "format": "text_native",
+    "character": {},
+    "hook": "Building a compounded-peptide telehealth company \u2014 the regulatory gauntlet (series opener)",
+    "slides": [],
+    "assets": {},
+    "outputs": {
+      "formats": {
+        "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/d24423d53722/reddit.md",
+        "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/d24423d53722/thread.json",
+        "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/d24423d53722/tiktok_script.md"
+      },
+      "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/d24423d53722/reddit.md",
+      "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/d24423d53722/thread.json",
+      "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/d24423d53722/tiktok_script.md"
+    },
+    "caption": "Building a compounded-peptide telehealth company \u2014 the regulatory gauntlet (series opener)\n\nTake the 60-second quiz.\n\nEducational only. Not medical advice. Compounded medications are not FDA-approved. Suitability is determined by a licensed clinician.\n\nTracking: vendra_20260721124126_01_01",
+    "package": {
+      "dir": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/d24423d53722",
+      "slides_dir": null,
+      "video": null,
+      "caption": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/d24423d53722/caption.txt",
+      "brief": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/d24423d53722/brief.json",
+      "assets_dir": null,
+      "assets": {},
+      "metadata": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/d24423d53722/post.json",
+      "formats": {
+        "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/d24423d53722/reddit.md",
+        "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/d24423d53722/thread.json",
+        "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/d24423d53722/tiktok_script.md"
+      }
+    },
+    "variant_of": null,
+    "tracking_code": "vendra_20260721124126_01_01",
+    "publish": {
+      "platform": null,
+      "account": null,
+      "url": null,
+      "posted_at": null
+    },
+    "publish_queue": {
+      "status": "ready_to_post",
+      "target_account": "TODO",
+      "notes": null,
+      "updated_at": "2026-07-21T12:42:00"
+    },
+    "compliance": {
+      "status": "pass",
+      "violations": [],
+      "checked_at": "2026-07-21T12:42:00",
+      "outputs": {
+        "reddit_longform": {
+          "status": "pass",
+          "violations": [],
+          "checked_at": "2026-07-21T12:41:58",
+          "candidates": [],
+          "notes": [],
+          "suggested_rewrite": "",
+          "rewrite_attempted": false
+        },
+        "x_thread": {
+          "status": "pass",
+          "violations": [],
+          "checked_at": "2026-07-21T12:41:59",
+          "candidates": [],
+          "notes": [],
+          "suggested_rewrite": "",
+          "rewrite_attempted": false
+        },
+        "tiktok_script": {
+          "status": "pass",
+          "violations": [],
+          "checked_at": "2026-07-21T12:42:00",
+          "candidates": [],
+          "notes": [],
+          "suggested_rewrite": "",
+          "rewrite_attempted": false
+        }
+      }
+    },
+    "metrics": {
+      "views": null,
+      "likes": null,
+      "shares": null,
+      "saves": null,
+      "ctr": null,
+      "installs": null,
+      "updated_at": null
+    },
+    "is_winner": null
+  },
+  {
+    "post_id": "bd00efab6940",
+    "brand": "vendrarx",
+    "created_at": "2026-07-21T12:42:00",
+    "format": "text_native",
+    "character": {},
+    "hook": "Why we're building a waitlist before signing a provider \u2014 clinical-infra minimums, unit economics of not paying for idle capacity",
+    "slides": [],
+    "assets": {},
+    "outputs": {
+      "formats": {
+        "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/bd00efab6940/reddit.md",
+        "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/bd00efab6940/thread.json",
+        "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/bd00efab6940/tiktok_script.md"
+      },
+      "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/bd00efab6940/reddit.md",
+      "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/bd00efab6940/thread.json",
+      "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/bd00efab6940/tiktok_script.md"
+    },
+    "caption": "Why we're building a waitlist before signing a provider \u2014 clinical-infra minimums, unit economics of not paying for idle capacity\n\nTake the 60-second quiz.\n\nEducational only. Not medical advice. Compounded medications are not FDA-approved. Suitability is determined by a licensed clinician.\n\nTracking: vendra_20260721124200_01_01",
+    "package": {
+      "dir": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/bd00efab6940",
+      "slides_dir": null,
+      "video": null,
+      "caption": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/bd00efab6940/caption.txt",
+      "brief": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/bd00efab6940/brief.json",
+      "assets_dir": null,
+      "assets": {},
+      "metadata": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/bd00efab6940/post.json",
+      "formats": {
+        "reddit_longform": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/bd00efab6940/reddit.md",
+        "x_thread": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/bd00efab6940/thread.json",
+        "tiktok_script": "acceptance/vendrarx_batch_01/packages/vendrarx/2026-07-21/bd00efab6940/tiktok_script.md"
+      }
+    },
+    "variant_of": null,
+    "tracking_code": "vendra_20260721124200_01_01",
+    "publish": {
+      "platform": null,
+      "account": null,
+      "url": null,
+      "posted_at": null
+    },
+    "publish_queue": {
+      "status": "ready_to_post",
+      "target_account": "TODO",
+      "notes": null,
+      "updated_at": "2026-07-21T12:43:00"
+    },
+    "compliance": {
+      "status": "pass",
+      "violations": [],
+      "checked_at": "2026-07-21T12:43:00",
+      "outputs": {
+        "reddit_longform": {
+          "status": "pass",
+          "violations": [],
+          "checked_at": "2026-07-21T12:42:57",
+          "candidates": [],
+          "notes": [],
+          "suggested_rewrite": "",
+          "rewrite_attempted": false
+        },
+        "x_thread": {
+          "status": "pass",
+          "violations": [],
+          "checked_at": "2026-07-21T12:42:59",
+          "candidates": [],
+          "notes": [],
+          "suggested_rewrite": "",
+          "rewrite_attempted": false
+        },
+        "tiktok_script": {
+          "status": "pass",
+          "violations": [],
+          "checked_at": "2026-07-21T12:43:00",
+          "candidates": [],
+          "notes": [],
+          "suggested_rewrite": "",
+          "rewrite_attempted": false
+        }
+      }
+    },
+    "metrics": {
+      "views": null,
+      "likes": null,
+      "shares": null,
+      "saves": null,
+      "ctr": null,
+      "installs": null,
+      "updated_at": null
+    },
+    "is_winner": null
+  }
+]
