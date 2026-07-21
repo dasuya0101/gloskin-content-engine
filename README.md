@@ -112,9 +112,9 @@ through `image_router.py`. Dreamina or another provider can be added there as
 long as it is a real documented API, not browser automation against a consumer
 website.
 
-For now, generated posts are queued for manual publishing with
-`publish_queue.status = "ready_to_post"` and the selected brand's configured
-target account.
+For now, generated posts are queued for manual publishing only when
+`compliance.status = "pass"`; otherwise they land in `needs_edit`. The selected
+brand's configured account remains the target account.
 This is intentional: TikTok Photo Mode and trend audio are often best handled
 in-app while the GloSkin account is still warming up. Later, `publish.py` can
 add official TikTok/Instagram/Facebook API adapters.
@@ -167,6 +167,10 @@ python publish.py payload --post-id <post_id>
 python publish.py mark --post-id <post_id> --platform tiktok --url https://...
 python publish.py queue --post-id <post_id> --status needs_edit
 ```
+
+Queue and publish actions require `compliance.status = "pass"`. A deliberate
+exception uses `--override --reason "..."`; the override is recorded in the
+manifest.
 
 `publish.py api-plan --platform tiktok|instagram|facebook` shows the credentials
 and payload shape for official API adapters. The adapters are intentionally not
@@ -341,6 +345,11 @@ optional for older folders; `before.png` is used as the fallback scan selfie.
 - **Fonts** — swap `FONT_BOLD` / `FONT_REG` at the top of `slideshow_maker.py`.
 
 ## Compliance (from day one)
+Run the Wave 3 semantic fixtures with a configured `OPENROUTER_API_KEY`:
+```
+python compliance_lint.py --selftest
+```
+
 Before/after acne creative is heavily scrutinized. Keep copy cosmetic/educational
 (no "cures" / medical promises — the brief generator enforces this), and put a
 visible "results vary · not medical advice" line in captions/bio.

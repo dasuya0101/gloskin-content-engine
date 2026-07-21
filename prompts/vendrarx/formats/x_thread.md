@@ -8,7 +8,7 @@ Requirements:
 - Tweet 1 must be a standalone hook.
 - Voice: evidence-forward, direct, founder/operator POV.
 - Use concrete terms: physician-supervised, 503A-compounded, labs/follow-up,
-  cold-chain shipping, no research peptides.
+  no research peptides.
 - No outcome promises, no prescription guarantees, no treat/cure/prevent claims.
 - The final tweet must contain only the literal token <<CTA>>; never write CTA text or a URL.
 

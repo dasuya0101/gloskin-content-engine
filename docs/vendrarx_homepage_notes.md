@@ -82,7 +82,6 @@ Recurring proof points:
 - US-licensed physician review
 - clinician-owned protocols rather than generic subscriptions
 - labs where appropriate
-- cold-chain shipping
 - Certificate of Analysis per batch
 - no research-peptide sourcing
 - no outcome guarantees

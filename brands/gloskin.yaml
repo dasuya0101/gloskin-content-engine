@@ -83,7 +83,7 @@ prompts:
   copy_system: prompts/gloskin/copy_system.md
   learned_rules: prompts/gloskin/learned_rules.md
   image_character: prompts/gloskin/image_character.json
-  compliance_policy: null
+  compliance_policy: prompts/gloskin/compliance_policy.md
 
 slideshow:
   wordmark_text: GloSkin
@@ -116,6 +116,9 @@ tracking:
   prefix: glo
 
 compliance:
-  banned_patterns:
-    - "\\b(cure|cures|treat|treats|prevent|prevents)\\b"
+  hard_block:
+    - "\\bguaranteed (results|outcome)\\b"
+  review:
+    - "\\b(cure|cures|treat|treats|prevent|prevents|heal|heals)\\b"
+  mechanism_claims: {}
   required_disclaimers: []

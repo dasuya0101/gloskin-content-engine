@@ -202,6 +202,16 @@ def brand_summary(brand):
     }
 
 
+def mechanism_claims_for(brand, source_text):
+    """Return only mechanism claims for compounds named in the source brief."""
+    haystack = str(source_text or "").lower()
+    claims = []
+    for compound, approved in (brand.compliance.get("mechanism_claims") or {}).items():
+        if str(compound).lower() in haystack:
+            claims.extend(str(item) for item in (approved or []) if str(item).strip())
+    return claims
+
+
 def main():
     import json
 

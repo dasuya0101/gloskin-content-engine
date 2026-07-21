@@ -32,6 +32,20 @@ class PublishError(RuntimeError):
     pass
 
 
+def require_compliance(post, *, override=False, reason=None, posts_path=POSTS_FILE):
+    status = (post.get("compliance") or {}).get("status")
+    if status == "pass":
+        return
+    if not override:
+        raise PublishError(
+            f"post {post['post_id']} compliance is {status or 'not_checked'}; "
+            "use --override with --reason to proceed"
+        )
+    if not str(reason or "").strip():
+        raise PublishError("--override requires a non-empty --reason")
+    manifest.record_compliance_override(post["post_id"], reason, posts_path)
+
+
 def load_post(post_id, posts_path):
     post = manifest.get_post(post_id, posts_path)
     if not post:
@@ -99,6 +113,7 @@ def payload_for(post):
         "slides": file_list(slides_dir),
         "publish": post.get("publish"),
         "queue": queue(post),
+        "compliance": post.get("compliance"),
     }
 
 
@@ -131,7 +146,8 @@ def api_plan(platform):
     return plans[platform]
 
 
-def publish_via_api(platform, post):
+def publish_via_api(platform, post, *, override=False, reason=None, posts_path=POSTS_FILE):
+    require_compliance(post, override=override, reason=reason, posts_path=posts_path)
     plan = api_plan(platform)
     require_env(plan["requires"])
     raise PublishError(
@@ -149,8 +165,9 @@ def list_ready(posts_path):
     print(f"\n{len(ready)} ready_to_post")
 
 
-def mark(post_id, platform, account, url, posts_path):
+def mark(post_id, platform, account, url, posts_path, *, override=False, reason=None):
     existing = load_post(post_id, posts_path)
+    require_compliance(existing, override=override, reason=reason, posts_path=posts_path)
     account = account or queue(existing)["target_account"]
     post = manifest.set_publish(post_id, platform, account, url, posts_path)
     if not post:
@@ -159,10 +176,12 @@ def mark(post_id, platform, account, url, posts_path):
     print(f"[publish] {post_id} marked posted on {platform}: {url or '(no url)'}")
 
 
-def set_queue(post_id, status, account, notes, posts_path):
+def set_queue(post_id, status, account, notes, posts_path, *, override=False, reason=None):
     if status not in VALID_QUEUE_STATUSES:
         raise PublishError(f"invalid status: {status}")
     existing = load_post(post_id, posts_path)
+    if status in {"ready_to_post", "posted"}:
+        require_compliance(existing, override=override, reason=reason, posts_path=posts_path)
     account = account or queue(existing)["target_account"]
     post = manifest.set_publish_queue(post_id, status, account, notes, posts_path)
     if not post:
@@ -185,12 +204,16 @@ def main():
     mark_p.add_argument("--platform", default="manual")
     mark_p.add_argument("--account", default=None)
     mark_p.add_argument("--url", default="")
+    mark_p.add_argument("--override", action="store_true")
+    mark_p.add_argument("--reason")
 
     queue_p = sub.add_parser("queue")
     queue_p.add_argument("--post-id", required=True)
     queue_p.add_argument("--status", required=True, choices=sorted(VALID_QUEUE_STATUSES))
     queue_p.add_argument("--account", default=None)
     queue_p.add_argument("--notes", default=None)
+    queue_p.add_argument("--override", action="store_true")
+    queue_p.add_argument("--reason")
 
     api_p = sub.add_parser("api-plan")
     api_p.add_argument("--platform", required=True, choices=["tiktok", "instagram", "facebook"])
@@ -198,6 +221,8 @@ def main():
     api_pub = sub.add_parser("api-publish")
     api_pub.add_argument("--post-id", required=True)
     api_pub.add_argument("--platform", required=True, choices=["tiktok", "instagram", "facebook"])
+    api_pub.add_argument("--override", action="store_true")
+    api_pub.add_argument("--reason")
 
     args = ap.parse_args()
 
@@ -207,14 +232,17 @@ def main():
         elif args.cmd == "payload":
             print(json.dumps(payload_for(load_post(args.post_id, args.posts)), indent=2))
         elif args.cmd == "mark":
-            mark(args.post_id, args.platform, args.account, args.url, args.posts)
+            mark(args.post_id, args.platform, args.account, args.url, args.posts,
+                 override=args.override, reason=args.reason)
         elif args.cmd == "queue":
-            set_queue(args.post_id, args.status, args.account, args.notes, args.posts)
+            set_queue(args.post_id, args.status, args.account, args.notes, args.posts,
+                      override=args.override, reason=args.reason)
         elif args.cmd == "api-plan":
             print(json.dumps(api_plan(args.platform), indent=2))
         elif args.cmd == "api-publish":
             post = load_post(args.post_id, args.posts)
-            publish_via_api(args.platform, post)
+            publish_via_api(args.platform, post, override=args.override,
+                            reason=args.reason, posts_path=args.posts)
     except PublishError as exc:
         raise SystemExit(str(exc)) from exc
 

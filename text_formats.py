@@ -11,6 +11,7 @@ import json
 import re
 import sys
 from pathlib import Path
+from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 from brand_loader import DEFAULT_BRAND, load_brand
 from llm_router import complete
@@ -23,6 +24,7 @@ FORMAT_FILES = {
 }
 SECTION_NAMES = ["HOOK", "BEATS", "CTA", "SHOTLIST"]
 CTA_SENTINEL = "<<CTA>>"
+DISCLAIMER_SENTINEL = "<<DISCLAIMER:{id}>>"
 
 
 class TextFormatError(RuntimeError):
@@ -96,6 +98,8 @@ def brief_context(brief, brand, format_name):
         f"Format: {format_name}",
         f"Angle: {brief_angle(brief)}",
         f"CTA placeholder: {CTA_SENTINEL}",
+        f"Factual claims supplied by the brief: {json.dumps(brief.get('factual_claims') or [])}",
+        f"Approved mechanism claims: {json.dumps(brief.get('mechanism_claims') or [])}",
         f"Voice: {json.dumps(brand.voice)}",
         f"Pillars: {', '.join(brand.pillars)}",
         "Existing slide/copy context:",
@@ -117,15 +121,23 @@ def load_system_prompt(brand, format_name):
 
 
 def build_cta_url(base_url, platform, tracking_code):
-    # TODO: Append platform UTM parameters and tracking_code here.
-    return str(base_url or "").strip()
+    base_url = str(base_url or "").strip()
+    if not base_url or not tracking_code:
+        return base_url
+    parts = urlsplit(base_url)
+    query = parse_qsl(parts.query, keep_blank_values=True)
+    query.extend([
+        ("utm_source", str(platform)),
+        ("utm_campaign", str(tracking_code)),
+    ])
+    return urlunsplit((parts.scheme, parts.netloc, parts.path, urlencode(query), parts.fragment))
 
 
 def build_cta(brand, format_name, tracking_code=None):
     text = str(brand.cta.get("text") or "").strip()
     platform = {
         "reddit_longform": "reddit",
-        "x_thread": "x",
+        "x_thread": "twitter",
         "tiktok_script": "tiktok",
     }.get(format_name, format_name)
     url = build_cta_url(brand.cta.get("url"), platform, tracking_code)
@@ -229,6 +241,75 @@ def insert_canonical_cta(content, brand, format_name, tracking_code=None):
     raise TextFormatError(f"unknown text format: {format_name}")
 
 
+def required_disclaimers(brand, format_name):
+    return [
+        item for item in (brand.compliance.get("required_disclaimers") or [])
+        if format_name in (item.get("applies_to") or [])
+    ]
+
+
+def _insert_reddit_disclaimer(text, token, disclaimer, canonical_cta):
+    text = text.replace(disclaimer, "").strip()
+    if token in text:
+        return text.replace(token, disclaimer, 1).replace(token, "").strip()
+    blocks = re.split(r"\n\s*\n", text)
+    try:
+        index = blocks.index(canonical_cta)
+    except ValueError:
+        index = len(blocks)
+    blocks.insert(index, disclaimer)
+    return "\n\n".join(block for block in blocks if block.strip())
+
+
+def _insert_thread_disclaimer(data, token, disclaimer, canonical_cta):
+    tweets = [tweet for tweet in data.get("tweets", []) if tweet != disclaimer]
+    inserted = False
+    clean = []
+    for tweet in tweets:
+        if isinstance(tweet, str) and token in tweet:
+            if not inserted:
+                clean.append(disclaimer)
+                inserted = True
+            continue
+        clean.append(tweet)
+    if not inserted:
+        index = len(clean) - 1 if clean and clean[-1] == canonical_cta else len(clean)
+        clean.insert(index, disclaimer)
+    return {**data, "tweets": clean}
+
+
+def _insert_tiktok_disclaimer(text, token, disclaimer):
+    text = text.replace(disclaimer, "").strip()
+    if token in text:
+        return text.replace(token, disclaimer, 1).replace(token, "").strip()
+    cta = re.search(r"(?m)^CTA\s*$", text)
+    if cta:
+        return (text[:cta.start()].rstrip() + "\n" + disclaimer + "\n\n"
+                + text[cta.start():]).strip()
+    return text.rstrip() + "\n\n" + disclaimer
+
+
+def insert_canonical_disclaimers(content, brand, format_name, tracking_code=None):
+    canonical_cta = build_cta(brand, format_name, tracking_code)
+    for item in required_disclaimers(brand, format_name):
+        disclaimer_id = str(item.get("id") or "required")
+        disclaimer = str(item.get("text") or "").strip()
+        if not disclaimer:
+            continue
+        token = DISCLAIMER_SENTINEL.format(id=disclaimer_id)
+        if format_name == "reddit_longform":
+            content = _insert_reddit_disclaimer(
+                content, token, disclaimer, canonical_cta)
+        elif format_name == "x_thread":
+            content = _insert_thread_disclaimer(
+                content, token, disclaimer, canonical_cta)
+        elif format_name == "tiktok_script":
+            content = _insert_tiktok_disclaimer(content, token, disclaimer)
+        else:
+            raise TextFormatError(f"unknown text format: {format_name}")
+    return content
+
+
 def generate_format(brief, brand, format_name, *, placeholder=False, tracking_code=None):
     if placeholder:
         return placeholder_format(brief, brand, format_name, tracking_code=tracking_code)
@@ -269,6 +350,8 @@ def normalize_format(format_name, raw, *, brand=None, tracking_code=None):
         if brand:
             content = insert_canonical_cta(
                 content, brand, format_name, tracking_code)
+            content = insert_canonical_disclaimers(
+                content, brand, format_name, tracking_code)
         return validate_reddit(content)
     if format_name == "x_thread":
         if isinstance(raw, dict):
@@ -281,11 +364,15 @@ def normalize_format(format_name, raw, *, brand=None, tracking_code=None):
                 raise TextFormatError(f"x_thread did not return valid JSON: {exc}") from exc
         if brand:
             data = insert_canonical_cta(data, brand, format_name, tracking_code)
+            data = insert_canonical_disclaimers(
+                data, brand, format_name, tracking_code)
         return validate_x_thread(data)
     if format_name == "tiktok_script":
         content = strip_fences(raw)
         if brand:
             content = insert_canonical_cta(
+                content, brand, format_name, tracking_code)
+            content = insert_canonical_disclaimers(
                 content, brand, format_name, tracking_code)
         return validate_tiktok_script(content)
     raise TextFormatError(f"unknown text format: {format_name}")
@@ -355,7 +442,7 @@ def placeholder_reddit(brief, brand):
         paragraphs = [
             f"I keep coming back to this angle: {angle}. The interesting part is not whether peptides sound exciting. The interesting part is whether the operation around them is serious enough for a medical category that has been pushed through a lot of internet noise.",
             "The first filter is oversight. A real program should start with intake, history, and physician review before anyone talks about a protocol. That sounds obvious, but it is exactly where a lot of peptide marketing gets weird. People are sold vials, stacks, and slogans before anyone has checked whether the category is appropriate for them.",
-            "The second filter is sourcing. VendraRx is being built around physician-prescribed protocols and 503A compounding pharmacy partners, not research-use-only vendors. That distinction matters because research peptides sold online are often outside normal patient-specific prescribing and pharmacy controls. Serious care should be boring in the right places: documentation, pharmacy process, lot testing, cold-chain shipping, and follow-up.",
+            "The second filter is sourcing. VendraRx is being built around physician-prescribed protocols and 503A compounding pharmacy partners, not research-use-only vendors. That distinction matters because research peptides sold online are often outside normal patient-specific prescribing and pharmacy controls. Serious care should be boring in the right places: documentation, pharmacy process, lot testing, and follow-up.",
             "The third filter is expectations. Compounded medications are not FDA-approved drugs, and nobody should promise a specific outcome or a guaranteed prescription from a quiz. The quiz should help route people toward a clinician review, and that clinician should be able to say no, pause, or adjust based on the person's history, labs, goals, and risk profile.",
             "A good intake flow should also make disqualification feel normal. Underage patients, pregnancy, active malignancy, certain endocrine situations, medication conflicts, or missing labs can all change the answer. The point of a clinical program is not to push every person through the same funnel. It is to decide who should move forward, who needs more information, and who should be declined or sent elsewhere.",
             "That is the bar I would use as a patient: not the loudest peptide brand, not the most aggressive claim, and not the fastest checkout. I would look for the group willing to explain the framework, name the caveats, and keep the prescribing decision in a clinician's hands.",
@@ -383,7 +470,7 @@ def placeholder_thread(brief, brand):
             "For peptide therapy, I would look for physician review before protocol, not checkout-first selling.",
             "I would also ask where the medication comes from. VendraRx is being built around 503A compounding pharmacy partners, not research-use-only sourcing.",
             "Compounded medications are not FDA-approved. Suitability should be determined by a licensed clinician, and outcomes should not be promised.",
-            "The boring parts matter: intake, history, labs when appropriate, cold-chain shipping, COAs, follow-up, and the ability to pause or adjust.",
+            "The boring parts matter: intake, history, labs when appropriate, COAs, follow-up, and the ability to pause or adjust.",
             CTA_SENTINEL,
         ]
     return [
@@ -472,13 +559,15 @@ def selftest():
     validate_tiktok_script("HOOK\nA\n\nBEATS\n1. B\n\nCTA\nC\n\nSHOTLIST\nD\n")
 
     brand = load_brand("vendrarx")
-    brief = {"angle": "evidence review"}
+    brief = {"angle": "BPC-157 evidence review"}
+    tracking_code = "vendra_test_01"
     model_cta = "Take our 60-second quiz at vendrarx.com."
     outputs = {
         "reddit_longform": normalize_format(
             "reddit_longform",
             placeholder_reddit(brief, brand).replace(CTA_SENTINEL, model_cta),
             brand=brand,
+            tracking_code=tracking_code,
         ),
         "x_thread": normalize_format(
             "x_thread",
@@ -487,11 +576,13 @@ def selftest():
                 for tweet in placeholder_thread(brief, brand)
             ]},
             brand=brand,
+            tracking_code=tracking_code,
         ),
         "tiktok_script": normalize_format(
             "tiktok_script",
             placeholder_tiktok_script(brief, brand).replace(CTA_SENTINEL, model_cta),
             brand=brand,
+            tracking_code=tracking_code,
         ),
     }
     for format_name, content in outputs.items():
@@ -502,6 +593,18 @@ def selftest():
             raise TextFormatError(f"{format_name} must contain cta.url exactly once")
         if model_cta in serialized or CTA_SENTINEL in serialized:
             raise TextFormatError(f"{format_name} retained a model-written CTA")
+        platform = {
+            "reddit_longform": "reddit",
+            "x_thread": "twitter",
+            "tiktok_script": "tiktok",
+        }[format_name]
+        if f"utm_source={platform}" not in serialized or f"utm_campaign={tracking_code}" not in serialized:
+            raise TextFormatError(f"{format_name} is missing canonical UTM parameters")
+    disclaimer = brand.compliance["required_disclaimers"][0]["text"]
+    for format_name in ("reddit_longform", "tiktok_script"):
+        content = outputs[format_name]
+        if content.count(disclaimer) != 1:
+            raise TextFormatError(f"{format_name} must contain the disclaimer exactly once")
     final_tweet = outputs["x_thread"]["tweets"][-1]
     if len(final_tweet) > 275:
         raise TextFormatError("canonical X CTA exceeds 275 characters")
@@ -511,7 +614,10 @@ def selftest():
     )
     if not tiktok_cta or brand.cta["url"] not in tiktok_cta.group(1):
         raise TextFormatError("TikTok CTA section is missing the canonical URL")
-    print("[ok] text format validators and canonical CTAs")
+    existing_query = build_cta_url("https://example.com/?ref=1", "reddit", "abc")
+    if "ref=1" not in existing_query or "utm_source=reddit" not in existing_query:
+        raise TextFormatError("build_cta_url did not preserve an existing query")
+    print("[ok] text format validators, canonical CTAs/disclaimers, and UTM URLs")
 
 
 def main():

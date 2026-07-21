@@ -34,6 +34,7 @@ ROUTES = {
     "reddit_longform": ("openrouter", "deepseek/deepseek-chat"),
     "x_thread":      ("openrouter", "deepseek/deepseek-chat"),
     "tiktok_script": ("openrouter", "deepseek/deepseek-chat"),
+    "compliance_lint": ("openrouter", "openai/gpt-4.1-mini"),
     "analysis":      ("anthropic", "claude-sonnet-4-5"),        # winner analysis = premium
 }
 DEFAULT_ROUTE = ("anthropic", "claude-sonnet-4-5")
@@ -81,26 +82,29 @@ def _with_retries(call, provider, model, attempts=3):
             time.sleep(attempt)
 
 
-def complete(system, user, task="copy_brief", max_tokens=900):
+def complete(system, user, task="copy_brief", max_tokens=900, temperature=None):
     provider, model = ROUTES.get(task, DEFAULT_ROUTE)
     if provider == "openrouter":
-        return _openrouter(system, user, model, max_tokens)
+        return _openrouter(system, user, model, max_tokens, temperature)
     if provider == "anthropic":
-        return _anthropic(system, user, model, max_tokens)
+        return _anthropic(system, user, model, max_tokens, temperature)
     if provider == "openai":
-        return _openai(system, user, model, max_tokens)
+        return _openai(system, user, model, max_tokens, temperature)
     raise ValueError(f"unknown provider {provider}")
 
 
-def _openrouter(system, user, model, max_tokens):
-    payload = json.dumps({
+def _openrouter(system, user, model, max_tokens, temperature=None):
+    body = {
         "model": model,
         "max_tokens": max_tokens,
         "messages": [
             {"role": "system", "content": system},
             {"role": "user", "content": user},
         ],
-    }).encode("utf-8")
+    }
+    if temperature is not None:
+        body["temperature"] = temperature
+    payload = json.dumps(body).encode("utf-8")
     request = Request(
         "https://openrouter.ai/api/v1/chat/completions",
         data=payload,
@@ -134,19 +138,24 @@ def _openrouter(system, user, model, max_tokens):
         raise RuntimeError("OpenRouter response did not contain message content") from exc
 
 
-def _anthropic(system, user, model, max_tokens):
+def _anthropic(system, user, model, max_tokens, temperature=None):
     import anthropic
     client = anthropic.Anthropic()
-    m = client.messages.create(model=model, max_tokens=max_tokens, system=system,
-                               messages=[{"role": "user", "content": user}])
+    kwargs = {"model": model, "max_tokens": max_tokens, "system": system,
+              "messages": [{"role": "user", "content": user}]}
+    if temperature is not None:
+        kwargs["temperature"] = temperature
+    m = client.messages.create(**kwargs)
     return "".join(b.text for b in m.content if b.type == "text")
 
 
-def _openai(system, user, model, max_tokens):
+def _openai(system, user, model, max_tokens, temperature=None):
     from openai import OpenAI
     client = OpenAI()
-    r = client.chat.completions.create(
-        model=model, max_tokens=max_tokens,
-        messages=[{"role": "system", "content": system},
-                  {"role": "user", "content": user}])
+    kwargs = {"model": model, "max_tokens": max_tokens,
+              "messages": [{"role": "system", "content": system},
+                           {"role": "user", "content": user}]}
+    if temperature is not None:
+        kwargs["temperature"] = temperature
+    r = client.chat.completions.create(**kwargs)
     return r.choices[0].message.content

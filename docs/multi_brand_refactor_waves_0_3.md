@@ -165,43 +165,55 @@ Wave 2 acceptance:
 
 ## Wave 3 - Compliance Linter And Publish Gate
 
-Status: not started.
+Status: implemented; final real-copy acceptance requires the project 14-angle
+source list.
 
 Objective: no generated copy reaches the publish queue without passing
 brand-specific compliance rules.
 
-Add `compliance_lint.py` with:
+`compliance_lint.py` runs once per output file with three layers:
 
-- deterministic pattern rules from `brand.compliance.banned_patterns`
-- required disclaimer checks from `brand.compliance.required_disclaimers`
-- GloSkin rules for affiliate disclosure and AI/avatar illustrative labeling
-- VendraRx rules against outcome promises, prescription guarantees, and
-  treat/cure/prevent phrasing
-- LLM judgment pass through `llm_router.py` using
-  `prompts/<brand>/compliance_policy.md`
-- JSON-only LLM response:
-  `{"pass": bool, "violations": [...], "suggested_rewrite": "..."}`
-- one rewrite loop, then `needs_review` if still failing
-- manifest `compliance` block with `status`, `violations`, and `checked_at`
-- publish gate: `publish.py` refuses non-pass posts unless `--override` is
-  passed and logged
-- dashboard status badge with minimal cosmetic changes
+- Layer 1 immediately blocks only unambiguous `hard_block` patterns. Review
+  terms and shared false-precision patterns are candidates, not verdicts.
+- Layer 2 is the primary semantic control. It calls the brand compliance policy
+  through `llm_router.py` with the full output, brief factual claims, approved
+  mechanism claims, Layer-1 candidates, and post context. It catches fabricated
+  research acts, evidence details, unsourced mechanisms, disease/Rx promises,
+  and unverifiable operational claims. It also clears debunks and disclaimers
+  in context. Invalid JSON becomes `needs_review`, never pass.
+- Layer 3 asserts that every format-required disclaimer is present verbatim.
 
-Seed selftest cases:
+Vendra briefs carry `mechanism_claims`, selected from the per-compound allowlist
+in brand config. Generation may use only approved directional language; the
+semantic gate blocks named pathways, receptors, molecules, or mechanisms absent
+from that allowlist.
 
-- GloSkin must flag: "GloSkin cures acne"; "clears your eczema in two weeks";
-  an `amzn.to` caption without disclosure; avatar testimonial without
-  illustrative label.
-- GloSkin must pass: "reduces the appearance of redness"; affiliate post with
-  disclosure present.
-- VendraRx must flag: "BPC-157 heals tendons fast"; "guaranteed prescription
-  after the quiz".
-- VendraRx must pass: cautious animal-model wording plus compounded-meds
-  disclaimer.
+The renderer owns deterministic copy. `text_formats.py` inserts the CTA and
+required disclaimers from brand config at sentinels, with format-appropriate
+fallback placement. CTA URLs receive `utm_source=reddit|twitter|tiktok` and
+`utm_campaign=<tracking_code>` while preserving existing query parameters.
+Landing-side UTM capture on `vendrarx.com` remains a dependency in the separate
+landing repository.
+
+On a semantic failure with a suggested full rewrite, the engine normalizes the
+rewrite and reruns all layers once. A second failure becomes `needs_review`.
+Each new post records `compliance.status`, `violations`, and `checked_at` in both
+`posts.json` and packaged `post.json`. The dashboard shows the status. The CLI
+and dashboard API reject queue/publish actions for non-pass posts unless an
+override and reason are supplied; the override is recorded in the manifest.
+
+Operational-practice language was removed from source prompts and homepage
+notes. The linter retains a frozen shipping/storage fixture and warns on such
+claims if generated anyway.
 
 Wave 3 acceptance:
 
 - `python compliance_lint.py --selftest` passes all seed cases.
+- The five clean-regex frozen leaks are caught by Layer 2, while the cure/heal
+  debunk cases and approved directional mechanism phrase pass.
+- The full 14-angle Vendra batch is the real-copy acceptance test. Review false
+  positives on debunks and directional mechanism language before trusting the
+  gate; the synthetic seeds verify wiring, not production precision.
 - A failing post cannot enter publish queue without `--override`.
 - Override is recorded in the manifest.
 - New posts include `compliance` in both `post.json` and `posts.json`.
@@ -256,9 +268,14 @@ prompts:
   compliance_policy: prompts/vendrarx/compliance_policy.md
   image_character: null
 compliance:
-  banned_patterns:
-    - "\\b(cure|cures|treat|treats|prevent|prevents)\\b"
-    - "\\bguaranteed (prescription|results)\\b"
+  hard_block:
+    - "\\bguaranteed (prescription|results|outcome)\\b"
+  review:
+    - "\\b(cure|cures|treat|treats|prevent|prevents|heal|heals)\\b"
+  mechanism_claims:
+    BPC-157:
+      - "may support tissue-repair pathways"
+      - "studied for effects on inflammation in animal models"
   required_disclaimers:
     - id: compounded
       applies_to: [reddit_longform, tiktok_script]

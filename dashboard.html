@@ -424,6 +424,7 @@ function val(p,k){
   if(k === "brand") return p.brand || "";
   if(k === "hook") return p.hook || "";
   if(k === "queue") return queue(p).status || "";
+  if(k === "compliance") return (p.compliance||{}).status || "needs_review";
   if(k === "format") return p.format || "";
   if(METRIC_COLS.includes(k)) return metric(p,k) ?? -1;
   return "";
@@ -592,7 +593,7 @@ function renderRuns(){
 
 function renderHead(){
   const cols = [
-    ["","Clip"],["queue","Queue"],["brand","Brand"],["spec","Character"],["hook","Hook"],["format","Format"],
+    ["","Clip"],["queue","Queue"],["compliance","Compliance"],["brand","Brand"],["spec","Character"],["hook","Hook"],["format","Format"],
     ...METRIC_COLS.map(m=>[m,m]),["","Package"],["","Actions"]
   ];
   $("tbl").querySelector("thead").innerHTML = "<tr>"+cols.map(([k,label]) => {
@@ -644,6 +645,14 @@ function statusSelect(p){
   </select>`;
 }
 
+function complianceBadge(p){
+  const st = ((p.compliance||{}).status || "needs_review");
+  const label = st === "needs_review" ? "needs review" : st;
+  const cls = st === "pass" ? "ok" : "missing";
+  const count = ((p.compliance||{}).violations||[]).length;
+  return `<span class="badge ${cls}" title="${esc(count)} violation(s)">${esc(label)}</span>`;
+}
+
 function render(){
   const rows = filteredRows();
   $("count").textContent = `${rows.length} shown`;
@@ -658,6 +667,7 @@ function render(){
       <td>
         <div class="status s-${esc(st)}"><span class="dot"></span>${statusSelect(p)}</div>
       </td>
+      <td>${complianceBadge(p)}</td>
       <td class="spec">${esc(p.brand || "-")}</td>
       <td>
         <div>${esc((p.character||{}).slug || "-")}</div>
@@ -782,11 +792,16 @@ function applyProductPreset(){
 
 async function setQueue(postId,status){
   const p = posts.find(x => x.post_id === postId);
-  await api(`/api/posts/${postId}/queue`, {
-    method:"PATCH",
-    body:JSON.stringify({status, target_account: queue(p).target_account || $("account").value})
-  });
-  await refresh();
+  try{
+    await api(`/api/posts/${postId}/queue`, {
+      method:"PATCH",
+      body:JSON.stringify({status, target_account: queue(p).target_account || $("account").value})
+    });
+  }catch(err){
+    alert(err.message);
+  }finally{
+    await refresh();
+  }
 }
 
 async function toggleWinner(postId){
@@ -814,11 +829,16 @@ async function markPosted(postId){
   if(platform == null) return;
   const url = prompt("Post URL", (p.publish||{}).url || "");
   if(url == null) return;
-  await api(`/api/posts/${postId}/publish`, {
-    method:"PATCH",
-    body:JSON.stringify({platform, account: queue(p).target_account || $("account").value, url})
-  });
-  await refresh();
+  try{
+    await api(`/api/posts/${postId}/publish`, {
+      method:"PATCH",
+      body:JSON.stringify({platform, account: queue(p).target_account || $("account").value, url})
+    });
+  }catch(err){
+    alert(err.message);
+  }finally{
+    await refresh();
+  }
 }
 
 async function importMetricsCsv(){
@@ -860,7 +880,7 @@ async function showDetail(postId, open=true){
   ];
   const slideImages = payload.slides || [];
   const formatFiles = payload.formats || {};
-  $("detailTitle").textContent = `${p.post_id} / ${queue(p).status || "draft"}`;
+  $("detailTitle").textContent = `${p.post_id} / ${queue(p).status || "draft"} / compliance ${((p.compliance||{}).status || "needs_review")}`;
   $("detailSub").textContent = `${(p.character||{}).spec || ""} / ${p.tracking_code || ""}`;
   $("detailMedia").innerHTML = video ? `<video src="${fileUrl(video)}" muted controls></video>` : "";
   $("detailCaption").textContent = payload.caption || p.caption || "";

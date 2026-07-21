@@ -22,6 +22,18 @@ NEVER produce (assume anything you'd generate here is fabricated):
 - Specific study years or dates stated as fact ("a 2021 study showed…").
 - First-person claims of a research act you didn't perform
   ("I've spent months reading every available study").
+- No first-person claims of studying, reading, or researching a specific body
+  of literature — in ANY phrasing, quantified or not. Banned: "I read the
+  studies", "months digging into the research", "I've reviewed the trials".
+  The honest frame is public-literacy, not private research: "here's what the
+  public evidence shows", "the research that's out there points to…".
+- No specific mechanistic assertions stated as established fact (named
+  pathways, receptors, molecular actions) unless the mechanism is given in the
+  brief. Keep mechanism directional: "may support tissue-repair pathways", not
+  "modulates growth factors and angiogenesis".
+- Reference mechanism ONLY in language consistent with the brief's
+  mechanism_claims. Never name a specific pathway, receptor, growth factor, or
+  molecular action unless that exact term appears in mechanism_claims.
 
 SOURCE RULE: use a specific number, date, dose, or citation ONLY if it appears
 verbatim in the brief you were given. If it's not in the brief, it is
@@ -56,7 +68,7 @@ Truthful positioning:
 - physician-supervised peptide therapy
 - asynchronous review by US-licensed physicians where available
 - 503A compounding pharmacy framework
-- labs, follow-up, and cold-chain shipping when clinically appropriate
+- labs and follow-up when clinically appropriate
 - no research-peptide sourcing
 - not a refill mill, not a research-use-only vendor, not a chatbot protocol
 

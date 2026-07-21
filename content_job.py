@@ -24,7 +24,8 @@ from datetime import datetime
 from pathlib import Path
 
 import character_factory as cf
-from brand_loader import DEFAULT_BRAND, load_brand
+import compliance_lint
+from brand_loader import DEFAULT_BRAND, load_brand, mechanism_claims_for
 import manifest
 import screenshot_factory as sf
 import slideshow_maker as sm
@@ -291,7 +292,8 @@ def write_metadata(post_id, metadata_dest, manifest_path):
     metadata_dest.write_text(json.dumps(post, indent=2), encoding="utf-8")
 
 
-def attach_text_formats(post_id, brief, brand, package, outputs, formats, placeholder, manifest_path):
+def attach_text_formats(post_id, brief, brand, package, outputs, formats, placeholder,
+                        tracking_code, manifest_path):
     text_names = tf.text_format_names(formats)
     if not text_names:
         return package, outputs
@@ -302,6 +304,7 @@ def attach_text_formats(post_id, brief, brand, package, outputs, formats, placeh
         package_dir,
         text_names,
         placeholder=placeholder,
+        tracking_code=tracking_code,
     )
     rel_rendered = {name: rel(path) for name, path in rendered.items()}
     package = {**package, "formats": rel_rendered}
@@ -318,7 +321,29 @@ def build_text_brief(slug, angle, brand, formats):
         "angle": angle,
         "formats": tf.text_format_names(formats),
         "slides": [],
+        "factual_claims": [angle],
+        "mechanism_claims": mechanism_claims_for(brand, angle),
     }
+
+
+def run_compliance(post_id, brief, brand, package, caption, slides,
+                   tracking_code, manifest_path):
+    results = {}
+    format_paths = package.get("formats") or {}
+    for format_name, path in format_paths.items():
+        results[format_name] = compliance_lint.lint_file(
+            path, format_name, brand, brief, tracking_code=tracking_code)
+    if not results:
+        context = {"avatar_testimonial": bool(slides)}
+        combined = "\n\n".join([
+            caption or "",
+            *[str(item.get("text") or "") for item in (slides or [])],
+        ]).strip()
+        results["caption_and_slides"] = compliance_lint.lint_output(
+            combined, brand, brief, context=context)
+    compliance = compliance_lint.aggregate_results(results)
+    manifest.set_compliance(post_id, compliance, manifest_path)
+    return compliance
 
 
 def main():
@@ -419,13 +444,17 @@ def main():
             post_id, None, brief, caption, args.posts_dir, run_date, brand.brand_id)
         manifest.set_package(post_id, package, caption, args.manifest)
         package, outputs = attach_text_formats(
-            post_id, brief, brand, package, outputs, formats, args.placeholder, args.manifest)
-        manifest.set_publish_queue(post_id, "ready_to_post", account, path=args.manifest)
+            post_id, brief, brand, package, outputs, formats, args.placeholder,
+            tracking_code, args.manifest)
+        compliance = run_compliance(
+            post_id, brief, brand, package, caption, [], tracking_code, args.manifest)
+        queue_status = "ready_to_post" if compliance["status"] == "pass" else "needs_edit"
+        manifest.set_publish_queue(post_id, queue_status, account, path=args.manifest)
         write_metadata(post_id, metadata_dest, args.manifest)
         built.append((post_id, package["dir"]))
         print(f"[post] {post_id} -> {package['dir']}")
         print(f"\n{len(built)} posts packaged under {args.posts_dir}/{brand.brand_id}/{run_date}/")
-        print("Manual queue status: ready_to_post")
+        print(f"Manual queue status: {queue_status}")
         return
 
     for avatar_index, character in enumerate(characters, start=1):
@@ -458,9 +487,11 @@ def main():
             )
             brief = build_testimonial_brief(
                 render_slug, char_dir, shot_before, shot_after, character, post_index, brand)
-            brief["formats"] = formats
-            result = sm.make_content(brief, args.out, brand=brand)
             hook = pick_hook(character, post_index, brand)
+            brief["formats"] = formats
+            brief.setdefault("factual_claims", [hook])
+            brief.setdefault("mechanism_claims", mechanism_claims_for(brand, hook))
+            result = sm.make_content(brief, args.out, brand=brand)
             caption = caption_for(character, hook, tracking_code, brand)
             outputs = {
                 "slides_dir": rel(result["dir"]),
@@ -518,15 +549,20 @@ def main():
                 brand.brand_id, package_assets)
             manifest.set_package(post_id, package, caption, args.manifest)
             package, outputs = attach_text_formats(
-                post_id, brief, brand, package, outputs, formats, args.placeholder, args.manifest)
-            manifest.set_publish_queue(post_id, "ready_to_post", account, path=args.manifest)
+                post_id, brief, brand, package, outputs, formats, args.placeholder,
+                tracking_code, args.manifest)
+            compliance = run_compliance(
+                post_id, brief, brand, package, caption, brief.get("slides") or [],
+                tracking_code, args.manifest)
+            queue_status = "ready_to_post" if compliance["status"] == "pass" else "needs_edit"
+            manifest.set_publish_queue(post_id, queue_status, account, path=args.manifest)
             write_metadata(post_id, metadata_dest, args.manifest)
 
             built.append((post_id, package["dir"]))
             print(f"[post] {post_id} -> {package['dir']}")
 
     print(f"\n{len(built)} posts packaged under {args.posts_dir}/{brand.brand_id}/{run_date}/")
-    print("Manual queue status: ready_to_post")
+    print("Manual queue status is ready_to_post only for compliance=pass; review the manifest.")
 
 
 if __name__ == "__main__":

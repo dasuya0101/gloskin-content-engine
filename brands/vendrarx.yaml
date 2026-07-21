@@ -52,7 +52,7 @@ prompts:
   copy_system: prompts/vendrarx/copy_system.md
   learned_rules: null
   image_character: null
-  compliance_policy: null
+  compliance_policy: prompts/vendrarx/compliance_policy.md
 
 slideshow:
   wordmark_text: VendraRx
@@ -89,9 +89,14 @@ tracking:
   prefix: vendra
 
 compliance:
-  banned_patterns:
-    - "\\b(cure|cures|treat|treats|prevent|prevents)\\b"
+  hard_block:
     - "\\bguaranteed (prescription|results|outcome)\\b"
+  review:
+    - "\\b(cure|cures|treat|treats|prevent|prevents|heal|heals)\\b"
+  mechanism_claims:
+    BPC-157:
+      - "may support tissue-repair pathways"
+      - "studied for effects on inflammation in animal models"
   required_disclaimers:
     - id: compounded
       applies_to: [reddit_longform, tiktok_script]

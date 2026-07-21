@@ -27,6 +27,9 @@ def normalize_post(record):
     record.setdefault("metrics", {"views": None, "likes": None, "shares": None,
                                   "saves": None, "ctr": None, "installs": None,
                                   "updated_at": None})
+    record.setdefault("compliance", {
+        "status": "needs_review", "violations": [], "checked_at": None,
+    })
     return record
 
 
@@ -44,6 +47,7 @@ def _save(records, path):
 def record_post(*, character, fmt, hook, slides, assets, outputs,
                 variant_of=None, tracking_code=None, caption=None,
                 package=None, publish_queue=None, brand=DEFAULT_BRAND,
+                compliance=None,
                 path=POSTS_FILE):
     """Append a new post record. Returns the post_id."""
     records = _load(path)
@@ -66,6 +70,9 @@ def record_post(*, character, fmt, hook, slides, assets, outputs,
         "publish": {"platform": None, "account": None, "url": None, "posted_at": None},
         "publish_queue": publish_queue or {"status": "draft", "target_account": None,
                                            "notes": None, "updated_at": None},
+        "compliance": compliance or {
+            "status": "needs_review", "violations": [], "checked_at": None,
+        },
         "metrics": {"views": None, "likes": None, "shares": None, "saves": None,
                     "ctr": None, "installs": None, "updated_at": None},
         "is_winner": None,                  # set by analyze_winners
@@ -98,6 +105,23 @@ def set_package(post_id, package, caption=None, path=POSTS_FILE):
     if caption is not None:
         updates["caption"] = caption
     return update_post(post_id, updates, path)
+
+
+def set_compliance(post_id, compliance, path=POSTS_FILE):
+    return update_post(post_id, {"compliance": compliance}, path)
+
+
+def record_compliance_override(post_id, reason, path=POSTS_FILE):
+    record = get_post(post_id, path)
+    if not record:
+        return None
+    compliance = dict(record.get("compliance") or {})
+    compliance["override"] = {
+        "flag": True,
+        "reason": str(reason or "").strip(),
+        "recorded_at": time.strftime("%Y-%m-%dT%H:%M:%S"),
+    }
+    return set_compliance(post_id, compliance, path)
 
 
 def set_publish_queue(post_id, status, target_account=None, notes=None, path=POSTS_FILE):

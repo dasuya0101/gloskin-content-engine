@@ -14,7 +14,7 @@ import json
 import re
 from pathlib import Path
 
-from brand_loader import DEFAULT_BRAND, load_brand
+from brand_loader import DEFAULT_BRAND, load_brand, mechanism_claims_for
 from llm_router import complete
 import text_formats as tf
 
@@ -75,12 +75,16 @@ def gen_brief(angle, brand, formats, task="copy_brief"):
             "angle": angle,
             "formats": tf.text_format_names(formats),
             "slides": [],
+            "factual_claims": [angle],
+            "mechanism_claims": mechanism_claims_for(brand, angle),
         }
     raw = complete(system=load_system_prompt(brand, formats), user=f"Angle: {angle}", task=task)
     raw = re.sub(r"^```(?:json)?|```$", "", raw, flags=re.MULTILINE).strip()
     brief = json.loads(raw)
     brief["brand"] = brand.brand_id
     brief["formats"] = formats
+    brief.setdefault("factual_claims", [angle])
+    brief.setdefault("mechanism_claims", mechanism_claims_for(brand, angle))
     return brief
 
 

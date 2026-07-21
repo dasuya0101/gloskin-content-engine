@@ -1,0 +1,82 @@
+- id: frozen_research_months
+  text: "I've spent a lot of time digging into the available evidence"
+  brand: vendrarx
+  expect: fail
+  rule: fabricated_research_act
+- id: frozen_research_bpc
+  text: "Been digging into BPC-157 research"
+  brand: vendrarx
+  expect: fail
+  rule: fabricated_research_act
+- id: frozen_mechanism_growth
+  text: "hypotheses point to modulation of growth factors and angiogenesis"
+  brand: vendrarx
+  expect: fail
+  rule: unsourced_mechanism
+- id: frozen_mechanism_inflammation
+  text: "works through inflammatory modulation"
+  brand: vendrarx
+  expect: fail
+  rule: unsourced_mechanism
+- id: frozen_operations
+  text: "shipped cold-chain to preserve stability"
+  brand: vendrarx
+  expect: needs_review
+  rule: unverifiable_operational_claim
+- id: vendra_guaranteed_rx
+  text: "guaranteed prescription after the quiz"
+  brand: vendrarx
+  expect: fail
+  rule: hard_block
+- id: vendra_heals
+  text: "BPC-157 heals your tendons fast"
+  brand: vendrarx
+  expect: fail
+  rule: disease_claim
+- id: vendra_animal_caveat
+  text: "most of the evidence comes from animal studies"
+  brand: vendrarx
+  expect: pass
+- id: vendra_allowlisted_mechanism
+  text: "may support tissue-repair pathways"
+  brand: vendrarx
+  mechanism_claims: ["may support tissue-repair pathways"]
+  expect: pass
+- id: vendra_debunk_cure
+  text: "the hype suggests it's a cure-all"
+  brand: vendrarx
+  expect: pass
+- id: vendra_disclaims_heal
+  text: "we won't claim it heals anything"
+  brand: vendrarx
+  expect: pass
+- id: vendra_required_disclaimer
+  text: "Compounded medications are prepared by licensed pharmacies and are not FDA-approved. Individual suitability is determined by a licensed clinician."
+  brand: vendrarx
+  format: reddit_longform
+  expect: pass
+- id: glo_cures_acne
+  text: "GloSkin cures acne"
+  brand: gloskin
+  expect: fail
+  rule: disease_claim
+- id: glo_undisclosed_affiliate
+  text: "My favorite cleanser: https://amzn.to/example"
+  brand: gloskin
+  expect: fail
+  rule: missing_affiliate_disclosure
+- id: glo_unlabeled_avatar
+  text: "My skin transformed after eight weeks with GloSkin."
+  brand: gloskin
+  context:
+    avatar_testimonial: true
+  expect: fail
+  rule: missing_ai_label
+- id: glo_appearance_claim
+  text: "reduces the appearance of redness"
+  brand: gloskin
+  expect: pass
+- id: glo_disclosed_affiliate
+  text: "Affiliate disclosure: I may earn a commission. https://amzn.to/example"
+  brand: gloskin
+  expect: pass

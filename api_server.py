@@ -120,6 +120,9 @@ def normalize_post(post):
         p["publish_queue"]["target_account"] = default_account_for(p.get("brand"))
     p.setdefault("publish", {"platform": None, "account": None, "url": None, "posted_at": None})
     p.setdefault("metrics", {})
+    p.setdefault("compliance", {
+        "status": "needs_review", "violations": [], "checked_at": None,
+    })
     return p
 
 
@@ -323,6 +326,19 @@ def queue(post_id):
     status = data.get("status")
     if status not in {"draft", "ready_to_post", "posted", "skipped", "failed", "needs_edit"}:
         abort(400, description="invalid queue status")
+    existing = manifest.get_post(post_id, str(POSTS_FILE))
+    if not existing:
+        abort(404)
+    if status in {"ready_to_post", "posted"}:
+        try:
+            publish_bridge.require_compliance(
+                existing,
+                override=bool(data.get("override")),
+                reason=data.get("override_reason"),
+                posts_path=str(POSTS_FILE),
+            )
+        except publish_bridge.PublishError as exc:
+            abort(409, description=str(exc))
     post = manifest.set_publish_queue(
         post_id,
         status,
@@ -344,6 +360,15 @@ def publish(post_id):
     platform = data.get("platform") or "manual"
     account = data.get("account") or default_account_for(existing.get("brand"))
     url = data.get("url") or ""
+    try:
+        publish_bridge.require_compliance(
+            existing,
+            override=bool(data.get("override")),
+            reason=data.get("override_reason"),
+            posts_path=str(POSTS_FILE),
+        )
+    except publish_bridge.PublishError as exc:
+        abort(409, description=str(exc))
     post = manifest.set_publish(post_id, platform, account, url, str(POSTS_FILE))
     if not post:
         abort(404)
