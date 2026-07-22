@@ -89,6 +89,11 @@ def brief_angle(brief):
 
 def brief_context(brief, brand, format_name):
     slides = brief.get("slides") or []
+    claim_caveats = [
+        caveat
+        for pack in (brief.get("claim_packs") or [])
+        for caveat in (pack.get("caveats") or [])
+    ]
     slide_lines = [
         f"- {s.get('kind', 'body')}: {s.get('text') or s.get('caption') or ''}"
         for s in slides
@@ -101,6 +106,7 @@ def brief_context(brief, brand, format_name):
         f"Factual claims supplied by the brief: {json.dumps(brief.get('factual_claims') or [])}",
         f"Approved mechanism claims: {json.dumps(brief.get('mechanism_claims') or [])}",
         f"Verified claim packs: {json.dumps(brief.get('claim_packs') or [])}",
+        f"Claim-pack caveats: {json.dumps(claim_caveats)}",
         f"Operational status: {brief.get('operational_status') or brand.operational_status}",
         f"Voice: {json.dumps(brand.voice)}",
         f"Pillars: {', '.join(brand.pillars)}",

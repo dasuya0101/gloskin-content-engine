@@ -102,6 +102,58 @@
         - "guarantees rapid recovery"
   expect: fail
   rule: disallowed_claim
+- id: wave4_regulatory_hold_503a
+  text: "BPC-157 is eligible for 503A compounding."
+  brand: vendrarx
+  claim_packs:
+    - compound: BPC-157
+      evidence_claims: []
+      mechanism_claims: []
+      regulatory_claims:
+        - "BPC-157 may be compounded under section 503A."
+        - "BPC-157 is eligible for 503A compounding."
+      disallowed_claims: []
+      caveats: []
+      regulatory_hold:
+        - claim_ref: "BPC-157 may be compounded under section 503A."
+          review_after: "2026-07-25"
+          status: held
+          note: "PCAC 7/23-24; re-verify after the meeting."
+  expect: fail
+  rule: regulatory_hold
+- id: wave4_regulatory_hold_cleared
+  text: "BPC-157 is eligible for 503A compounding."
+  brand: vendrarx
+  claim_packs:
+    - compound: BPC-157
+      evidence_claims: []
+      mechanism_claims: []
+      regulatory_claims:
+        - "BPC-157 may be compounded under section 503A."
+        - "BPC-157 is eligible for 503A compounding."
+      disallowed_claims: []
+      caveats: []
+      regulatory_hold:
+        - claim_ref: "BPC-157 may be compounded under section 503A."
+          review_after: "2025-01-01"
+          status: cleared
+          cleared_at: "2025-01-02"
+          note: "Human re-verification completed."
+  expect: pass
+- id: wave4_single_lab_caveat
+  text: "A single research group proved BPC-157 definitively improves tissue outcomes."
+  brand: vendrarx
+  claim_packs:
+    - compound: BPC-157
+      evidence_claims: []
+      mechanism_claims: []
+      regulatory_claims: []
+      disallowed_claims: []
+      regulatory_hold: []
+      caveats:
+        - "Efficacy language stays directional; never lean on a single research group's stronger conclusions (much foundational work is one lab)."
+  expect: fail
+  rule: claim_pack_caveat
 - id: wave4_prelaunch_present_operation
   text: "Every case is reviewed by a licensed clinician."
   brand: vendrarx

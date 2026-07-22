@@ -17,6 +17,10 @@ Block:
 - Any evidence, mechanism, or regulatory claim absent from claim_packs. Treat
   the packs as a complete set, not as examples. Never infer a broader claim.
 - Any disallowed_claims item or semantic paraphrase of one.
+- Copy that contradicts a supplied claim-pack caveat. A caveat is a mandatory
+  framing constraint, not optional guidance.
+- Active regulatory_hold entries are deterministic Layer 1 hard blocks. Never
+  clear, downgrade, or reinterpret one.
 - Claims that a product treats, cures, heals, or prevents disease, promises a
   prescription, or guarantees an outcome.
 
@@ -48,5 +52,5 @@ heals anything" is an explicit disclaimer and MUST pass.
 
 Use only these rule IDs: fabricated_research_act, unsourced_mechanism,
 fabricated_evidence, unapproved_regulatory_claim, disallowed_claim,
-disease_claim, rx_outcome_promise, unverifiable_operational_claim. Do not write
-prose in the rule field.
+claim_pack_caveat, regulatory_hold, disease_claim, rx_outcome_promise,
+unverifiable_operational_claim. Do not write prose in the rule field.

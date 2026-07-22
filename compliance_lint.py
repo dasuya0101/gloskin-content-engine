@@ -10,7 +10,13 @@ from pathlib import Path
 import yaml
 
 from brand_loader import DEFAULT_BRAND, load_brand
-from claim_packs import approved_claims, disallowed_claims
+from claim_packs import (
+    approved_claims,
+    caveats,
+    disallowed_claims,
+    regulatory_hold_is_active,
+    regulatory_holds,
+)
 from llm_router import complete
 
 
@@ -51,6 +57,23 @@ PATTERNABLE_CLAIMS = {
 RESEARCH_OR_REGULATORY_CONTEXT = re.compile(
     r"\b(?:study|studies|trial|research|published|evidence|FDA|DEA|guidance|"
     r"law|legal|regulat(?:ion|ory)|scheduled|approval)\b", re.I)
+ELIGIBILITY_503A = re.compile(
+    r"(?:\b(?:eligible|eligibility|allowed|permitted|available|qualif(?:y|ies)|"
+    r"can be compounded|may be compounded)\b.{0,100}\b503A\b|"
+    r"\b503A\b.{0,100}\b(?:eligible|eligibility|allowed|permitted|available|"
+    r"qualif(?:y|ies)|can compound|may compound)\b)",
+    re.I,
+)
+STRONG_CONCLUSION = re.compile(
+    r"\b(?:prove[ds]?|definitively|conclusively|confirmed efficacy|"
+    r"establish(?:es|ed)? efficacy|demonstrat(?:es|ed) efficacy)\b",
+    re.I,
+)
+SINGLE_LAB = re.compile(
+    r"\b(?:one|single|same) (?:lab|laboratory|research group)|"
+    r"\bfoundational (?:lab|laboratory|research group)\b",
+    re.I,
+)
 OPERATIONAL_REVIEW = {
     "shipping_or_storage": r"\b(?:cold[- ]chain|refrigerated shipping|temperature[- ]controlled)\b",
     "physician_availability": (
@@ -144,10 +167,63 @@ def _disallowed_matches(text, brief):
     return rows
 
 
+def _regulatory_hold_matches(text, brief):
+    rows = []
+    for pack, hold in regulatory_holds(brief):
+        if not regulatory_hold_is_active(hold):
+            continue
+        claim_ref = str(hold.get("claim_ref") or "").strip()
+        if claim_ref:
+            matches = _matches(
+                text, [re.escape(claim_ref)], "regulatory_hold", excerpt=True)
+            for item in matches:
+                item.update({
+                    "claim_ref": claim_ref,
+                    "compound": pack.get("compound"),
+                    "review_after": str(hold.get("review_after") or ""),
+                })
+            rows.extend(matches)
+        for match in ELIGIBILITY_503A.finditer(text):
+            rows.append({
+                "text": _excerpt(text, match.start(), match.end()),
+                "match": match.group(0),
+                "start": match.start(),
+                "end": match.end(),
+                "rule": "regulatory_hold",
+                "pattern": ELIGIBILITY_503A.pattern,
+                "claim_ref": claim_ref,
+                "compound": pack.get("compound"),
+                "review_after": str(hold.get("review_after") or ""),
+            })
+    return rows
+
+
+def _caveat_matches(text, brief):
+    rows = []
+    for caveat in caveats(brief):
+        if not re.search(r"\b(?:one|single) (?:lab|research group)\b", caveat, re.I):
+            continue
+        for match in STRONG_CONCLUSION.finditer(text):
+            excerpt = _excerpt(text, match.start(), match.end())
+            if SINGLE_LAB.search(excerpt):
+                rows.append({
+                    "text": excerpt,
+                    "match": match.group(0),
+                    "start": match.start(),
+                    "end": match.end(),
+                    "rule": "claim_pack_caveat",
+                    "pattern": STRONG_CONCLUSION.pattern,
+                    "caveat": caveat,
+                })
+    return rows
+
+
 def layer1(text, brand, brief=None):
     brief = brief or {}
     hard = _matches(text, brand.compliance.get("hard_block") or [], "hard_block")
     hard.extend(_disallowed_matches(text, brief))
+    hard.extend(_regulatory_hold_matches(text, brief))
+    hard.extend(_caveat_matches(text, brief))
     review = _matches(text, brand.compliance.get("review") or [], "review")
     for rule, pattern in FALSE_PRECISION.items():
         review.extend(_matches(text, [pattern], rule, excerpt=True))
@@ -179,6 +255,7 @@ def llm_judgment(text, brand, brief, candidates, context=None):
         "factual_claims": brief.get("factual_claims") or [],
         "mechanism_claims": brief.get("mechanism_claims") or [],
         "claim_packs": brief.get("claim_packs") or [],
+        "caveats": caveats(brief),
         "layer1_candidates": candidates,
         "context": context or {},
         "required_schema": {
@@ -193,6 +270,8 @@ def llm_judgment(text, brand, brief, candidates, context=None):
             "Treat claim_packs as the complete ground-truth set for specific evidence, mechanism, and regulatory claims.",
             "A specific claim not represented by an exact approved claim is fabrication; never infer permission from the topic.",
             "A disallowed_claims item is always a block, including a semantic paraphrase.",
+            "Treat every claim-pack caveat as a framing constraint; flag copy that contradicts one.",
+            "Never clear regulatory_hold. Layer 1 owns those hard blocks.",
             "For pre_launch operations, flag bare present-tense care delivery; clear explicit design/building/when-launch framing. For live operations, clear present tense.",
             "Clear candidates used only to reject hype or disclaim a claim.",
             "If rewriting, preserve the complete output structure and rewrite only violations.",
@@ -265,12 +344,15 @@ def canonical_rule(value):
         ("regulatory", "unapproved_regulatory_claim"),
         ("legal", "unapproved_regulatory_claim"),
         ("disallowed", "disallowed_claim"),
+        ("caveat", "claim_pack_caveat"),
+        ("hold", "regulatory_hold"),
     ]
     known = {
         "fabricated_research_act", "unsourced_mechanism", "fabricated_evidence",
         "disease_claim", "rx_outcome_promise", "unverifiable_operational_claim",
         "missing_affiliate_disclosure", "missing_ai_label",
         "unapproved_regulatory_claim", "disallowed_claim",
+        "claim_pack_caveat", "regulatory_hold",
     }
     if raw in known:
         return raw
@@ -457,19 +539,41 @@ def deterministic_claim_violations(text, candidates, brief):
     return violations, cleared
 
 
+def hard_violations(hard):
+    violations = []
+    seen = set()
+    for item in hard:
+        source_rule = item.get("rule")
+        rule = source_rule if source_rule in {
+            "disallowed_claim", "regulatory_hold", "claim_pack_caveat"
+        } else "hard_block"
+        key = (item.get("text"), rule)
+        if key in seen:
+            continue
+        seen.add(key)
+        violation = {
+            "text": item.get("text") or "",
+            "rule": rule,
+            "severity": "block",
+        }
+        if rule == "regulatory_hold":
+            violation.update({
+                "claim_ref": item.get("claim_ref"),
+                "compound": item.get("compound"),
+                "review_after": item.get("review_after"),
+            })
+        elif rule == "claim_pack_caveat":
+            violation["caveat"] = item.get("caveat")
+        violations.append(violation)
+    return violations
+
+
 def lint_output(output, brand, brief=None, format_name=None, context=None):
     brief = brief or {}
     text = serialize_output(output)
     hard, candidates = layer1(text, brand, brief)
     if hard:
-        violations = [
-            {
-                "text": item["text"],
-                "rule": "disallowed_claim" if item.get("rule") == "disallowed_claim" else "hard_block",
-                "severity": "block",
-            }
-            for item in hard
-        ]
+        violations = hard_violations(hard)
         return {
             "status": "fail", "violations": violations, "checked_at": now_iso(),
             "candidates": candidates, "notes": [], "suggested_rewrite": "",
@@ -571,6 +675,7 @@ def rewrite_output(output, format_name, brand, brief, violations, target, error=
         "violations": violations,
         "approved_mechanism_claims": brief.get("mechanism_claims") or [],
         "claim_packs": brief.get("claim_packs") or [],
+        "caveats": caveats(brief),
         "operational_status": brief.get("operational_status") or brand.operational_status,
         "previous_validation_error": error or "",
         "original_output": output,
@@ -579,6 +684,8 @@ def rewrite_output(output, format_name, brand, brief, violations, target, error=
             "Replace violating specifics with qualitative, useful content; do not merely delete sentences.",
             "Stay at the supplied length target and preserve all required structure.",
             "Use exact approved claims only; otherwise generalize or omit the specific assertion.",
+            "Respect every claim-pack caveat as a framing constraint.",
+            "Never include a claim covered by an active regulatory_hold.",
             "Do not invent citations, dates, percentages, trial details, mechanisms, or regulatory conclusions.",
         ],
     }

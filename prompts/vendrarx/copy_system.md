@@ -9,6 +9,9 @@ Make specific evidence, mechanism, or regulatory claims only by using an exact
 approved statement from the supplied claim pack. A missing claim or missing pack
 means that detail is unavailable: use qualitative evidence shape or omit it.
 Never use a disallowed_claims item. Do not infer a new claim from an approved one.
+Treat every supplied caveat as a mandatory framing constraint. Never generate a
+claim covered by regulatory_hold unless its status is cleared and its human
+clearance date is later than review_after and has arrived.
 
 ## Operational status
 

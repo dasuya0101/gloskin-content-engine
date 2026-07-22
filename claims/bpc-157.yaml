@@ -6,3 +6,12 @@ mechanism_claims:
   - "studied for effects on inflammation in animal models"
 regulatory_claims: []
 disallowed_claims: []
+regulatory_hold:
+  - claim_ref: "BPC-157 is eligible for 503A compounding."
+    review_after: 2026-07-25
+    status: held
+    note: "PCAC 7/23-24; FDA briefing docs propose NOT listing. Re-verify."
+caveats:
+  - >-
+    Efficacy language stays directional; never lean on a single research
+    group's stronger conclusions (much foundational work is one lab).

@@ -331,3 +331,17 @@ Wave 4 acceptance:
   records initial deterministic catches even when a rewrite succeeds, and
   confirms there are no `rewrite_render_error` violations.
 - No publishing or compliance override is part of Wave 4.
+
+### Claim-Pack Regulatory Holds And Caveats
+
+Claim packs also support `regulatory_hold` for time-sensitive regulatory claims.
+A held claim, or a 503A-eligibility assertion for a compound with an active
+hold, hard-blocks in Layer 1 and cannot be cleared by the semantic judge. Holds
+do not expire automatically: a human must set `status: cleared` and record a
+`cleared_at` date later than `review_after`; the clearance date must also have
+arrived. This keeps regulatory memory from silently becoming publishable copy.
+
+The `caveats` field carries mandatory framing constraints alongside approved
+claims. Generation receives caveats explicitly, the semantic judge treats them
+as policy, and deterministic caveat patterns block before judgment where the
+constraint is patternable.
