@@ -140,6 +140,70 @@
           cleared_at: "2025-01-02"
           note: "Human re-verification completed."
   expect: pass
+- id: wave4_permanent_regulatory_hold
+  text: "Injectable GHK-Cu is eligible for 503A compounding."
+  brand: vendrarx
+  claim_lanes: [compounded_injectable]
+  claim_packs:
+    - compound: GHK-Cu
+      aliases: [GHK Cu]
+      lanes: [cosmetic_topical, compounded_injectable]
+      evidence_claims: []
+      mechanism_claims: []
+      regulatory_facts:
+        - claim: "Injectable GHK-Cu is eligible for 503A compounding."
+          lanes: [compounded_injectable]
+      disallowed_claims: []
+      caveats: []
+      regulatory_hold:
+        - claim_ref: "Injectable GHK-Cu is eligible for 503A compounding."
+          lanes: [compounded_injectable]
+          review_after: null
+          status: held
+          note: "No scheduled event resolves this hold."
+  expect: fail
+  rule: regulatory_hold
+- id: wave4_permanent_regulatory_hold_cleared
+  text: "Injectable GHK-Cu is eligible for 503A compounding."
+  brand: vendrarx
+  claim_lanes: [compounded_injectable]
+  claim_packs:
+    - compound: GHK-Cu
+      aliases: [GHK Cu]
+      lanes: [cosmetic_topical, compounded_injectable]
+      evidence_claims: []
+      mechanism_claims: []
+      regulatory_facts:
+        - claim: "Injectable GHK-Cu is eligible for 503A compounding."
+          lanes: [compounded_injectable]
+      disallowed_claims: []
+      caveats: []
+      regulatory_hold:
+        - claim_ref: "Injectable GHK-Cu is eligible for 503A compounding."
+          lanes: [compounded_injectable]
+          review_after: null
+          status: cleared
+          cleared_at: "2026-07-21"
+          note: "Human re-verification completed."
+  expect: pass
+- id: wave4_cross_lane_ghk_cu
+  text: "GHK-Cu's skin-level benefits are plausible."
+  brand: vendrarx
+  claim_lanes: [compounded_injectable]
+  claim_packs:
+    - compound: GHK-Cu
+      aliases: [GHK Cu]
+      lanes: [cosmetic_topical, compounded_injectable]
+      evidence_claims:
+        - claim: "GHK-Cu's skin-level benefits are plausible."
+          lanes: [cosmetic_topical]
+      mechanism_claims: []
+      regulatory_facts: []
+      disallowed_claims: []
+      caveats: []
+      regulatory_hold: []
+  expect: fail
+  rule: claim_lane
 - id: wave4_single_lab_caveat
   text: "A single research group proved BPC-157 definitively improves tissue outcomes."
   brand: vendrarx

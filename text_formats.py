@@ -106,6 +106,7 @@ def brief_context(brief, brand, format_name):
         f"Factual claims supplied by the brief: {json.dumps(brief.get('factual_claims') or [])}",
         f"Approved mechanism claims: {json.dumps(brief.get('mechanism_claims') or [])}",
         f"Verified claim packs: {json.dumps(brief.get('claim_packs') or [])}",
+        f"Allowed claim lanes: {json.dumps(brief.get('claim_lanes') or brand.claim_lanes)}",
         f"Claim-pack caveats: {json.dumps(claim_caveats)}",
         f"Operational status: {brief.get('operational_status') or brand.operational_status}",
         f"Voice: {json.dumps(brand.voice)}",

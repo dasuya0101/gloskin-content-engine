@@ -16,6 +16,8 @@ Block:
   receptors, molecules, growth factors, angiogenesis, or "modulation of X".
 - Any evidence, mechanism, or regulatory claim absent from claim_packs. Treat
   the packs as a complete set, not as examples. Never infer a broader claim.
+- Any claim whose tagged lanes do not overlap claim_lanes. Untagged top-level
+  mechanism_claims are legacy approved claims for the active brand lane.
 - Any disallowed_claims item or semantic paraphrase of one.
 - Copy that contradicts a supplied claim-pack caveat. A caveat is a mandatory
   framing constraint, not optional guidance.
@@ -52,5 +54,5 @@ heals anything" is an explicit disclaimer and MUST pass.
 
 Use only these rule IDs: fabricated_research_act, unsourced_mechanism,
 fabricated_evidence, unapproved_regulatory_claim, disallowed_claim,
-claim_pack_caveat, regulatory_hold, disease_claim, rx_outcome_promise,
+claim_pack_caveat, regulatory_hold, claim_lane, disease_claim, rx_outcome_promise,
 unverifiable_operational_claim. Do not write prose in the rule field.

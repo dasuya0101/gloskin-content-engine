@@ -14,6 +14,7 @@ from claim_packs import (
     approved_claims,
     caveats,
     disallowed_claims,
+    lane_claims,
     regulatory_hold_is_active,
     regulatory_holds,
 )
@@ -167,10 +168,61 @@ def _disallowed_matches(text, brief):
     return rows
 
 
-def _regulatory_hold_matches(text, brief):
+def _active_claim_lanes(brief, brand=None):
+    if "claim_lanes" in brief:
+        return brief.get("claim_lanes") or []
+    return (brand.claim_lanes if brand else []) or []
+
+
+def _lanes_overlap(left, right):
+    return not left or not right or bool(set(left) & set(right))
+
+
+def _lane_matches(text, brief, brand):
+    active_lanes = _active_claim_lanes(brief, brand)
+    if not active_lanes:
+        return []
     rows = []
+    for pack, field, claim, lanes in lane_claims(brief):
+        if _lanes_overlap(lanes, active_lanes):
+            continue
+        matches = _matches(text, [re.escape(claim)], "claim_lane", excerpt=True)
+        for item in matches:
+            item.update({
+                "claim": claim,
+                "claim_field": field,
+                "claim_lanes": lanes,
+                "active_lanes": active_lanes,
+                "compound": pack.get("compound"),
+            })
+        rows.extend(matches)
+    return rows
+
+
+def _hold_availability_pattern(pack, hold):
+    claim_ref = str(hold.get("claim_ref") or "")
+    if not re.search(r"(?i)\b(?:availab|eligib|may be compounded|can be compounded|offered)\w*", claim_ref):
+        return None
+    names = [pack.get("compound"), *(pack.get("aliases") or [])]
+    names = [re.escape(str(name)) for name in names if str(name or "").strip()]
+    if not names:
+        return None
+    compound = "(?:" + "|".join(names) + ")"
+    availability = (
+        r"(?:availab\w*|eligib\w*|offered|can be (?:prescribed|compounded)|"
+        r"may be (?:prescribed|compounded)|503A)"
+    )
+    return rf"(?:{compound}.{{0,120}}{availability}|{availability}.{{0,120}}{compound})"
+
+
+def _regulatory_hold_matches(text, brief, brand):
+    rows = []
+    active_lanes = _active_claim_lanes(brief, brand)
     for pack, hold in regulatory_holds(brief):
         if not regulatory_hold_is_active(hold):
+            continue
+        hold_lanes = hold.get("lanes") or []
+        if not _lanes_overlap(hold_lanes, active_lanes):
             continue
         claim_ref = str(hold.get("claim_ref") or "").strip()
         if claim_ref:
@@ -180,20 +232,26 @@ def _regulatory_hold_matches(text, brief):
                 item.update({
                     "claim_ref": claim_ref,
                     "compound": pack.get("compound"),
-                    "review_after": str(hold.get("review_after") or ""),
+                    "review_after": hold.get("review_after"),
+                    "hold_lanes": hold_lanes,
                 })
             rows.extend(matches)
-        for match in ELIGIBILITY_503A.finditer(text):
+        patterns = [ELIGIBILITY_503A.pattern]
+        availability_pattern = _hold_availability_pattern(pack, hold)
+        if availability_pattern:
+            patterns.append(availability_pattern)
+        for match in re.finditer("|".join(f"(?:{item})" for item in patterns), text, re.I):
             rows.append({
                 "text": _excerpt(text, match.start(), match.end()),
                 "match": match.group(0),
                 "start": match.start(),
                 "end": match.end(),
                 "rule": "regulatory_hold",
-                "pattern": ELIGIBILITY_503A.pattern,
+                "pattern": "|".join(patterns),
                 "claim_ref": claim_ref,
                 "compound": pack.get("compound"),
-                "review_after": str(hold.get("review_after") or ""),
+                "review_after": hold.get("review_after"),
+                "hold_lanes": hold_lanes,
             })
     return rows
 
@@ -222,7 +280,8 @@ def layer1(text, brand, brief=None):
     brief = brief or {}
     hard = _matches(text, brand.compliance.get("hard_block") or [], "hard_block")
     hard.extend(_disallowed_matches(text, brief))
-    hard.extend(_regulatory_hold_matches(text, brief))
+    hard.extend(_lane_matches(text, brief, brand))
+    hard.extend(_regulatory_hold_matches(text, brief, brand))
     hard.extend(_caveat_matches(text, brief))
     review = _matches(text, brand.compliance.get("review") or [], "review")
     for rule, pattern in FALSE_PRECISION.items():
@@ -255,6 +314,7 @@ def llm_judgment(text, brand, brief, candidates, context=None):
         "factual_claims": brief.get("factual_claims") or [],
         "mechanism_claims": brief.get("mechanism_claims") or [],
         "claim_packs": brief.get("claim_packs") or [],
+        "claim_lanes": _active_claim_lanes(brief, brand),
         "caveats": caveats(brief),
         "layer1_candidates": candidates,
         "context": context or {},
@@ -270,6 +330,7 @@ def llm_judgment(text, brand, brief, candidates, context=None):
             "Treat claim_packs as the complete ground-truth set for specific evidence, mechanism, and regulatory claims.",
             "A specific claim not represented by an exact approved claim is fabrication; never infer permission from the topic.",
             "A disallowed_claims item is always a block, including a semantic paraphrase.",
+            "A Layer-1 claim_lane violation is final. Untagged top-level mechanism_claims are legacy approved claims for the active brand lane; do not flag them as cross-lane.",
             "Treat every claim-pack caveat as a framing constraint; flag copy that contradicts one.",
             "Never clear regulatory_hold. Layer 1 owns those hard blocks.",
             "For pre_launch operations, flag bare present-tense care delivery; clear explicit design/building/when-launch framing. For live operations, clear present tense.",
@@ -346,13 +407,14 @@ def canonical_rule(value):
         ("disallowed", "disallowed_claim"),
         ("caveat", "claim_pack_caveat"),
         ("hold", "regulatory_hold"),
+        ("lane", "claim_lane"),
     ]
     known = {
         "fabricated_research_act", "unsourced_mechanism", "fabricated_evidence",
         "disease_claim", "rx_outcome_promise", "unverifiable_operational_claim",
         "missing_affiliate_disclosure", "missing_ai_label",
         "unapproved_regulatory_claim", "disallowed_claim",
-        "claim_pack_caveat", "regulatory_hold",
+        "claim_pack_caveat", "regulatory_hold", "claim_lane",
     }
     if raw in known:
         return raw
@@ -414,6 +476,16 @@ def context_clear_violations(violations, brief, context=None, brand=None):
         elif (rule in {"unsourced_mechanism", "fabricated_evidence",
                        "unapproved_regulatory_claim"}
               and _contains_exact_approved_claim(quoted, brief)):
+            clear = True
+        elif (rule == "claim_lane"
+              and _contains_exact_approved_claim(quoted, brief)):
+            clear = True
+        elif rule == "regulatory_hold":
+            # Active holds return from Layer 1 before semantic judgment.
+            clear = True
+        elif (rule == "claim_pack_caveat"
+              and _contains_exact_approved_claim(quoted, brief)):
+            # Exact pack phrases are human-authored, caveat-compliant wording.
             clear = True
         elif (rule == "unverifiable_operational_claim"
               and (context.get("operational_status") == "live"
@@ -545,7 +617,7 @@ def hard_violations(hard):
     for item in hard:
         source_rule = item.get("rule")
         rule = source_rule if source_rule in {
-            "disallowed_claim", "regulatory_hold", "claim_pack_caveat"
+            "disallowed_claim", "regulatory_hold", "claim_pack_caveat", "claim_lane"
         } else "hard_block"
         key = (item.get("text"), rule)
         if key in seen:
@@ -564,6 +636,14 @@ def hard_violations(hard):
             })
         elif rule == "claim_pack_caveat":
             violation["caveat"] = item.get("caveat")
+        elif rule == "claim_lane":
+            violation.update({
+                "claim": item.get("claim"),
+                "claim_field": item.get("claim_field"),
+                "claim_lanes": item.get("claim_lanes") or [],
+                "active_lanes": item.get("active_lanes") or [],
+                "compound": item.get("compound"),
+            })
         violations.append(violation)
     return violations
 
@@ -675,6 +755,7 @@ def rewrite_output(output, format_name, brand, brief, violations, target, error=
         "violations": violations,
         "approved_mechanism_claims": brief.get("mechanism_claims") or [],
         "claim_packs": brief.get("claim_packs") or [],
+        "claim_lanes": _active_claim_lanes(brief, brand),
         "caveats": caveats(brief),
         "operational_status": brief.get("operational_status") or brand.operational_status,
         "previous_validation_error": error or "",
@@ -685,6 +766,7 @@ def rewrite_output(output, format_name, brand, brief, violations, target, error=
             "Stay at the supplied length target and preserve all required structure.",
             "Use exact approved claims only; otherwise generalize or omit the specific assertion.",
             "Respect every claim-pack caveat as a framing constraint.",
+            "Use only claims whose lanes overlap the allowed claim lanes.",
             "Never include a claim covered by an active regulatory_hold.",
             "Do not invent citations, dates, percentages, trial details, mechanisms, or regulatory conclusions.",
         ],
@@ -779,6 +861,7 @@ def selftest(path=ROOT / "tests" / "compliance_cases.yaml"):
             "factual_claims": case.get("factual_claims") or [],
             "mechanism_claims": case.get("mechanism_claims") or [],
             "claim_packs": case.get("claim_packs") or [],
+            "claim_lanes": case.get("claim_lanes", brand.claim_lanes),
             "operational_status": case.get("operational_status") or brand.operational_status,
         }
         result = lint_output(

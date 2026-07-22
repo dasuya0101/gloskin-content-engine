@@ -9,9 +9,14 @@ Make specific evidence, mechanism, or regulatory claims only by using an exact
 approved statement from the supplied claim pack. A missing claim or missing pack
 means that detail is unavailable: use qualitative evidence shape or omit it.
 Never use a disallowed_claims item. Do not infer a new claim from an approved one.
+Use only claims whose `lanes` overlap the supplied allowed claim lanes. A claim
+from any other lane is unavailable, even when it appears in the same compound's
+pack; never transfer topical evidence to an injectable claim or vice versa.
 Treat every supplied caveat as a mandatory framing constraint. Never generate a
 claim covered by regulatory_hold unless its status is cleared and its human
-clearance date is later than review_after and has arrived.
+clearance date has arrived and, when review_after is present, is later than it.
+`review_after: null` means the hold has no automatic review date and remains held
+until a human records a valid clearance.
 
 ## Operational status
 

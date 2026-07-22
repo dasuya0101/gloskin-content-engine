@@ -345,3 +345,18 @@ The `caveats` field carries mandatory framing constraints alongside approved
 claims. Generation receives caveats explicitly, the semantic judge treats them
 as policy, and deterministic caveat patterns block before judgment where the
 constraint is patternable.
+
+### Permanent Holds And Claim Lanes
+
+`review_after` may be `null`. A null date represents a permanent hold: it stays
+active indefinitely until a human changes `status` to `cleared` and records a
+`cleared_at` date that has arrived. There is no automatic expiration path. For
+dated holds, `cleared_at` must still be later than `review_after`.
+
+Route-dependent packs declare top-level `lanes`, and each evidence, mechanism,
+or regulatory claim declares its applicable lanes. Brand config limits which
+lanes generation may draw from (`gloskin: cosmetic_topical`, `vendrarx:
+compounded_injectable`). Exact use of a claim outside the active brand lanes is
+a deterministic `claim_lane` hard block before semantic judgment. Regulatory
+holds may also be lane-scoped so a topical hold does not suppress unrelated
+injectable copy, or vice versa.

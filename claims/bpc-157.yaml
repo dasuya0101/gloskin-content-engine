@@ -1,13 +1,17 @@
 compound: BPC-157
 aliases: [BPC 157]
+lanes: [compounded_injectable]
 evidence_claims: []
 mechanism_claims:
-  - "may support tissue-repair pathways"
-  - "studied for effects on inflammation in animal models"
-regulatory_claims: []
+  - claim: "may support tissue-repair pathways"
+    lanes: [compounded_injectable]
+  - claim: "studied for effects on inflammation in animal models"
+    lanes: [compounded_injectable]
+regulatory_facts: []
 disallowed_claims: []
 regulatory_hold:
   - claim_ref: "BPC-157 is eligible for 503A compounding."
+    lanes: [compounded_injectable]
     review_after: 2026-07-25
     status: held
     note: "PCAC 7/23-24; FDA briefing docs propose NOT listing. Re-verify."

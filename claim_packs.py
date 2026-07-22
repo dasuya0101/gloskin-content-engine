@@ -13,9 +13,9 @@ CLAIM_FIELDS = (
     "evidence_claims",
     "mechanism_claims",
     "regulatory_claims",
-    "disallowed_claims",
-    "caveats",
+    "regulatory_facts",
 )
+LIST_FIELDS = ("disallowed_claims", "caveats")
 
 
 class ClaimPackError(RuntimeError):
@@ -30,13 +30,62 @@ def _items(value):
     return value
 
 
-def _iso_date(value, field, path):
+def _iso_date(value, field, path, *, allow_null=False):
+    if value is None and allow_null:
+        return None
     if isinstance(value, date):
         return value.isoformat()
     try:
         return date.fromisoformat(str(value)).isoformat()
     except (TypeError, ValueError) as exc:
         raise ClaimPackError(f"{path}: {field} must be an ISO date") from exc
+
+
+def _lanes(value, field, path, *, required=False):
+    rows = [str(item).strip() for item in _items(value) if str(item).strip()]
+    if required and not rows:
+        raise ClaimPackError(f"{path}: {field} must contain at least one lane")
+    if len(rows) != len(set(rows)):
+        raise ClaimPackError(f"{path}: {field} contains duplicate lanes")
+    return rows
+
+
+def claim_text(item):
+    if isinstance(item, dict):
+        return str(item.get("claim") or item.get("text") or "").strip()
+    return str(item or "").strip()
+
+
+def claim_lanes(item):
+    if not isinstance(item, dict):
+        return []
+    return [str(value).strip() for value in (item.get("lanes") or []) if str(value).strip()]
+
+
+def _claim_entries(value, field, path, pack_lanes):
+    entries = []
+    for index, raw in enumerate(_items(value)):
+        if isinstance(raw, str):
+            text = raw.strip()
+            lanes = []
+        elif isinstance(raw, dict):
+            text = claim_text(raw)
+            lanes = _lanes(
+                raw.get("lanes"), f"{field}[{index}].lanes", path,
+                required=bool(pack_lanes),
+            )
+        else:
+            raise ClaimPackError(f"{path}: {field}[{index}] must be a string or mapping")
+        if not text:
+            raise ClaimPackError(f"{path}: {field}[{index}].claim is required")
+        unknown = sorted(set(lanes) - set(pack_lanes)) if pack_lanes else []
+        if unknown:
+            raise ClaimPackError(
+                f"{path}: {field}[{index}] uses lanes not declared by the pack: "
+                f"{', '.join(unknown)}"
+            )
+        entries.append({"claim": text, "lanes": lanes} if isinstance(raw, dict) else text)
+    return entries
 
 
 def _regulatory_holds(value, path):
@@ -48,6 +97,11 @@ def _regulatory_holds(value, path):
         status = str(raw.get("status") or "held").strip()
         if not claim_ref:
             raise ClaimPackError(f"{path}: regulatory_hold[{index}].claim_ref is required")
+        if "review_after" not in raw:
+            raise ClaimPackError(
+                f"{path}: regulatory_hold[{index}].review_after is required; "
+                "use null for a permanent hold"
+            )
         if status not in {"held", "cleared"}:
             raise ClaimPackError(
                 f"{path}: regulatory_hold[{index}].status must be held or cleared"
@@ -58,10 +112,15 @@ def _regulatory_holds(value, path):
                 raw.get("review_after"),
                 f"regulatory_hold[{index}].review_after",
                 path,
+                allow_null=True,
             ),
             "status": status,
             "note": str(raw.get("note") or "").strip(),
         }
+        hold_lanes = _lanes(
+            raw.get("lanes"), f"regulatory_hold[{index}].lanes", path)
+        if hold_lanes:
+            hold["lanes"] = hold_lanes
         if raw.get("cleared_at") is not None:
             hold["cleared_at"] = _iso_date(
                 raw.get("cleared_at"),
@@ -86,10 +145,21 @@ def load_claim_pack(path):
         ],
         "source": str(path.relative_to(ROOT)).replace("\\", "/"),
     }
+    pack["lanes"] = _lanes(data.get("lanes"), "lanes", path)
     for field in CLAIM_FIELDS:
+        pack[field] = _claim_entries(
+            data.get(field), field, path, pack["lanes"])
+    for field in LIST_FIELDS:
         pack[field] = _items(data.get(field))
     pack["regulatory_hold"] = _regulatory_holds(
         data.get("regulatory_hold"), path)
+    for index, hold in enumerate(pack["regulatory_hold"]):
+        unknown = sorted(set(hold.get("lanes") or []) - set(pack["lanes"]))
+        if unknown:
+            raise ClaimPackError(
+                f"{path}: regulatory_hold[{index}] uses lanes not declared by "
+                f"the pack: {', '.join(unknown)}"
+            )
     return pack
 
 
@@ -111,12 +181,44 @@ def relevant_claim_packs(source_text, claims_dir=CLAIMS_DIR):
     return matches
 
 
+def _lane_allowed(item, allowed_lanes):
+    lanes = claim_lanes(item)
+    return not lanes or not allowed_lanes or bool(set(lanes) & set(allowed_lanes))
+
+
 def approved_claims(brief):
-    claims = [str(item) for item in (brief.get("mechanism_claims") or [])]
+    claims = [claim_text(item) for item in (brief.get("mechanism_claims") or [])]
+    allowed_lanes = brief.get("claim_lanes") or []
     for pack in brief.get("claim_packs") or []:
-        for field in ("evidence_claims", "mechanism_claims", "regulatory_claims"):
-            claims.extend(str(item) for item in (pack.get(field) or []))
+        for field in CLAIM_FIELDS:
+            claims.extend(
+                claim_text(item)
+                for item in (pack.get(field) or [])
+                if _lane_allowed(item, allowed_lanes)
+            )
     return [item.strip() for item in claims if item.strip()]
+
+
+def mechanism_claims(brief):
+    allowed_lanes = brief.get("claim_lanes") or []
+    claims = [claim_text(item) for item in (brief.get("mechanism_claims") or [])]
+    for pack in brief.get("claim_packs") or []:
+        claims.extend(
+            claim_text(item)
+            for item in (pack.get("mechanism_claims") or [])
+            if _lane_allowed(item, allowed_lanes)
+        )
+    return [item for item in claims if item]
+
+
+def lane_claims(brief):
+    """Yield every lane-tagged claim, including claims outside the active brand lane."""
+    for pack in brief.get("claim_packs") or []:
+        for field in CLAIM_FIELDS:
+            for item in pack.get(field) or []:
+                lanes = claim_lanes(item)
+                if lanes:
+                    yield pack, field, claim_text(item), lanes
 
 
 def disallowed_claims(brief):
@@ -142,16 +244,19 @@ def regulatory_holds(brief):
 
 
 def regulatory_hold_is_active(hold, today=None):
-    """A hold clears only after a valid human clearance past its review date."""
+    """A hold clears only after valid human clearance; null review dates never age out."""
     if str(hold.get("status") or "held") != "cleared":
         return True
     cleared_at = hold.get("cleared_at")
     if not cleared_at:
         return True
     try:
-        review_date = date.fromisoformat(str(hold.get("review_after")))
         clearance_date = date.fromisoformat(str(cleared_at))
-    except ValueError:
+        review_after = hold.get("review_after")
+        review_date = date.fromisoformat(str(review_after)) if review_after else None
+    except (TypeError, ValueError):
         return True
     current_date = today or date.today()
-    return clearance_date <= review_date or current_date < clearance_date
+    if current_date < clearance_date:
+        return True
+    return bool(review_date and clearance_date <= review_date)

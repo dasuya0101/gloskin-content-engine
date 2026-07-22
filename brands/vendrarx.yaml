@@ -1,6 +1,7 @@
 brand_id: vendrarx
 display_name: VendraRx
 operational_status: pre_launch
+claim_lanes: [compounded_injectable]
 
 voice:
   tone: [evidence-forward, direct, operator]

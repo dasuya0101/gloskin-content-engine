@@ -42,6 +42,7 @@ class Brand:
     caption: dict
     tracking: dict
     operational_status: str
+    claim_lanes: list
     source_path: Path
 
     @property
@@ -125,6 +126,7 @@ def _brand_from_dict(data, source_path):
         "display_name", "voice", "pillars", "cta", "palette", "fonts",
         "assets", "accounts", "formats", "templates", "prompts",
         "compliance", "slideshow", "testimonial", "caption", "tracking",
+        "claim_lanes",
     ]
     _validate_required(data, brand_id, required)
     _validate_hex_colors(brand_id, data.get("palette") or {})
@@ -132,6 +134,18 @@ def _brand_from_dict(data, source_path):
     if operational_status not in {"pre_launch", "live"}:
         raise BrandConfigError(
             f"brands/{brand_id}.yaml operational_status must be pre_launch or live"
+        )
+    claim_lanes = [
+        str(item).strip() for item in (data.get("claim_lanes") or [])
+        if str(item).strip()
+    ]
+    if not claim_lanes:
+        raise BrandConfigError(
+            f"brands/{brand_id}.yaml claim_lanes must contain at least one lane"
+        )
+    if len(claim_lanes) != len(set(claim_lanes)):
+        raise BrandConfigError(
+            f"brands/{brand_id}.yaml claim_lanes contains duplicate lanes"
         )
 
     for key, value in (data.get("prompts") or {}).items():
@@ -178,6 +192,7 @@ def _brand_from_dict(data, source_path):
         caption=data["caption"] or {},
         tracking=data["tracking"] or {},
         operational_status=operational_status,
+        claim_lanes=claim_lanes,
         source_path=source_path,
     )
 
@@ -207,6 +222,7 @@ def brand_summary(brand):
         "templates": list((brand.templates or {}).keys()),
         "has_image_prompts": bool(brand.prompts.get("image_character")),
         "operational_status": brand.operational_status,
+        "claim_lanes": brand.claim_lanes,
     }
 
 

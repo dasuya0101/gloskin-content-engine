@@ -26,7 +26,7 @@ from pathlib import Path
 import character_factory as cf
 import compliance_lint
 from brand_loader import DEFAULT_BRAND, load_brand, mechanism_claims_for
-from claim_packs import approved_claims, relevant_claim_packs
+from claim_packs import mechanism_claims as pack_mechanism_claims, relevant_claim_packs
 import manifest
 import screenshot_factory as sf
 import slideshow_maker as sm
@@ -317,7 +317,11 @@ def attach_text_formats(post_id, brief, brand, package, outputs, formats, placeh
 
 def build_text_brief(slug, angle, brand, formats):
     claim_packs = relevant_claim_packs(angle)
-    seeded = {"claim_packs": claim_packs, "mechanism_claims": mechanism_claims_for(brand, angle)}
+    seeded = {
+        "claim_packs": claim_packs,
+        "mechanism_claims": mechanism_claims_for(brand, angle),
+        "claim_lanes": brand.claim_lanes,
+    }
     return {
         "slug": slug,
         "brand": brand.brand_id,
@@ -326,7 +330,8 @@ def build_text_brief(slug, angle, brand, formats):
         "slides": [],
         "factual_claims": [angle],
         "claim_packs": claim_packs,
-        "mechanism_claims": approved_claims(seeded),
+        "mechanism_claims": pack_mechanism_claims(seeded),
+        "claim_lanes": brand.claim_lanes,
         "operational_status": brand.operational_status,
     }
 
@@ -500,7 +505,8 @@ def main():
             brief["formats"] = formats
             brief.setdefault("factual_claims", [hook])
             brief.setdefault("claim_packs", relevant_claim_packs(hook))
-            brief.setdefault("mechanism_claims", approved_claims(brief))
+            brief.setdefault("claim_lanes", brand.claim_lanes)
+            brief.setdefault("mechanism_claims", pack_mechanism_claims(brief))
             brief.setdefault("operational_status", brand.operational_status)
             result = sm.make_content(brief, args.out, brand=brand)
             caption = caption_for(character, hook, tracking_code, brand)

@@ -1,0 +1,36 @@
+compound: GHK-Cu
+aliases: [GHK Cu, copper tripeptide-1]
+lanes: [cosmetic_topical, compounded_injectable]
+
+evidence_claims:
+  - claim: "GHK-Cu's skin-level benefits are plausible."
+    lanes: [cosmetic_topical]
+  - claim: "Systemic injection of GHK-Cu is still speculative."
+    lanes: [compounded_injectable]
+  - claim: "Topical and injectable GHK-Cu are different delivery routes and should not be treated as interchangeable."
+    lanes: [cosmetic_topical, compounded_injectable]
+
+mechanism_claims: []
+regulatory_facts: []
+disallowed_claims: []
+
+regulatory_hold:
+  - claim_ref: "GHK-Cu topical products are available for cosmetic use."
+    lanes: [cosmetic_topical]
+    review_after: null
+    status: held
+    note: "Human verification is required before making any topical availability claim."
+  - claim_ref: "Injectable GHK-Cu is eligible for 503A compounding."
+    lanes: [compounded_injectable]
+    review_after: null
+    status: held
+    note: "No scheduled event resolves injectable availability; human re-verification is required."
+  - claim_ref: "GHK-Cu is available as a compounded injectable."
+    lanes: [compounded_injectable]
+    review_after: null
+    status: held
+    note: "Human verification is required before making any injectable availability claim."
+
+caveats:
+  - "Do not use topical evidence to support injectable efficacy, safety, or availability."
+  - "Keep efficacy language directional and distinguish delivery route from clinical availability."

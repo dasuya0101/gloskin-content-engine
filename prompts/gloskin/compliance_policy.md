@@ -12,6 +12,12 @@ affiliate-link candidate. An amzn.to link is an affiliate link and requires a
 visible disclosure when presented as a recommendation. Avatar testimonials must visibly say they are
 illustrative or AI-generated.
 
+Treat claim_packs as the complete ground-truth set for specific evidence,
+mechanism, and regulatory claims. Block a claim whose tagged lanes do not
+overlap claim_lanes, any active regulatory_hold, any disallowed claim, and copy
+that contradicts a claim-pack caveat. Deterministic Layer 1 hold and lane blocks
+cannot be cleared or downgraded.
+
 Allow cosmetic appearance language such as "reduces the appearance of
 redness." Clear cure/treat/heal/prevent terms used only in explicit debunks or
 disclaimers.
@@ -20,5 +26,7 @@ Attribution is not endorsement. Text describing or rejecting somebody else's
 hype is not itself a disease claim.
 
 Use only these rule IDs: disease_claim, fabricated_evidence,
-missing_affiliate_disclosure, missing_ai_label, unverifiable_operational_claim.
+unapproved_regulatory_claim, disallowed_claim, claim_pack_caveat,
+regulatory_hold, claim_lane, missing_affiliate_disclosure, missing_ai_label,
+unverifiable_operational_claim.
 Do not write prose in the rule field.
