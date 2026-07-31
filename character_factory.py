@@ -280,6 +280,133 @@ def gen_pair_api(spec, out_dir, opening_style=None, product_style=None, prompt_c
     return slug
 
 
+def missing_asset_plan(spec, character_dir, opening_style=None, product_style=None,
+                       prompt_config_path=DEFAULT_PROMPT_CONFIG):
+    """Describe the non-destructive work needed to complete a character folder."""
+    d = Path(character_dir)
+    d.mkdir(parents=True, exist_ok=True)
+    prompts = character_prompts(
+        spec,
+        path=prompt_config_path,
+        opening_style=opening_style,
+        product_style=product_style,
+    )
+    targets = []
+    skipped = []
+
+    def path_for(name):
+        return d / f"{name}.png"
+
+    def face_reference():
+        for name in ("before", "scan", "after", "opening"):
+            candidate = path_for(name)
+            if candidate.exists():
+                return candidate
+        return None
+
+    before_path = path_for("before")
+    if not before_path.exists():
+        reference = face_reference()
+        if reference:
+            prompt = (
+                "Keep this exact person's identity, facial structure, age, and ethnicity. "
+                "Create the starting-state portrait described here: " + prompts["before_prompt"]
+            )
+        else:
+            prompt = prompts["before_prompt"]
+        targets.append({
+            "name": "before",
+            "mode": "edit" if reference else "generate",
+            "prompt": prompt,
+            "reference_path": str(reference) if reference else None,
+            "target_path": str(before_path),
+            "size": "1024x1536",
+        })
+
+    jobs = [
+        ("scan", prompts["scan_prompt"]),
+        ("after", prompts["after_prompt"]),
+    ]
+    if prompts["opening_style"] != "selfie" and prompts["opening_prompt"]:
+        jobs.insert(0, ("opening", prompts["opening_prompt"]))
+    else:
+        skipped.append("opening")
+
+    for name, prompt in jobs:
+        target = path_for(name)
+        if target.exists():
+            continue
+        targets.append({
+            "name": name,
+            "mode": "edit",
+            "prompt": prompt,
+            "reference_path": str(before_path),
+            "target_path": str(target),
+            "size": "1024x1536",
+        })
+
+    product_path = path_for("product_prop")
+    if prompts["product_style"] != "none" and prompts["product_prop_prompt"]:
+        if not product_path.exists():
+            targets.append({
+                "name": "product_prop",
+                "mode": "generate",
+                "prompt": prompts["product_prop_prompt"],
+                "reference_path": None,
+                "target_path": str(product_path),
+                "size": "1024x1536",
+            })
+    else:
+        skipped.append("product_prop")
+
+    existing = [
+        name for name in ("before", "opening", "scan", "after", "product_prop")
+        if path_for(name).exists()
+    ]
+    return {
+        "directory": str(d),
+        "targets": targets,
+        "existing": existing,
+        "skipped": skipped,
+        "opening_style": prompts["opening_style"],
+        "product_style": prompts["product_style"],
+    }
+
+
+def generate_missing_assets(spec, character_dir, opening_style=None, product_style=None,
+                            prompt_config_path=DEFAULT_PROMPT_CONFIG):
+    """Fill absent character assets while preserving every uploaded/generated file."""
+    import image_router
+
+    plan = missing_asset_plan(
+        spec,
+        character_dir,
+        opening_style=opening_style,
+        product_style=product_style,
+        prompt_config_path=prompt_config_path,
+    )
+    generated = []
+    for target in plan["targets"]:
+        if target["mode"] == "edit":
+            reference = Path(target["reference_path"]).read_bytes()
+            image_bytes = image_router.edit(
+                reference, target["prompt"], size=target["size"])
+        else:
+            image_bytes = image_router.generate(target["prompt"], size=target["size"])
+        Path(target["target_path"]).write_bytes(image_bytes)
+        generated.append(target["name"])
+
+    existing = [
+        name for name in ("before", "opening", "scan", "after", "product_prop")
+        if (Path(plan["directory"]) / f"{name}.png").exists()
+    ]
+    return {
+        **plan,
+        "generated": generated,
+        "existing": existing,
+    }
+
+
 # back-compat alias for older callers
 gen_pair_openai = gen_pair_api
 

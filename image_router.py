@@ -20,8 +20,28 @@ NOTE: providers here are real HTTP/SDK APIs. Driving a consumer ChatGPT/Dreamina
 """
 import base64
 import os
+from pathlib import Path
 
 _PROVIDERS = {}
+
+
+def _load_dotenv():
+    path = Path(__file__).resolve().with_name(".env")
+    if not path.exists():
+        return
+    for raw_line in path.read_text(encoding="utf-8-sig").splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        if line.startswith("export "):
+            line = line[7:].lstrip()
+        key, value = line.split("=", 1)
+        key = key.strip()
+        value = value.strip()
+        if len(value) >= 2 and value[0] == value[-1] and value[0] in {"'", '"'}:
+            value = value[1:-1]
+        if key and value:
+            os.environ.setdefault(key, value)
 
 
 def register(name, generate=None, edit=None):
@@ -29,6 +49,7 @@ def register(name, generate=None, edit=None):
 
 
 def _active():
+    _load_dotenv()
     name = os.environ.get("IMAGE_PROVIDER", "openai")
     if name not in _PROVIDERS:
         raise ValueError(f"image provider '{name}' not registered. "

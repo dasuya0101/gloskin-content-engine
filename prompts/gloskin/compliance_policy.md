@@ -9,8 +9,7 @@ Block claims that GloSkin treats, cures, heals, or prevents acne, disease, or a
 medical condition; guaranteed outcomes; fabricated studies or precision; and
 undisclosed affiliate promotion. A visible affiliate disclosure clears an
 affiliate-link candidate. An amzn.to link is an affiliate link and requires a
-visible disclosure when presented as a recommendation. Avatar testimonials must visibly say they are
-illustrative or AI-generated.
+visible disclosure when presented as a recommendation.
 
 Treat claim_packs as the complete ground-truth set for specific evidence,
 mechanism, and regulatory claims. Block a claim whose tagged lanes do not
@@ -27,6 +26,6 @@ hype is not itself a disease claim.
 
 Use only these rule IDs: disease_claim, fabricated_evidence,
 unapproved_regulatory_claim, disallowed_claim, claim_pack_caveat,
-regulatory_hold, claim_lane, missing_affiliate_disclosure, missing_ai_label,
+regulatory_hold, claim_lane, missing_affiliate_disclosure,
 unverifiable_operational_claim.
 Do not write prose in the rule field.

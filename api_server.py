@@ -23,6 +23,7 @@ from datetime import datetime
 from pathlib import Path
 
 from flask import Flask, abort, jsonify, request, send_file
+from PIL import Image, ImageOps, UnidentifiedImageError
 
 import manifest
 import import_metrics
@@ -30,6 +31,9 @@ import metrics_refresh
 import publish as publish_bridge
 import app_assets
 import character_factory
+import heygen_adapter
+import image_queue
+import video_queue
 from brand_loader import DEFAULT_BRAND, BrandConfigError, available_brands, brand_summary, load_brand
 
 
@@ -38,8 +42,15 @@ POSTS_FILE = ROOT / "posts.json"
 RUNS_DIR = ROOT / "runs"
 OUTPUT_DIR = ROOT / "output"
 PACKAGE_DIR = ROOT / "posts"
+ROSTER_FILE = ROOT / "roster.json"
+CHARACTER_ASSETS_DIR = ROOT / "assets"
+CHARACTER_ASSET_NAMES = ("before", "opening", "scan", "after", "product_prop")
+IMAGE_GENERATION_LOCK = threading.Lock()
+IMAGE_JOBS_DIR = ROOT / "image_jobs"
+VIDEO_JOBS_DIR = ROOT / "video_jobs"
 
 app = Flask(__name__)
+app.config["MAX_CONTENT_LENGTH"] = 80 * 1024 * 1024
 
 
 def now_iso():
@@ -80,6 +91,65 @@ def read_json(path, default):
 def write_json(path, data):
     Path(path).parent.mkdir(parents=True, exist_ok=True)
     Path(path).write_text(json.dumps(data, indent=2), encoding="utf-8")
+
+
+def load_roster():
+    roster = read_json(ROSTER_FILE, {"template": "scan_results", "characters": []})
+    roster.setdefault("template", "scan_results")
+    roster.setdefault("characters", [])
+    return roster
+
+
+def unique_character_slug(roster, desired, current_index=None):
+    base = character_factory.slugify(desired) or "character"
+    used = {
+        character.get("slug")
+        for index, character in enumerate(roster.get("characters", []))
+        if index != current_index and character.get("slug")
+    }
+    slug = base
+    suffix = 2
+    while slug in used:
+        slug = f"{base}_{suffix}"
+        suffix += 1
+    return slug
+
+
+def character_asset_record(index, character):
+    slug = character.get("slug") or ""
+    assets = {}
+    for name in CHARACTER_ASSET_NAMES:
+        path = CHARACTER_ASSETS_DIR / slug / f"{name}.png" if slug else None
+        exists = bool(path and path.exists())
+        assets[name] = {
+            "exists": exists,
+            "path": root_rel(path) if exists else None,
+        }
+    return {**character, "index": index, "slug": slug, "assets": assets}
+
+
+def roster_payload(brand=None):
+    roster = load_roster()
+    return {
+        "template": roster.get("template"),
+        "can_generate": bool(brand and brand.prompt_path("image_character")),
+        "characters": [
+            character_asset_record(index, character)
+            for index, character in enumerate(roster.get("characters", []))
+        ],
+    }
+
+
+def normalize_uploaded_image(upload):
+    try:
+        with Image.open(upload.stream) as source:
+            image = ImageOps.exif_transpose(source)
+            image.thumbnail((2048, 3072), Image.Resampling.LANCZOS)
+            if image.mode not in {"RGB", "RGBA"}:
+                image = image.convert("RGBA" if "transparency" in image.info else "RGB")
+            return image.copy()
+    except (UnidentifiedImageError, OSError) as exc:
+        abort(400, description=f"{upload.filename or 'upload'} is not a supported image: {exc}")
 
 
 def requested_brand(default=DEFAULT_BRAND):
@@ -187,13 +257,14 @@ def files(rel_path):
 @app.get("/api/config")
 def config():
     brand = requested_brand()
-    roster = read_json(ROOT / "roster.json", {"characters": []})
+    roster = load_roster()
     return jsonify({
         "default_brand": DEFAULT_BRAND,
         "active_brand": brand_summary(brand),
         "brands": [brand_summary(b) for b in available_brands()],
         "default_account": brand.default_account,
-        "image_provider": os.environ.get("IMAGE_PROVIDER", "openai"),
+        "image_provider": os.environ.get("DASHBOARD_IMAGE_PROVIDER", "codex_local"),
+        "heygen": heygen_adapter.connection_status(),
         "roster_count": len(roster.get("characters", [])),
         "publish_integrations": {
             name: publish_bridge.api_plan(name)
@@ -204,6 +275,419 @@ def config():
             for name in sorted(metrics_refresh.API_PLANS)
         },
     })
+
+
+@app.get("/api/roster")
+def roster():
+    return jsonify(roster_payload(requested_brand()))
+
+
+@app.post("/api/roster/characters")
+def save_roster_character():
+    roster_data = load_roster()
+    characters = roster_data["characters"]
+    raw_index = (request.form.get("index") or "").strip()
+    if raw_index:
+        try:
+            index = int(raw_index)
+        except ValueError:
+            abort(400, description="invalid roster index")
+        if index < 0 or index >= len(characters):
+            abort(404, description="roster character not found")
+        existing = dict(characters[index])
+    else:
+        index = len(characters)
+        existing = {}
+
+    spec = (request.form.get("spec") or existing.get("spec") or "").strip()
+    if not spec:
+        abort(400, description="character spec is required")
+    existing_slug = existing.get("slug")
+    requested_slug = (request.form.get("slug") or existing_slug or spec).strip()
+    slug = existing_slug or unique_character_slug(roster_data, requested_slug, index)
+
+    def score(name, default):
+        raw = (request.form.get(name) or "").strip()
+        if not raw:
+            return int(existing.get(name, default))
+        try:
+            value = int(raw)
+        except ValueError:
+            abort(400, description=f"{name} must be a number")
+        if value < 0 or value > 100:
+            abort(400, description=f"{name} must be between 0 and 100")
+        return value
+
+    uploads = {}
+    for name in CHARACTER_ASSET_NAMES:
+        upload = request.files.get(name)
+        if upload and upload.filename:
+            uploads[name] = normalize_uploaded_image(upload)
+
+    character = {
+        **existing,
+        "slug": slug,
+        "spec": spec,
+        "before_score": score("before_score", 54),
+        "after_score": score("after_score", 87),
+        "hook": (
+            request.form.get("hook")
+            if "hook" in request.form
+            else existing.get("hook", "")
+        ).strip(),
+    }
+    if index == len(characters):
+        characters.append(character)
+    else:
+        characters[index] = character
+
+    character_dir = CHARACTER_ASSETS_DIR / slug
+    character_dir.mkdir(parents=True, exist_ok=True)
+    for name, image in uploads.items():
+        image.save(character_dir / f"{name}.png", format="PNG", optimize=True)
+    write_json(ROSTER_FILE, roster_data)
+    return jsonify({
+        "character": character_asset_record(index, character),
+        "roster": roster_payload(),
+        "uploaded": sorted(uploads),
+    })
+
+
+@app.post("/api/roster/characters/<int:index>/generate-missing")
+def generate_missing_character_assets(index):
+    data = request.get_json(force=True, silent=True) or {}
+    roster_data = load_roster()
+    characters = roster_data["characters"]
+    if index < 0 or index >= len(characters):
+        abort(404, description="roster character not found")
+    character = characters[index]
+    brand_id = data.get("brand") or DEFAULT_BRAND
+    try:
+        brand = load_brand(brand_id)
+    except BrandConfigError as exc:
+        abort(400, description=str(exc))
+    prompt_config_path = brand.prompt_path("image_character")
+    if not prompt_config_path:
+        abort(400, description=f"{brand.display_name} does not define character image prompts")
+
+    if not character.get("slug"):
+        character["slug"] = unique_character_slug(roster_data, character.get("spec") or "character", index)
+        write_json(ROSTER_FILE, roster_data)
+    provider = (data.get("provider") or os.environ.get("IMAGE_PROVIDER") or "openai").strip()
+    try:
+        with IMAGE_GENERATION_LOCK:
+            previous_provider = os.environ.get("IMAGE_PROVIDER")
+            try:
+                os.environ["IMAGE_PROVIDER"] = provider
+                result = character_factory.generate_missing_assets(
+                    character["spec"],
+                    CHARACTER_ASSETS_DIR / character["slug"],
+                    opening_style=(data.get("opening_style") or None),
+                    product_style=(data.get("product_style") or None),
+                    prompt_config_path=prompt_config_path,
+                )
+            finally:
+                if previous_provider is None:
+                    os.environ.pop("IMAGE_PROVIDER", None)
+                else:
+                    os.environ["IMAGE_PROVIDER"] = previous_provider
+    except Exception as exc:
+        message = str(exc)
+        if getattr(exc, "status_code", None) == 401 or "invalid_api_key" in message:
+            return jsonify({
+                "error": (
+                    "OpenAI rejected OPENAI_API_KEY. Replace it in .env with an active "
+                    "OpenAI Platform API key; ChatGPT/Codex subscriptions do not include API billing."
+                )
+            }), 502
+        return jsonify({"error": f"image generation failed: {message}"}), 502
+    return jsonify({
+        "character": character_asset_record(index, character),
+        "generation": result,
+    })
+
+
+@app.post("/api/roster/characters/<int:index>/queue-missing")
+def queue_missing_character_assets(index):
+    data = request.get_json(force=True, silent=True) or {}
+    roster_data = load_roster()
+    characters = roster_data["characters"]
+    if index < 0 or index >= len(characters):
+        abort(404, description="roster character not found")
+    character = characters[index]
+    brand_id = data.get("brand") or DEFAULT_BRAND
+    try:
+        brand = load_brand(brand_id)
+    except BrandConfigError as exc:
+        abort(400, description=str(exc))
+    prompt_config_path = brand.prompt_path("image_character")
+    if not prompt_config_path:
+        abort(400, description=f"{brand.display_name} does not define character image prompts")
+    if not character.get("slug"):
+        character["slug"] = unique_character_slug(
+            roster_data, character.get("spec") or "character", index)
+        write_json(ROSTER_FILE, roster_data)
+
+    plan = character_factory.missing_asset_plan(
+        character["spec"],
+        CHARACTER_ASSETS_DIR / character["slug"],
+        opening_style=(data.get("opening_style") or None),
+        product_style=(data.get("product_style") or None),
+        prompt_config_path=prompt_config_path,
+    )
+    targets = []
+    for target in plan["targets"]:
+        targets.append({
+            **target,
+            "reference_path": root_rel(target["reference_path"])
+            if target.get("reference_path") else None,
+            "target_path": root_rel(target["target_path"]),
+        })
+    if not targets:
+        return jsonify({
+            "queued": False,
+            "already_ready": True,
+            "character": character_asset_record(index, character),
+        })
+
+    job, created = image_queue.enqueue_job({
+        "worker": "codex_builtin_imagegen",
+        "brand": brand.brand_id,
+        "character_index": index,
+        "slug": character["slug"],
+        "spec": character["spec"],
+        "opening_style": plan["opening_style"],
+        "product_style": plan["product_style"],
+        "character_dir": root_rel(plan["directory"]),
+        "targets": targets,
+        "note": "Process with Codex built-in image generation; never overwrite existing targets.",
+    }, queue_root=IMAGE_JOBS_DIR)
+    job.pop("queue_file", None)
+    return jsonify({
+        "queued": True,
+        "created": created,
+        "job": job,
+        "character": character_asset_record(index, character),
+    }), 202 if created else 200
+
+
+@app.get("/api/image-jobs")
+def image_jobs():
+    jobs = image_queue.list_jobs(IMAGE_JOBS_DIR)
+    slug = (request.args.get("slug") or "").strip()
+    if slug:
+        jobs = [job for job in jobs if job.get("slug") == slug]
+    for job in jobs:
+        job.pop("queue_file", None)
+    return jsonify(jobs[:50])
+
+
+def public_video_job(job):
+    result = dict(job)
+    result.pop("queue_file", None)
+    result["script"] = result.get("script") or ""
+    return result
+
+
+@app.get("/api/heygen/status")
+def heygen_status():
+    status = heygen_adapter.connection_status()
+    jobs = video_queue.list_jobs(VIDEO_JOBS_DIR)
+    status["jobs"] = {
+        state: sum(1 for job in jobs if job.get("status") == state)
+        for state in video_queue.STATES
+    }
+    return jsonify(status)
+
+
+@app.post("/api/heygen/test")
+def test_heygen_connection():
+    if not heygen_adapter.connection_status()["api_key_configured"]:
+        abort(409, description="HEYGEN_API_KEY is not configured in .env")
+    try:
+        user = heygen_adapter.HeyGenClient().current_user()
+    except heygen_adapter.HeyGenError as exc:
+        abort(502, description=f"HeyGen connection failed: {exc}")
+    wallet = user.get("wallet") if isinstance(user, dict) else None
+    return jsonify({
+        "connected": True,
+        "mode": "api_key",
+        "wallet": wallet,
+    })
+
+
+@app.get("/api/heygen/jobs")
+def heygen_jobs():
+    jobs = video_queue.list_jobs(VIDEO_JOBS_DIR)
+    slug = (request.args.get("slug") or "").strip()
+    if slug:
+        jobs = [job for job in jobs if job.get("slug") == slug]
+    return jsonify([public_video_job(job) for job in jobs[:50]])
+
+
+def prepare_heygen_job(data, roster_data=None, batch_id=None):
+    try:
+        index = int(data.get("character_index"))
+    except (TypeError, ValueError):
+        abort(400, description="character_index is required")
+    roster_data = roster_data or load_roster()
+    characters = roster_data["characters"]
+    if index < 0 or index >= len(characters):
+        abort(404, description="roster character not found")
+    character = characters[index]
+    slug = character.get("slug")
+    if not slug:
+        abort(400, description="save the character before queueing a video")
+
+    source_asset = (data.get("source_asset") or "after").strip()
+    if source_asset not in {"before", "after", "opening"}:
+        abort(400, description="source_asset must be before, after, or opening")
+    portrait = CHARACTER_ASSETS_DIR / slug / f"{source_asset}.png"
+    if not portrait.exists():
+        abort(409, description=f"{source_asset}.png is missing for {slug}")
+
+    script = (data.get("script") or "").strip()
+    if len(script) < 10:
+        abort(400, description="video script must be at least 10 characters")
+    if len(script) > 5000:
+        abort(400, description="video script must be 5000 characters or fewer")
+    if not data.get("consent_confirmed"):
+        abort(400, description="confirm character and voice consent before queueing")
+
+    auth_mode = (data.get("auth_mode") or "oauth_mcp").strip()
+    if auth_mode not in {"oauth_mcp", "api_key"}:
+        abort(400, description="auth_mode must be oauth_mcp or api_key")
+    mapping = character.get("heygen") or {}
+    voice_id = (data.get("voice_id") or mapping.get("voice_id") or heygen_adapter.env_value("HEYGEN_VOICE_ID") or "").strip()
+    mapped_avatar_id = mapping.get("avatar_id") if data.get("use_character_avatar", True) else None
+    avatar_id = (data.get("avatar_id") or mapped_avatar_id or "").strip()
+    if auth_mode == "api_key" and not voice_id:
+        abort(400, description="voice_id or HEYGEN_VOICE_ID is required for API generation")
+
+    job_id = f"vid_{time.strftime('%Y%m%d%H%M%S')}_{os.urandom(4).hex()}"
+    output_path = Path("videos") / slug / f"{job_id}.mp4"
+    return {
+        "job_id": job_id,
+        "batch_id": batch_id,
+        "clip_role": data.get("clip_role") or source_asset,
+        "worker": "heygen_mcp_oauth" if auth_mode == "oauth_mcp" else "heygen_api_v3",
+        "auth_mode": auth_mode,
+        "brand": data.get("brand") or DEFAULT_BRAND,
+        "character_index": index,
+        "slug": slug,
+        "character_spec": character.get("spec"),
+        "source_asset": source_asset,
+        "portrait_path": root_rel(portrait),
+        "script": script,
+        "title": (data.get("title") or f"{slug} talking head").strip()[:200],
+        "voice_id": voice_id or None,
+        "avatar_id": avatar_id or None,
+        "aspect_ratio": "9:16",
+        "resolution": data.get("resolution") or "1080p",
+        "motion_prompt": (data.get("motion_prompt") or "Natural conversational delivery with subtle head movement.").strip(),
+        "output_path": str(output_path).replace("\\", "/"),
+        "consent_confirmed": True,
+        "approval": "human_requested_generation",
+        "note": (
+            "Process with a Codex task that has HeyGen Remote MCP connected."
+            if auth_mode == "oauth_mcp"
+            else "Run with the local HeyGen API worker; this spends API wallet credit."
+        ),
+    }
+
+
+@app.post("/api/heygen/jobs")
+def queue_heygen_job():
+    data = request.get_json(force=True, silent=True) or {}
+    prepared = prepare_heygen_job(data)
+    job, created = video_queue.enqueue_job(prepared, queue_root=VIDEO_JOBS_DIR)
+    return jsonify({"created": created, "job": public_video_job(job)}), 202 if created else 200
+
+
+@app.post("/api/heygen/batches")
+def queue_heygen_batch():
+    data = request.get_json(force=True, silent=True) or {}
+    requested_jobs = data.get("jobs") or []
+    if not isinstance(requested_jobs, list) or not requested_jobs:
+        abort(400, description="batch jobs are required")
+    if len(requested_jobs) > 20:
+        abort(400, description="a video batch may contain at most 20 clips")
+    indexes = {job.get("character_index") for job in requested_jobs if isinstance(job, dict)}
+    if len(indexes) > 10:
+        abort(400, description="a video batch may contain at most 10 characters")
+    if not data.get("consent_confirmed"):
+        abort(400, description="confirm character and voice consent before queueing")
+
+    roster_data = load_roster()
+    batch_id = f"hgb_{time.strftime('%Y%m%d%H%M%S')}_{os.urandom(4).hex()}"
+    shared = {
+        "brand": data.get("brand") or DEFAULT_BRAND,
+        "auth_mode": data.get("auth_mode") or "oauth_mcp",
+        "voice_id": data.get("voice_id") or "",
+        "resolution": data.get("resolution") or "1080p",
+        "motion_prompt": data.get("motion_prompt") or "",
+        "use_character_avatar": False,
+        "consent_confirmed": True,
+    }
+    # Prepare every clip before enqueueing any of them so missing assets fail as a set.
+    prepared = [
+        prepare_heygen_job({**shared, **job}, roster_data=roster_data, batch_id=batch_id)
+        for job in requested_jobs
+        if isinstance(job, dict)
+    ]
+    if len(prepared) != len(requested_jobs):
+        abort(400, description="every batch job must be an object")
+
+    queued = []
+    created_count = 0
+    for item in prepared:
+        job, created = video_queue.enqueue_job(item, queue_root=VIDEO_JOBS_DIR)
+        queued.append(public_video_job(job))
+        created_count += int(created)
+    return jsonify({
+        "batch_id": batch_id,
+        "requested_count": len(requested_jobs),
+        "created_count": created_count,
+        "jobs": queued,
+    }), 202 if created_count else 200
+
+
+def background_heygen_job(job_id):
+    try:
+        heygen_adapter.process_job(
+            job_id, queue_root=VIDEO_JOBS_DIR, workspace_root=ROOT, wait=True)
+    except Exception:
+        # The adapter records a sanitized failure on the job itself.
+        pass
+
+
+@app.post("/api/heygen/jobs/<job_id>/run")
+def run_heygen_job(job_id):
+    try:
+        _, job = video_queue.find_job(job_id, VIDEO_JOBS_DIR)
+    except FileNotFoundError as exc:
+        abort(404, description=str(exc))
+    if job.get("auth_mode") != "api_key":
+        abort(409, description="OAuth jobs require a Codex task with HeyGen Remote MCP connected")
+    if not heygen_adapter.connection_status()["api_key_configured"]:
+        abort(409, description="HEYGEN_API_KEY is not configured in .env")
+    if job.get("status") != "queued":
+        abort(409, description=f"only queued jobs can start; current status is {job.get('status')}")
+    thread = threading.Thread(target=background_heygen_job, args=(job_id,), daemon=True)
+    thread.start()
+    return jsonify({"started": True, "job": public_video_job(job)}), 202
+
+
+@app.post("/api/heygen/jobs/<job_id>/refresh")
+def refresh_heygen_job(job_id):
+    try:
+        job = heygen_adapter.refresh_job(
+            job_id, queue_root=VIDEO_JOBS_DIR, workspace_root=ROOT)
+    except FileNotFoundError as exc:
+        abort(404, description=str(exc))
+    except heygen_adapter.HeyGenError as exc:
+        abort(502, description=str(exc))
+    return jsonify(public_video_job(job))
 
 
 @app.get("/api/assets/status")
@@ -445,12 +929,51 @@ def create_run():
     opening_style = (data.get("opening_style") or "").strip()
     product_style = (data.get("product_style") or "").strip()
     product_slide_caption = (data.get("product_slide_caption") or "").strip()
+    character_slug = (data.get("character_slug") or "").strip()
     if opening_style and opening_style not in character_factory.OPENING_PRESETS:
         abort(400, description="invalid opening_style")
     if product_style and product_style not in character_factory.PRODUCT_PROP_PRESETS:
         abort(400, description="invalid product_style")
     if text_only and not hook:
         abort(400, description="text-only runs require a hook/angle")
+    if provider == "codex_local" and "slideshow" in requested_formats and not placeholder:
+        if spec:
+            abort(409, description=(
+                "Local Codex image runs must use a saved roster character. "
+                "Save it, queue missing images, and process the queue first."
+            ))
+        roster_data = load_roster()
+        run_characters = roster_data.get("characters", [])
+        if character_slug:
+            run_characters = [
+                character for character in run_characters
+                if character.get("slug") == character_slug
+            ]
+        else:
+            run_characters = run_characters[:avatars]
+        if not run_characters:
+            abort(409, description="No saved roster characters match this batch.")
+        incomplete = []
+        for character in run_characters:
+            slug = character.get("slug")
+            if not slug:
+                incomplete.append(character.get("spec") or "unsaved character")
+                continue
+            plan = character_factory.missing_asset_plan(
+                character["spec"],
+                CHARACTER_ASSETS_DIR / slug,
+                opening_style=opening_style or None,
+                product_style=product_style or None,
+                prompt_config_path=brand.prompt_path("image_character"),
+            )
+            if plan["targets"]:
+                names = ", ".join(target["name"] for target in plan["targets"])
+                incomplete.append(f"{slug} ({names})")
+        if incomplete:
+            abort(409, description=(
+                "Process Local Codex image jobs before starting this batch: "
+                + "; ".join(incomplete)
+            ))
 
     run_id = datetime.now().strftime("%Y%m%d%H%M%S")
     cmd = [
@@ -473,6 +996,8 @@ def create_run():
         cmd += ["--product-style", product_style]
     if product_slide_caption:
         cmd += ["--product-slide-caption", product_slide_caption]
+    if character_slug and not spec:
+        cmd += ["--character-slug", character_slug]
     if text_only:
         cmd += ["--angle", hook]
     elif spec:
@@ -508,6 +1033,7 @@ def create_run():
             "opening_style": opening_style or None,
             "product_style": product_style or None,
             "product_slide_caption": product_slide_caption or None,
+            "character_slug": character_slug or None,
         },
         "command": cmd,
         "log": str(run_log_path(run_id).relative_to(ROOT)),

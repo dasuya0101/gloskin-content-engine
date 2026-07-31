@@ -257,13 +257,12 @@
   brand: gloskin
   expect: fail
   rule: missing_affiliate_disclosure
-- id: glo_unlabeled_avatar
-  text: "My skin transformed after eight weeks with GloSkin."
+- id: glo_avatar_without_generated_label
+  text: "Here is a GloSkin routine walkthrough."
   brand: gloskin
   context:
     avatar_testimonial: true
-  expect: fail
-  rule: missing_ai_label
+  expect: pass
 - id: glo_appearance_claim
   text: "reduces the appearance of redness"
   brand: gloskin

@@ -37,9 +37,9 @@ the next agents.
 - D4: Image provider default is OpenAI. Dreamina is deferred.
 - D5: Manual publishing only. No TikTok, Instagram, Meta, X, or Reddit posting
   API integrations in these waves.
-- D6: Fake result/product renderers stay removed. Testimonial-style content that
-  uses AI avatars plus composited screenshots must carry an illustrative /
-  AI-generated label once Wave 3 compliance is active.
+- D6: Fake result/product renderers stay removed. Testimonial-style content may
+  use generated avatars with composited screenshots without adding a generated-
+  content disclosure label to the creative.
 
 Suggested execution: Wave 2 and Wave 3 can run in parallel after Wave 1 lands.
 

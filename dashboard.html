@@ -33,7 +33,7 @@
   .ops{display:grid;grid-template-columns:minmax(440px,1fr) minmax(360px,1fr);gap:16px;margin-bottom:18px}
   .section{background:var(--band);border:1px solid var(--line);border-radius:8px;padding:16px}
   .section h2{margin:0 0 14px;font-size:13px;font-weight:700;color:var(--dim);font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em}
-  .run-grid{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:10px;align-items:end}
+  .run-grid{display:grid;grid-template-columns:repeat(3,minmax(130px,1fr));gap:10px;align-items:end}
   label{display:block;color:var(--dim);font-size:11px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
   input,select,button,textarea{font:inherit}
   input,select,textarea{width:100%;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:7px;padding:9px 10px;min-height:38px}
@@ -46,7 +46,7 @@
   button.on{border-color:var(--accent);color:var(--accent)}
   button:disabled{opacity:.48;cursor:not-allowed}
   .checkline{display:flex;align-items:center;height:38px;color:var(--ink)}
-  .run-log{background:#0b0d11;border:1px solid var(--line);border-radius:7px;min-height:102px;max-height:180px;overflow:auto;padding:10px;color:#c5ccd8;font-family:var(--mono);font-size:11px;white-space:pre-wrap}
+  .run-log{background:#0b0d11;border:1px solid var(--line);border-radius:7px;min-height:102px;max-height:180px;overflow:auto;padding:10px;color:#c5ccd8;font-family:var(--mono);font-size:11px;white-space:pre-wrap;overflow-wrap:anywhere}
   .metrics-grid{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;align-items:end}
   .prompt-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
   .prompt-grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}
@@ -56,6 +56,40 @@
   .asset{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:9px}
   .asset .name{font-weight:700}
   .asset .meta{color:var(--dim);font-size:12px}
+  .roster-band{margin-bottom:18px}
+  .roster-head{display:flex;gap:10px;align-items:end;margin-bottom:12px}
+  .roster-head>div{min-width:280px;flex:1}
+  .roster-meta{display:grid;grid-template-columns:1.2fr 1.2fr .6fr .6fr 2fr;gap:10px;margin-bottom:12px}
+  .character-assets{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+  .character-asset{border:1px solid var(--line);border-radius:7px;padding:8px;min-width:0}
+  .character-asset label{display:flex;justify-content:space-between;gap:6px}
+  .character-asset label span{color:var(--muted);font-weight:400;text-transform:none}
+  .asset-preview{position:relative;width:100%;aspect-ratio:9/16;background:#0b0d11;border:1px solid var(--line);border-radius:5px;overflow:hidden;margin-bottom:8px}
+  .asset-preview img{display:none;width:100%;height:100%;object-fit:cover}
+  .asset-preview.has-image img{display:block}
+  .asset-preview.has-image .asset-empty{display:none}
+  .asset-empty{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);font-family:var(--mono);font-size:11px}
+  .character-asset input[type="file"]{min-height:36px;min-width:0;max-width:100%;padding:6px;font-size:11px;color:transparent}
+  .character-asset input[type="file"]::file-selector-button{width:100%;background:var(--panel2);color:var(--ink);border:1px solid var(--line);border-radius:5px;padding:6px;cursor:pointer}
+  .roster-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:12px}
+  .video-builder{display:grid;grid-template-columns:minmax(160px,.7fr) minmax(160px,.7fr) minmax(220px,1fr) minmax(220px,1fr);gap:10px;align-items:end}
+  .video-builder .wide{grid-column:span 2}
+  .video-builder .full{grid-column:1/-1}
+  .video-script{min-height:128px;resize:vertical;line-height:1.4}
+  .video-jobs{display:grid;gap:8px;margin-top:14px}
+  .video-job{display:grid;grid-template-columns:minmax(150px,.7fr) minmax(180px,1fr) minmax(160px,.8fr) auto;gap:10px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:10px}
+  .video-job video{width:54px;height:96px}
+  .video-job-actions{display:flex;gap:6px;align-items:center;justify-content:flex-end;flex-wrap:wrap}
+  .mode-tabs{display:flex;gap:6px;margin-bottom:12px}
+  .mode-tabs button{min-width:132px}
+  .mode-panel[hidden]{display:none}
+  .batch-drafts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}
+  .batch-draft{display:grid;grid-template-columns:72px minmax(0,1fr);gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:9px;min-width:0}
+  .batch-draft>div{min-width:0}
+  .batch-draft label{overflow-wrap:anywhere}
+  .batch-draft img,.batch-portrait-empty{width:72px;aspect-ratio:9/16;object-fit:cover;border:1px solid var(--line);border-radius:5px;background:#0b0d11}
+  .batch-portrait-empty{display:grid;place-items:center;color:var(--bad);font-family:var(--mono);font-size:9px;text-align:center;padding:4px}
+  .batch-draft textarea{min-width:0;min-height:112px;resize:vertical;font-size:12px;line-height:1.35}
   .badge{font-family:var(--mono);font-size:10px;border:1px solid var(--line);border-radius:999px;padding:3px 7px;color:var(--dim)}
   .badge.ok{border-color:#477a52;color:var(--good)}
   .badge.missing{border-color:#7a4949;color:var(--bad)}
@@ -70,6 +104,7 @@
   .filters .spacer{flex:1}
   .search{max-width:280px}
   table{width:100%;border-collapse:collapse;background:var(--band);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+  .table-wrap{width:100%;overflow-x:auto}
   thead{background:#151820}
   th,td{text-align:left;padding:10px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
   th{font-family:var(--mono);font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.06em;user-select:none;white-space:nowrap}
@@ -108,11 +143,21 @@
   .caption-box{white-space:pre-wrap;background:#0b0d11;border:1px solid var(--line);border-radius:7px;padding:10px;color:#d8dde6;line-height:1.35}
   a{color:var(--accent)}
   @media (max-width:980px){
-    .toolbar{grid-template-columns:1fr}
-    .lab{grid-template-columns:1fr}
-    .ops{grid-template-columns:1fr}
+    .toolbar{grid-template-columns:minmax(0,1fr)}
+    .lab{grid-template-columns:minmax(0,1fr)}
+    .ops{grid-template-columns:minmax(0,1fr)}
+    .toolbar>*,.lab>*,.ops>*{min-width:0}
+    .roster-head{flex-direction:column;align-items:stretch}
+    .roster-head>div{min-width:0;width:100%}
     .prompt-grid{grid-template-columns:1fr}
     .prompt-grid.three{grid-template-columns:1fr}
+    .roster-meta{grid-template-columns:1fr 1fr}
+    .character-assets{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .video-builder{grid-template-columns:1fr 1fr}
+    .video-builder .wide{grid-column:span 2}
+    .video-job{grid-template-columns:1fr}
+    .video-job-actions{justify-content:flex-start}
+    .batch-drafts{grid-template-columns:1fr}
     .metrics-grid{grid-template-columns:1fr}
     .pill-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
     .run-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -142,6 +187,10 @@
           <select id="brand"></select>
         </div>
         <div>
+          <label for="runCharacter">Roster character</label>
+          <select id="runCharacter"><option value="">Roster order</option></select>
+        </div>
+        <div>
           <label for="avatars">Avatars</label>
           <input id="avatars" type="number" min="1" max="100" value="2">
         </div>
@@ -150,8 +199,9 @@
           <input id="postsPerAvatar" type="number" min="1" max="50" value="2">
         </div>
         <div>
-          <label for="provider">Image API</label>
+          <label for="provider">Image source</label>
           <select id="provider">
+            <option value="codex_local">codex subscription / local queue</option>
             <option value="openai">openai</option>
             <option value="dreamina">dreamina</option>
             <option value="custom">custom</option>
@@ -181,6 +231,158 @@
       <div class="run-log" id="runLog">No runs yet.</div>
     </section>
   </div>
+
+  <section class="section roster-band">
+    <h2>Character Roster &amp; Assets</h2>
+    <div class="roster-head">
+      <div>
+        <label for="rosterCharacter">Character</label>
+        <select id="rosterCharacter"></select>
+      </div>
+      <button id="newCharacter">New character</button>
+    </div>
+    <div class="roster-meta">
+      <div>
+        <label for="characterSlug">Asset slug</label>
+        <input id="characterSlug" placeholder="assigned from the spec">
+      </div>
+      <div>
+        <label for="characterSpec">Character spec</label>
+        <input id="characterSpec" value="woman, early 20s, East Asian">
+      </div>
+      <div>
+        <label for="characterBeforeScore">Before score</label>
+        <input id="characterBeforeScore" type="number" min="0" max="100" value="54">
+      </div>
+      <div>
+        <label for="characterAfterScore">After score</label>
+        <input id="characterAfterScore" type="number" min="0" max="100" value="87">
+      </div>
+      <div>
+        <label for="characterHook">Default hook</label>
+        <textarea id="characterHook" rows="2">I let AI score my skin. The number hurt.</textarea>
+      </div>
+    </div>
+    <div class="character-assets">
+      <div class="character-asset" data-asset="before">
+        <label for="asset-before">Before <span>core / upload optional</span></label>
+        <div class="asset-preview" id="preview-before"><div class="asset-empty">no image</div><img alt="Before preview"></div>
+        <input id="asset-before" type="file" accept="image/png,image/jpeg,image/webp">
+      </div>
+      <div class="character-asset" data-asset="opening">
+        <label for="asset-opening">Opening <span>optional</span></label>
+        <div class="asset-preview" id="preview-opening"><div class="asset-empty">no image</div><img alt="Opening preview"></div>
+        <input id="asset-opening" type="file" accept="image/png,image/jpeg,image/webp">
+      </div>
+      <div class="character-asset" data-asset="scan">
+        <label for="asset-scan">Scan selfie <span>core / derived</span></label>
+        <div class="asset-preview" id="preview-scan"><div class="asset-empty">no image</div><img alt="Scan preview"></div>
+        <input id="asset-scan" type="file" accept="image/png,image/jpeg,image/webp">
+      </div>
+      <div class="character-asset" data-asset="after">
+        <label for="asset-after">After <span>core / upload optional</span></label>
+        <div class="asset-preview" id="preview-after"><div class="asset-empty">no image</div><img alt="After preview"></div>
+        <input id="asset-after" type="file" accept="image/png,image/jpeg,image/webp">
+      </div>
+      <div class="character-asset" data-asset="product_prop">
+        <label for="asset-product_prop">Product prop <span>optional / no person</span></label>
+        <div class="asset-preview" id="preview-product_prop"><div class="asset-empty">no image</div><img alt="Product prop preview"></div>
+        <input id="asset-product_prop" type="file" accept="image/png,image/jpeg,image/webp">
+      </div>
+    </div>
+    <div class="roster-actions">
+      <button id="saveCharacter">Save character</button>
+      <button class="primary" id="generateMissing">Queue missing images</button>
+      <span class="sub" id="rosterResult"></span>
+    </div>
+  </section>
+
+  <section class="section roster-band">
+    <h2>HeyGen Talking Head</h2>
+    <div class="video-builder">
+      <div>
+        <label for="heygenAuthMode">Credit route</label>
+        <select id="heygenAuthMode">
+          <option value="oauth_mcp">Subscription / OAuth</option>
+          <option value="api_key">API wallet</option>
+        </select>
+      </div>
+      <div>
+        <label for="heygenVoiceId">Voice ID</label>
+        <input id="heygenVoiceId" placeholder="account default for OAuth">
+      </div>
+      <div class="wide">
+        <label for="heygenMotion">Motion</label>
+        <input id="heygenMotion" value="Natural conversational delivery with subtle head movement.">
+      </div>
+    </div>
+    <div class="mode-tabs">
+      <button id="heygenModeSingle">Single clip</button>
+      <button class="on" id="heygenModeBatch">Batch before + after</button>
+    </div>
+    <div class="mode-panel" id="heygenSinglePanel" hidden>
+      <div class="video-builder">
+        <div>
+          <label for="heygenSourceAsset">Portrait</label>
+          <select id="heygenSourceAsset">
+            <option value="after">After</option>
+            <option value="before">Before</option>
+            <option value="opening">Opening</option>
+          </select>
+        </div>
+        <div>
+          <label for="heygenAvatarId">Existing avatar ID</label>
+          <input id="heygenAvatarId" placeholder="optional">
+        </div>
+        <div class="wide">
+          <label for="heygenTitle">Video title</label>
+          <input id="heygenTitle" placeholder="Character talking head">
+        </div>
+        <div class="full">
+          <label for="heygenScript">Approved script</label>
+          <textarea class="video-script" id="heygenScript" placeholder="Paste the approved talking-head script"></textarea>
+        </div>
+        <label class="checkline full"><input id="heygenConsent" type="checkbox"> Character and voice consent confirmed</label>
+      </div>
+      <div class="roster-actions">
+        <button class="primary" id="queueHeygen">Queue single clip</button>
+      </div>
+    </div>
+    <div class="mode-panel" id="heygenBatchPanel">
+      <div class="video-builder">
+        <div>
+          <label for="heygenBatchCount">Characters</label>
+          <input id="heygenBatchCount" type="number" min="1" max="10" value="3">
+        </div>
+        <div>
+          <label for="heygenBatchStart">Start at</label>
+          <select id="heygenBatchStart"></select>
+        </div>
+        <div class="wide">
+          <label for="heygenBatchBeforeTemplate">Before clip script</label>
+          <textarea class="video-script" id="heygenBatchBeforeTemplate">I was tired of guessing. {hook}</textarea>
+        </div>
+        <div class="wide">
+          <label for="heygenBatchAfterTemplate">After clip script</label>
+          <textarea class="video-script" id="heygenBatchAfterTemplate">Once I had a routine built around my skin, I could finally see consistent progress instead of guessing.</textarea>
+        </div>
+      </div>
+      <div class="roster-actions">
+        <button id="previewHeygenBatch">Preview scripts</button>
+        <span class="sub" id="heygenBatchSummary">3 characters / 6 clips</span>
+      </div>
+      <div class="batch-drafts" id="heygenBatchDrafts"></div>
+      <label class="checkline"><input id="heygenBatchConsent" type="checkbox"> Character and voice consent confirmed for this batch</label>
+      <div class="roster-actions">
+        <button class="primary" id="queueHeygenBatch">Queue batch clips</button>
+      </div>
+    </div>
+    <div class="roster-actions">
+      <button id="testHeygen">Test API connection</button>
+      <span class="sub" id="heygenConnection">checking connection</span>
+    </div>
+    <div class="video-jobs" id="heygenJobs"></div>
+  </section>
 
   <div class="lab">
     <section class="section">
@@ -312,10 +514,12 @@
     <span class="sub" id="count"></span>
   </div>
 
-  <table id="tbl">
-    <thead></thead>
-    <tbody></tbody>
-  </table>
+  <div class="table-wrap">
+    <table id="tbl">
+      <thead></thead>
+      <tbody></tbody>
+    </table>
+  </div>
   <div class="empty" id="empty">No posts yet.</div>
 </main>
 
@@ -366,6 +570,8 @@ const PRODUCT_LABELS = {
   niche_products:"Niche products",
   random_products:"Random mix"
 };
+const CHARACTER_ASSETS = ["before","opening","scan","after","product_prop"];
+const CORE_CHARACTER_ASSETS = ["before","scan","after"];
 let posts = [];
 let runs = [];
 let sortKey = "created_at";
@@ -377,6 +583,13 @@ let selectedBrand = "";
 let assetRows = [];
 let openingPresets = {};
 let productPropPresets = {};
+let rosterData = {characters:[], can_generate:false};
+let selectedCharacterIndex = -1;
+let imageJobs = [];
+let videoJobs = [];
+let heygenStatus = {};
+let heygenMode = "batch";
+let heygenBatchDrafts = [];
 
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -435,18 +648,37 @@ async function api(path, opts={}){
     headers:{"Content-Type":"application/json", ...(opts.headers||{})},
     ...opts
   });
-  if(!res.ok) throw new Error(await res.text());
+  if(!res.ok) throw new Error(await responseError(res));
   return res.json();
+}
+async function apiUpload(path, body){
+  const res = await fetch(path, {method:"POST", cache:"no-store", body});
+  if(!res.ok) throw new Error(await responseError(res));
+  return res.json();
+}
+async function responseError(res){
+  const contentType = res.headers.get("content-type") || "";
+  if(contentType.includes("application/json")){
+    const data = await res.json();
+    return data.error || data.message || `Request failed (${res.status})`;
+  }
+  const text = await res.text();
+  const doc = new DOMParser().parseFromString(text, "text/html");
+  return (doc.querySelector("p") || doc.body).textContent.trim() || `Request failed (${res.status})`;
 }
 
 async function load(){
   try{
-    const [config, postRows, runRows] = await Promise.all([
+    const [config, postRows, runRows, nextVideoJobs, nextHeygenStatus] = await Promise.all([
       api("/api/config"),
       api("/api/posts"),
-      api("/api/runs")
+      api("/api/runs"),
+      api("/api/heygen/jobs"),
+      api("/api/heygen/status")
     ]);
     configData = config;
+    videoJobs = nextVideoJobs;
+    heygenStatus = nextHeygenStatus;
     populateBrands(config);
     posts = postRows;
     runs = runRows;
@@ -455,7 +687,15 @@ async function load(){
     $("account").value = activeBrandInfo().default_account || config.default_account || "";
     $("formats").value = "slideshow";
     $("savePrompt").disabled = !activeBrandInfo().has_image_prompts;
-    assetRows = await api(`/api/assets/status?brand=${brandParam()}`);
+    [assetRows, rosterData, imageJobs] = await Promise.all([
+      api(`/api/assets/status?brand=${brandParam()}`),
+      api(`/api/roster?brand=${brandParam()}`),
+      api("/api/image-jobs")
+    ]);
+    renderRosterSelectors();
+    renderHeygen();
+    setHeygenMode(heygenMode);
+    updateImageActionLabel();
     await previewPrompt();
   }catch(err){
     $("apiState").textContent = "api offline";
@@ -485,6 +725,377 @@ function renderAssets(){
       <span class="meta">${a.size_bytes ? esc(Math.round(a.size_bytes/1024)+"kb") : ""}</span>
     </div>
   `).join("");
+}
+
+function characterLabel(character, index){
+  return `${index + 1}. ${character.slug || character.spec || "character"}`;
+}
+
+function renderRosterSelectors(preferredIndex=selectedCharacterIndex){
+  const characters = rosterData.characters || [];
+  const runValue = $("runCharacter").value;
+  const batchStartValue = $("heygenBatchStart").value;
+  $("rosterCharacter").innerHTML = `<option value="-1">New character</option>` + characters
+    .map((character,index) => `<option value="${index}">${esc(characterLabel(character,index))}</option>`).join("");
+  $("runCharacter").innerHTML = `<option value="">Roster order</option>` + characters
+    .filter(character => character.slug)
+    .map(character => `<option value="${esc(character.slug)}">${esc(character.slug)}</option>`).join("");
+  if(Array.from($("runCharacter").options).some(option => option.value === runValue)){
+    $("runCharacter").value = runValue;
+  }
+  $("heygenBatchStart").innerHTML = characters
+    .map((character,index) => `<option value="${index}">${esc(characterLabel(character,index))}</option>`).join("");
+  if(Array.from($("heygenBatchStart").options).some(option => option.value === batchStartValue)){
+    $("heygenBatchStart").value = batchStartValue;
+  }
+  const nextIndex = characters.length
+    ? Math.max(0, Math.min(Number(preferredIndex) >= 0 ? Number(preferredIndex) : 0, characters.length - 1))
+    : -1;
+  $("rosterCharacter").value = String(nextIndex);
+  selectRosterCharacter(nextIndex);
+}
+
+function clearAssetInput(name){
+  const input = $(`asset-${name}`);
+  input.value = "";
+  const preview = $(`preview-${name}`);
+  if(preview.dataset.objectUrl){
+    URL.revokeObjectURL(preview.dataset.objectUrl);
+    delete preview.dataset.objectUrl;
+  }
+}
+
+function showAssetPreview(name, path="", objectUrl=""){
+  const preview = $(`preview-${name}`);
+  const image = preview.querySelector("img");
+  if(preview.dataset.objectUrl && preview.dataset.objectUrl !== objectUrl){
+    URL.revokeObjectURL(preview.dataset.objectUrl);
+    delete preview.dataset.objectUrl;
+  }
+  const src = objectUrl || (path ? `${fileUrl(path)}?v=${Date.now()}` : "");
+  if(src){
+    image.src = src;
+    preview.classList.add("has-image");
+    if(objectUrl) preview.dataset.objectUrl = objectUrl;
+  }else{
+    image.removeAttribute("src");
+    preview.classList.remove("has-image");
+  }
+}
+
+function selectRosterCharacter(index){
+  selectedCharacterIndex = Number(index);
+  $("rosterCharacter").value = String(selectedCharacterIndex);
+  const character = (rosterData.characters || [])[selectedCharacterIndex] || null;
+  CHARACTER_ASSETS.forEach(name => clearAssetInput(name));
+  $("characterSlug").value = character ? (character.slug || "") : "";
+  $("characterSlug").readOnly = Boolean(character && character.slug);
+  $("characterSpec").value = character ? (character.spec || "") : "woman, early 20s, East Asian";
+  $("characterBeforeScore").value = character ? (character.before_score ?? 54) : 54;
+  $("characterAfterScore").value = character ? (character.after_score ?? 87) : 87;
+  $("characterHook").value = character ? (character.hook || "") : "I let AI score my skin. The number hurt.";
+  CHARACTER_ASSETS.forEach(name => {
+    const asset = character && character.assets ? character.assets[name] : null;
+    showAssetPreview(name, asset && asset.exists ? asset.path : "");
+  });
+  $("generateMissing").disabled = !rosterData.can_generate;
+  renderCharacterJobStatus(character);
+  syncHeygenCharacter(character);
+}
+
+function syncHeygenCharacter(character){
+  if(!character) return;
+  const mapping = character.heygen || {};
+  if(!$('heygenVoiceId').value) $('heygenVoiceId').value = mapping.voice_id || "";
+  if(!$('heygenAvatarId').value) $('heygenAvatarId').value = mapping.avatar_id || "";
+  if(!$('heygenTitle').value || $('heygenTitle').dataset.auto === "true"){
+    $('heygenTitle').value = `${character.slug || "character"} talking head`;
+    $('heygenTitle').dataset.auto = "true";
+  }
+  renderHeygen();
+}
+
+function heygenStatusLabel(){
+  const mode = $('heygenAuthMode').value;
+  if(mode === "api_key"){
+    return heygenStatus.api_key_configured
+      ? "API wallet connected / generation spends API balance"
+      : "API wallet not connected / add HEYGEN_API_KEY to .env";
+  }
+  return "OAuth queue ready / HeyGen MCP connection still required in Codex";
+}
+
+function renderHeygen(){
+  if(!$('heygenJobs')) return;
+  $('heygenConnection').textContent = heygenStatusLabel();
+  if(!videoJobs.length){
+    $('heygenJobs').innerHTML = '<div class="sub">No video jobs yet.</div>';
+    return;
+  }
+  $('heygenJobs').innerHTML = videoJobs.slice(0,20).map(job => {
+    const output = job.status === "completed" && job.output_path
+      ? `<video src="${fileUrl(job.output_path)}" controls preload="metadata"></video>`
+      : `<span class="badge ${job.status === "failed" ? "missing" : ""}">${esc(job.status)}</span>`;
+    let action = "";
+    if(job.status === "queued" && job.auth_mode === "api_key"){
+      action = `<button class="small" onclick="runHeygenJob('${esc(job.job_id)}')" ${heygenStatus.api_key_configured ? "" : "disabled"}>Start render</button>`;
+    }else if(job.status === "submitted"){
+      action = `<button class="small" onclick="refreshHeygenJob('${esc(job.job_id)}')">Refresh</button>`;
+    }
+    return `<div class="video-job">
+      <div>${output}</div>
+      <div><strong>${esc(job.title || job.job_id)}</strong><div class="spec">${esc(job.slug)} / ${esc(job.source_asset)} / ${esc(job.auth_mode)}</div></div>
+      <div class="spec">${esc(job.error || job.remote_status || job.note || "queued")}</div>
+      <div class="video-job-actions">${action}${job.status === "completed" ? `<a href="${fileUrl(job.output_path)}" target="_blank">Open video</a>` : ""}</div>
+    </div>`;
+  }).join("");
+}
+
+function setHeygenMode(mode){
+  heygenMode = mode === "single" ? "single" : "batch";
+  $('heygenSinglePanel').hidden = heygenMode !== "single";
+  $('heygenBatchPanel').hidden = heygenMode !== "batch";
+  $('heygenModeSingle').classList.toggle('on', heygenMode === "single");
+  $('heygenModeBatch').classList.toggle('on', heygenMode === "batch");
+  if(heygenMode === "batch" && !heygenBatchDrafts.length) buildHeygenBatchPreview();
+}
+
+function batchScript(template, character){
+  const values = {
+    character:character.slug || character.spec || "character",
+    spec:character.spec || "",
+    hook:String(character.hook || "").replace(/\s+/g," ").trim(),
+    before_score:character.before_score ?? "",
+    after_score:character.after_score ?? ""
+  };
+  return String(template || "").replace(/\{(character|spec|hook|before_score|after_score)\}/g, (_,key) => values[key]);
+}
+
+function buildHeygenBatchPreview(){
+  const characters = rosterData.characters || [];
+  const start = Number($('heygenBatchStart').value || 0);
+  const count = Math.max(1, Math.min(10, Number($('heygenBatchCount').value || 3)));
+  const selected = characters.slice(start, start + count)
+    .map((character,offset) => ({character,index:start + offset}))
+    .filter(item => item.character.slug);
+  heygenBatchDrafts = selected.flatMap(({character,index:characterIndex}) => ["before","after"].map(source => {
+    const asset = character.assets && character.assets[source];
+    const template = source === "before" ? $('heygenBatchBeforeTemplate').value : $('heygenBatchAfterTemplate').value;
+    return {
+      character_index:characterIndex,
+      slug:character.slug,
+      source_asset:source,
+      clip_role:source,
+      portrait_path:asset && asset.exists ? asset.path : "",
+      script:batchScript(template, character),
+      title:`${character.slug} ${source} clip`
+    };
+  }));
+  renderHeygenBatchDrafts();
+}
+
+function renderHeygenBatchDrafts(){
+  const characterCount = new Set(heygenBatchDrafts.map(draft => draft.character_index)).size;
+  const missing = heygenBatchDrafts.filter(draft => !draft.portrait_path).length;
+  $('heygenBatchSummary').textContent = `${characterCount} characters / ${heygenBatchDrafts.length} clips${missing ? ` / ${missing} missing portraits` : ""}`;
+  if(!heygenBatchDrafts.length){
+    $('heygenBatchDrafts').innerHTML = '<div class="sub">No saved roster characters in this range.</div>';
+    return;
+  }
+  $('heygenBatchDrafts').innerHTML = heygenBatchDrafts.map((draft,index) => `
+    <div class="batch-draft">
+      ${draft.portrait_path
+        ? `<img src="${fileUrl(draft.portrait_path)}" alt="${esc(draft.slug)} ${esc(draft.source_asset)} portrait">`
+        : '<div class="batch-portrait-empty">missing portrait</div>'}
+      <div>
+        <label>${esc(draft.slug)} / ${esc(draft.source_asset)}</label>
+        <textarea data-batch-script="${index}">${esc(draft.script)}</textarea>
+      </div>
+    </div>
+  `).join("");
+  document.querySelectorAll('[data-batch-script]').forEach(input => {
+    input.oninput = () => { heygenBatchDrafts[Number(input.dataset.batchScript)].script = input.value; };
+  });
+}
+
+async function queueHeygenBatch(){
+  $('queueHeygenBatch').disabled = true;
+  try{
+    if(!heygenBatchDrafts.length) buildHeygenBatchPreview();
+    const missing = heygenBatchDrafts.filter(draft => !draft.portrait_path);
+    if(missing.length) throw new Error(`${missing.length} before/after portraits are missing`);
+    const result = await api('/api/heygen/batches', {
+      method:'POST',
+      body:JSON.stringify({
+        brand:$('brand').value,
+        auth_mode:$('heygenAuthMode').value,
+        voice_id:$('heygenVoiceId').value.trim(),
+        motion_prompt:$('heygenMotion').value.trim(),
+        consent_confirmed:$('heygenBatchConsent').checked,
+        jobs:heygenBatchDrafts.map(({portrait_path,slug,...job}) => job)
+      })
+    });
+    videoJobs = await api('/api/heygen/jobs');
+    renderHeygen();
+    $('heygenConnection').textContent = `batch ${result.batch_id} / ${result.created_count} clips queued`;
+  }catch(err){
+    $('heygenConnection').textContent = err.message;
+  }finally{
+    $('queueHeygenBatch').disabled = false;
+  }
+}
+
+async function queueHeygenVideo(){
+  $('queueHeygen').disabled = true;
+  $('heygenConnection').textContent = "saving character...";
+  try{
+    const character = await saveCharacter(false);
+    const result = await api('/api/heygen/jobs', {
+      method:'POST',
+      body:JSON.stringify({
+        brand:$('brand').value,
+        character_index:character.index,
+        auth_mode:$('heygenAuthMode').value,
+        source_asset:$('heygenSourceAsset').value,
+        voice_id:$('heygenVoiceId').value.trim(),
+        avatar_id:$('heygenAvatarId').value.trim(),
+        title:$('heygenTitle').value.trim(),
+        motion_prompt:$('heygenMotion').value.trim(),
+        script:$('heygenScript').value.trim(),
+        consent_confirmed:$('heygenConsent').checked
+      })
+    });
+    videoJobs = await api('/api/heygen/jobs');
+    renderHeygen();
+    $('heygenConnection').textContent = result.created ? `queued ${result.job.job_id}` : `matching job already ${result.job.status}`;
+  }catch(err){
+    $('heygenConnection').textContent = err.message;
+  }finally{
+    $('queueHeygen').disabled = false;
+  }
+}
+
+async function testHeygenConnection(){
+  $('testHeygen').disabled = true;
+  $('heygenConnection').textContent = "testing HeyGen API...";
+  try{
+    const result = await api('/api/heygen/test', {method:'POST', body:'{}'});
+    const wallet = result.wallet == null ? "" : ` / wallet ${typeof result.wallet === "object" ? JSON.stringify(result.wallet) : result.wallet}`;
+    $('heygenConnection').textContent = `HeyGen API connected${wallet}`;
+    heygenStatus = await api('/api/heygen/status');
+  }catch(err){ $('heygenConnection').textContent = err.message; }
+  finally{ $('testHeygen').disabled = false; }
+}
+
+async function runHeygenJob(jobId){
+  try{
+    await api(`/api/heygen/jobs/${encodeURIComponent(jobId)}/run`, {method:'POST', body:'{}'});
+    $('heygenConnection').textContent = `render started: ${jobId}`;
+    await refresh();
+  }catch(err){ $('heygenConnection').textContent = err.message; }
+}
+
+async function refreshHeygenJob(jobId){
+  try{
+    await api(`/api/heygen/jobs/${encodeURIComponent(jobId)}/refresh`, {method:'POST', body:'{}'});
+    await refresh();
+  }catch(err){ $('heygenConnection').textContent = err.message; }
+}
+
+function renderCharacterJobStatus(character){
+  if(!character){
+    $("rosterResult").textContent = "new character";
+    return;
+  }
+  const latest = imageJobs.find(job => job.slug === character.slug);
+  if(latest && ["queued","processing"].includes(latest.status)){
+    $("rosterResult").textContent = `${latest.status} / ${latest.job_id} / ${latest.targets.length} image${latest.targets.length === 1 ? "" : "s"}`;
+    return;
+  }
+  if(latest && latest.status === "failed"){
+    $("rosterResult").textContent = `failed / ${latest.error || latest.job_id}`;
+    return;
+  }
+  const ready = CORE_CHARACTER_ASSETS.filter(name => character.assets && character.assets[name] && character.assets[name].exists).length;
+  $("rosterResult").textContent = `${ready}/3 core images ready${latest && latest.status === "completed" ? " / last job complete" : ""}`;
+}
+
+function updateImageActionLabel(){
+  const local = $("provider").value === "codex_local";
+  $("generateMissing").textContent = local ? "Queue missing images" : "Generate missing images";
+}
+
+function previewSelectedUpload(name){
+  const file = $(`asset-${name}`).files[0];
+  if(!file) return;
+  showAssetPreview(name, "", URL.createObjectURL(file));
+}
+
+async function saveCharacter(showStatus=true){
+  $("saveCharacter").disabled = true;
+  try{
+    const form = new FormData();
+    if(selectedCharacterIndex >= 0) form.append("index", String(selectedCharacterIndex));
+    form.append("slug", $("characterSlug").value.trim());
+    form.append("spec", $("characterSpec").value.trim());
+    form.append("before_score", $("characterBeforeScore").value);
+    form.append("after_score", $("characterAfterScore").value);
+    form.append("hook", $("characterHook").value.trim());
+    CHARACTER_ASSETS.forEach(name => {
+      const file = $(`asset-${name}`).files[0];
+      if(file) form.append(name, file);
+    });
+    const result = await apiUpload("/api/roster/characters", form);
+    selectedCharacterIndex = result.character.index;
+    rosterData = await api(`/api/roster?brand=${brandParam()}`);
+    configData.roster_count = rosterData.characters.length;
+    renderRosterSelectors(selectedCharacterIndex);
+    $("apiState").textContent = `${activeBrandInfo().display_name || "brand"} / ${configData.roster_count} roster characters / ${configData.image_provider}`;
+    if(showStatus) $("rosterResult").textContent = result.uploaded.length
+      ? `saved / uploaded ${result.uploaded.join(", ")}`
+      : "character saved";
+    return result.character;
+  }finally{
+    $("saveCharacter").disabled = false;
+  }
+}
+
+async function generateMissingImages(){
+  $("generateMissing").disabled = true;
+  $("rosterResult").textContent = "saving uploads...";
+  try{
+    const character = await saveCharacter(false);
+    const local = $("provider").value === "codex_local";
+    $("rosterResult").textContent = local ? "queueing missing images..." : "generating missing images...";
+    const endpoint = local ? "queue-missing" : "generate-missing";
+    const result = await api(`/api/roster/characters/${character.index}/${endpoint}`, {
+      method:"POST",
+      body:JSON.stringify({
+        brand:$("brand").value,
+        provider:$("provider").value,
+        opening_style:$("openingStyle").value,
+        product_style:$("productStyle").value
+      })
+    });
+    rosterData = await api(`/api/roster?brand=${brandParam()}`);
+    if(result.job){
+      imageJobs = [result.job, ...imageJobs.filter(job => job.job_id !== result.job.job_id)];
+    }
+    renderRosterSelectors(character.index);
+    if(local){
+      if(result.already_ready) $("rosterResult").textContent = "all assets required by the current styles are ready";
+      else $("rosterResult").textContent = `${result.created ? "queued" : "already queued"} / ${result.job.job_id} / ${result.job.targets.length} image${result.job.targets.length === 1 ? "" : "s"}`;
+    }else{
+      const generated = result.generation.generated || [];
+      $("rosterResult").textContent = generated.length
+        ? `generated ${generated.join(", ")}`
+        : "all assets required by the current styles are ready";
+    }
+  }catch(err){
+    $("rosterResult").textContent = err.message;
+  }finally{
+    $("generateMissing").disabled = !rosterData.can_generate;
+  }
 }
 
 async function previewPrompt(){
@@ -691,13 +1302,28 @@ function render(){
 }
 
 async function refresh(){
-  const [postRows, runRows] = await Promise.all([api("/api/posts"), api("/api/runs")]);
+  const [postRows, runRows, nextImageJobs, nextVideoJobs, nextHeygenStatus] = await Promise.all([
+    api("/api/posts"), api("/api/runs"), api("/api/image-jobs"),
+    api("/api/heygen/jobs"), api("/api/heygen/status")
+  ]);
+  const previousStatuses = new Map(imageJobs.map(job => [job.job_id, job.status]));
   posts = postRows;
   runs = runRows;
+  imageJobs = nextImageJobs;
+  videoJobs = nextVideoJobs;
+  heygenStatus = nextHeygenStatus;
+  const completedNow = imageJobs.some(job => job.status === "completed" && previousStatuses.get(job.job_id) && previousStatuses.get(job.job_id) !== "completed");
+  if(completedNow){
+    rosterData = await api(`/api/roster?brand=${brandParam()}`);
+    renderRosterSelectors(selectedCharacterIndex);
+  }else{
+    renderCharacterJobStatus((rosterData.characters || [])[selectedCharacterIndex] || null);
+  }
   $("stamp").textContent = `${posts.length} posts / ${new Date().toLocaleString()}`;
   renderStats();
   render();
   renderRuns();
+  renderHeygen();
   if(selectedPost) showDetail(selectedPost, false);
 }
 
@@ -708,8 +1334,12 @@ async function changeBrand(){
   $("formats").value = "slideshow";
   $("savePrompt").disabled = !info.has_image_prompts;
   $("apiState").textContent = `${info.display_name || "brand"} / ${configData.roster_count} roster characters / ${configData.image_provider}`;
-  assetRows = await api(`/api/assets/status?brand=${brandParam()}`);
+  [assetRows, rosterData] = await Promise.all([
+    api(`/api/assets/status?brand=${brandParam()}`),
+    api(`/api/roster?brand=${brandParam()}`)
+  ]);
   renderAssets();
+  renderRosterSelectors();
   $("beforeTemplate").value = "";
   $("openingPrompt").value = "";
   $("scanPrompt").value = "";
@@ -736,7 +1366,8 @@ async function startRun(){
         hook:$("promptHook").value.trim(),
         opening_style:$("openingStyle").value,
         product_style:$("productStyle").value,
-        product_slide_caption:$("productCaption").value
+        product_slide_caption:$("productCaption").value,
+        character_slug:$("runCharacter").value
       })
     });
     await refresh();
@@ -915,6 +1546,27 @@ function setFilter(f){
 
 $("startRun").onclick = startRun;
 $("brand").onchange = changeBrand;
+$("provider").onchange = updateImageActionLabel;
+$("rosterCharacter").onchange = event => selectRosterCharacter(event.target.value);
+$("newCharacter").onclick = () => selectRosterCharacter(-1);
+$("saveCharacter").onclick = async () => {
+  try{ await saveCharacter(); }
+  catch(err){ $("rosterResult").textContent = err.message; }
+};
+$("generateMissing").onclick = generateMissingImages;
+$("queueHeygen").onclick = queueHeygenVideo;
+$("queueHeygenBatch").onclick = queueHeygenBatch;
+$("previewHeygenBatch").onclick = buildHeygenBatchPreview;
+$("heygenBatchCount").onchange = buildHeygenBatchPreview;
+$("heygenBatchStart").onchange = buildHeygenBatchPreview;
+$("heygenModeSingle").onclick = () => setHeygenMode("single");
+$("heygenModeBatch").onclick = () => setHeygenMode("batch");
+$("testHeygen").onclick = testHeygenConnection;
+$("heygenAuthMode").onchange = renderHeygen;
+$("heygenTitle").oninput = () => { $("heygenTitle").dataset.auto = "false"; };
+CHARACTER_ASSETS.forEach(name => {
+  $(`asset-${name}`).onchange = () => previewSelectedUpload(name);
+});
 $("previewPrompt").onclick = previewPrompt;
 $("savePrompt").onclick = savePrompt;
 $("runPromptTest").onclick = runPromptTest;

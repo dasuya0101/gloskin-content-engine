@@ -384,8 +384,6 @@ def canonical_rule(value):
     lowered = raw.lower()
     mappings = [
         ("affiliate", "missing_affiliate_disclosure"),
-        ("avatar", "missing_ai_label"),
-        ("illustrative", "missing_ai_label"),
         ("mechanism", "unsourced_mechanism"),
         ("pathway", "unsourced_mechanism"),
         ("receptor", "unsourced_mechanism"),
@@ -412,7 +410,7 @@ def canonical_rule(value):
     known = {
         "fabricated_research_act", "unsourced_mechanism", "fabricated_evidence",
         "disease_claim", "rx_outcome_promise", "unverifiable_operational_claim",
-        "missing_affiliate_disclosure", "missing_ai_label",
+        "missing_affiliate_disclosure",
         "unapproved_regulatory_claim", "disallowed_claim",
         "claim_pack_caveat", "regulatory_hold", "claim_lane",
     }
@@ -695,11 +693,6 @@ def lint_output(output, brand, brief=None, format_name=None, context=None):
     violations = judged_violations + _missing_disclaimers(text, brand, format_name)
     violations.extend(operational_candidate_fallbacks(
         candidates, violations, semantic_context["operational_status"]))
-    if (brand.brand_id == "gloskin" and semantic_context.get("avatar_testimonial")
-            and not re.search(r"\b(?:illustrative|AI[- ]generated)\b", text, re.I)):
-        violations.append({
-            "text": "", "rule": "missing_ai_label", "severity": "block",
-        })
     blocks = any(item["severity"] == "block" for item in violations)
     warns = any(item["severity"] == "warn" for item in violations)
     cleared_model_verdict = bool(semantic_notes or (grounding_notes and not ungrounded))

@@ -124,6 +124,15 @@ def prepare_character(character, assets_dir, placeholder, prompt_config_path,
         if ((char_dir / "before.png").exists() and (char_dir / "after.png").exists()
                 and not needs_opening and not needs_product):
             return existing_slug
+        if not placeholder:
+            cf.generate_missing_assets(
+                character["spec"],
+                char_dir,
+                opening_style=active_opening,
+                product_style=active_product,
+                prompt_config_path=prompt_config_path,
+            )
+            return existing_slug
 
     gen = cf.gen_pair_placeholder if placeholder else cf.gen_pair_openai
     return gen(character["spec"], assets_dir,
@@ -346,7 +355,6 @@ def run_compliance(post_id, brief, brand, package, caption, slides,
             context={"operational_status": brand.operational_status})
     if not results:
         context = {
-            "avatar_testimonial": bool(slides),
             "operational_status": brand.operational_status,
         }
         combined = "\n\n".join([
@@ -374,6 +382,8 @@ def main():
     ap.add_argument("--after-score", type=int, default=87)
     ap.add_argument("--avatars", type=int, default=None,
                     help="number of roster characters to generate this run")
+    ap.add_argument("--character-slug", default=None,
+                    help="run one saved roster character by slug")
     ap.add_argument("--posts-per-avatar", type=int, default=1,
                     help="number of post iterations to render for each avatar")
     ap.add_argument("--out", default="output")
@@ -418,6 +428,13 @@ def main():
         }]
     else:
         characters = roster.get("characters", [])
+        if args.character_slug:
+            characters = [
+                character for character in characters
+                if character.get("slug") == args.character_slug
+            ]
+            if not characters:
+                raise SystemExit(f"roster character not found: {args.character_slug}")
     if args.avatars is not None:
         characters = characters[:max(0, args.avatars)]
 

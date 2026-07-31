@@ -13,6 +13,9 @@ __pycache__/
 *.log
 *.err
 runs/
+image_jobs/
+video_jobs/
+videos/
 
 # Generated review/output artifacts
 assets/

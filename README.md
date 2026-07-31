@@ -133,6 +133,10 @@ http://127.0.0.1:5055
 
 The dashboard can:
 - start `content_job.py` with dashboard-controlled `avatars` and `posts / avatar`
+- create and edit saved roster characters, with previews for all five image slots
+- upload any mix of before, opening, scan, after, and product-prop images
+- generate only the missing character images from an uploaded identity reference
+- select one saved roster character for a batch or use normal roster order
 - select `gloskin` or `vendrarx`
 - request output formats with the `Formats` field
 - preview and save the actual character image prompt templates
@@ -158,6 +162,37 @@ Prompt testing workflow:
 4. Click `Preview` to see the rendered prompts with `{age}`, `{gender}`, and `{ethnicity}` filled in.
 5. Click `Save prompts` to make those templates the actual prompts used by `character_factory.py`.
 6. Click `Run 1-post test`. Keep `placeholder` on for layout-only tests; turn it off when your image API credentials are ready and you want to spend a real generation.
+
+Character roster workflow:
+1. Open **Character Roster & Assets** and choose an existing character or click **New character**.
+2. Enter the character spec, scores, and default hook. Every image slot is optional.
+3. Pick any existing images you have. The dashboard previews local selections immediately; click **Save character** to store them under `assets/<slug>/`.
+4. Keep **Image source** set to **codex subscription / local queue** and click **Queue missing images**. A single before, scan, after, or opening face can serve as the identity reference. Opening and product-prop images are queued only when their Prompt Lab styles request them.
+5. Run a Codex task using `docs/codex_image_queue.md`. Built-in GPT Image fills only absent files and marks the folder job complete; no `OPENAI_API_KEY` is used.
+6. In **Batch Generator**, choose the saved character from **Roster character** to run that character alone, or leave **Roster order** selected to use the first `Avatars` entries. Local Codex batches wait until required image jobs are complete.
+
+Uploaded images and queued jobs remain local. The default Codex queue is processed through the built-in image tool and uses the signed-in Codex subscription. Selecting `openai` or `custom` instead uses the API router and its credentials from `.env`.
+
+Asset requirements: `before.png`, `scan.png`, and `after.png` are core character outputs, although uploading each one is optional because Codex can generate the missing files. `opening.png` is an optional identity-preserving hook. `product_prop.png` is an optional product-only visual and does not contain the character.
+
+Queue inspection commands:
+```text
+python image_queue.py list --status queued
+python image_queue.py claim
+python image_queue.py complete --job <job_id>
+```
+
+The HeyGen talking-head queue is available in the dashboard and documented in
+`docs/heygen_video_adapter.md`. Select a roster character, portrait, approved
+script, and credit route, then queue the video. Subscription-backed jobs require a
+HeyGen Remote MCP/OAuth connection in the processing Codex task; direct API-key
+jobs use HeyGen's separate API wallet and can be tested and started in the local
+dashboard. Neither route publishes automatically.
+
+Video batch mode defaults to three roster characters and prepares a before clip
+plus an after clip for each one. Review and edit all six rendered scripts in the
+dashboard before queueing; the batch is rejected if any selected portrait is
+missing.
 
 ## Publishing and metrics integrations
 Manual publishing is the working first adapter. CLI helpers:
