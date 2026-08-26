@@ -1,6 +1,8 @@
 import unittest
 from pathlib import Path
 
+from PIL import Image
+
 import content_job
 import publish
 import slideshow_maker
@@ -68,6 +70,16 @@ class PublishGateTests(unittest.TestCase):
 
     def test_carousel_canvas_is_four_by_five(self):
         self.assertEqual((slideshow_maker.W, slideshow_maker.H), (1080, 1350))
+
+    def test_phone_mockup_adds_frame_without_recoloring_screen(self):
+        screen_color = (119, 87, 151)
+        screen = Image.new("RGB", (200, 430), screen_color)
+        device = slideshow_maker.phone_mockup(screen)
+        self.assertGreater(device.width, screen.width)
+        self.assertGreater(device.height, screen.height)
+        self.assertEqual(device.getpixel((device.width // 2, device.height // 2))[:3],
+                         screen_color)
+        self.assertLess(max(device.getpixel((device.width // 2, 2))[:3]), 40)
 
     def test_missing_aigc_flag_is_a_non_overridable_block(self):
         post = synthetic_post()

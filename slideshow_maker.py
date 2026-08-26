@@ -279,33 +279,80 @@ def render_image_top(slide, palette):
     return base.convert("RGB")
 
 
+def phone_mockup(screen):
+    """Place a full-screen app capture inside a modern black phone frame."""
+    screen = screen.convert("RGB")
+    bezel = max(14, round(screen.width * 0.045))
+    rim = max(4, round(screen.width * 0.012))
+    side = max(5, round(screen.width * 0.015))
+    outer_w = screen.width + 2 * (bezel + rim)
+    outer_h = screen.height + 2 * (bezel + rim)
+    device = Image.new("RGBA", (outer_w + side * 2, outer_h), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(device)
+    left = side
+    right = left + outer_w - 1
+    outer_radius = max(42, round(outer_w * 0.12))
+
+    # Physical controls sit outside the frame, like the App Store mockup.
+    button = (31, 32, 36, 255)
+    draw.rounded_rectangle(
+        [left - side, round(outer_h * 0.19), left + 2, round(outer_h * 0.27)],
+        radius=side, fill=button)
+    draw.rounded_rectangle(
+        [left - side, round(outer_h * 0.30), left + 2, round(outer_h * 0.41)],
+        radius=side, fill=button)
+    draw.rounded_rectangle(
+        [right - 2, round(outer_h * 0.25), right + side, round(outer_h * 0.38)],
+        radius=side, fill=button)
+
+    # Layered rim gives the frame a black-glass and dark-metal edge.
+    draw.rounded_rectangle(
+        [left, 0, right, outer_h - 1], radius=outer_radius,
+        fill=(9, 10, 13, 255), outline=(4, 4, 5, 255), width=max(3, rim))
+    draw.rounded_rectangle(
+        [left + rim, rim, right - rim, outer_h - rim - 1],
+        radius=outer_radius - rim, fill=(70, 72, 78, 255),
+        outline=(151, 153, 160, 255), width=max(2, rim // 2))
+    draw.rounded_rectangle(
+        [left + rim * 2, rim * 2, right - rim * 2, outer_h - rim * 2 - 1],
+        radius=outer_radius - rim * 2, fill=(5, 5, 7, 255))
+
+    screen_x = left + bezel + rim
+    screen_y = bezel + rim
+    screen_radius = max(32, round(screen.width * 0.105))
+    mask = Image.new("L", screen.size, 0)
+    ImageDraw.Draw(mask).rounded_rectangle(
+        [0, 0, screen.width - 1, screen.height - 1],
+        radius=screen_radius, fill=255)
+    device.paste(screen, (screen_x, screen_y), mask)
+    return device
+
+
 def render_screenshot_slide(slide, palette):
-    """Frames a REAL app screenshot on the brand background with a soft shadow
-    and optional caption. Use this for authentic app-proof slides instead of
-    re-creating UI."""
+    """Frame a real app screenshot inside a phone mockup on the brand canvas."""
     text_rgb = hex_to_rgb(palette["text"])
     base = gradient_bg(palette["bg1"], palette["bg2"])
     shot = Image.open(slide["image"]).convert("RGB")
 
     caption = slide.get("caption")
-    target_h = int(H * (0.62 if caption else 0.82))
+    target_h = int(H * (0.60 if caption else 0.78))
     scale = target_h / shot.height
     sw, sh = int(shot.width * scale), int(shot.height * scale)
     shot = shot.resize((sw, sh), Image.LANCZOS)
+    device = phone_mockup(shot)
 
-    # rounded corners + drop shadow
-    rad = 48
-    mask = Image.new("L", (sw, sh), 0)
-    ImageDraw.Draw(mask).rounded_rectangle([0, 0, sw, sh], radius=rad, fill=255)
-    x = (W - sw) // 2
-    y = (H - sh) // 2 + (75 if caption else 0)
+    x = (W - device.width) // 2
+    y = (H - device.height) // 2 + (75 if caption else 0)
     shadow = Image.new("RGBA", (W, H), (0, 0, 0, 0))
     sd = ImageDraw.Draw(shadow)
-    sd.rounded_rectangle([x, y + 18, x + sw, y + sh + 18], radius=rad,
-                         fill=(40, 20, 70, 110))
-    shadow = shadow.filter(ImageFilter.GaussianBlur(40))
-    base = Image.alpha_composite(base.convert("RGBA"), shadow).convert("RGB")
-    base.paste(shot, (x, y), mask)
+    shadow_pad = max(20, device.width // 12)
+    sd.rounded_rectangle(
+        [x - shadow_pad, y + 18, x + device.width + shadow_pad,
+         y + device.height + 30],
+        radius=max(56, device.width // 7), fill=(32, 16, 54, 120))
+    shadow = shadow.filter(ImageFilter.GaussianBlur(46))
+    base = Image.alpha_composite(base.convert("RGBA"), shadow)
+    base.alpha_composite(device, (x, y))
 
     if caption:
         draw = ImageDraw.Draw(base)
