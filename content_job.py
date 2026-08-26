@@ -291,7 +291,7 @@ def build_testimonial_brief(render_slug, char_dir, shot_before, shot_after, char
         {
             "kind": "hook",
             "layout": "image_top",
-            "label": "reference" if synthetic else "before",
+            "label": None if synthetic else "before",
             "image": str(face_asset(char_dir, "opening", "before")),
             "text": hook,
         },
@@ -335,7 +335,7 @@ def build_testimonial_brief(render_slug, char_dir, shot_before, shot_after, char
         {
             "kind": "body",
             "layout": "image_top",
-            "label": "progress" if synthetic else "after",
+            "label": None if synthetic else "after",
             "image": str(char_dir / "after.png"),
             "text": (
                 slide_copy["progress_text"]

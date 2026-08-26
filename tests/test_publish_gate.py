@@ -52,6 +52,8 @@ class PublishGateTests(unittest.TestCase):
         self.assertEqual(brief["slides"][2]["caption"], "Result copy")
         self.assertEqual(brief["slides"][3]["text"], "Progress copy")
         self.assertEqual(brief["slides"][3]["subtext"], "Results vary.")
+        self.assertIsNone(brief["slides"][0]["label"])
+        self.assertIsNone(brief["slides"][3]["label"])
 
     def test_render_key_is_short_deterministic_and_unique(self):
         first = content_job.compact_render_key(
