@@ -27,7 +27,7 @@ fallback and is close enough for fast-scroll social.
 import argparse
 import json
 import os
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 # ---- Scan Results template geometry (722 x 1568) ----------------------------
 REGIONS = {
@@ -39,8 +39,10 @@ REGIONS = {
     "score_h": 80,                         # target glyph height (px)
     "bar": (60, 1244, 685, 1263),          # progress track (x0,y0,x1,y1)
     "clean_patch": (330, 1112, 470, 1208),  # empty card bg to copy over old number
+    "footer_artifact": (0, 1534, 722, 1568), # clipped body copy below the tab bar
 }
 BAR_GREEN = (52, 199, 89)
+BAR_AMBER = (253, 153, 46)
 BAR_TRACK = (228, 228, 232)
 
 
@@ -206,6 +208,21 @@ def apply_text_patches(template_path, out_path, patches=None):
     return out_path
 
 
+def score_bar_color(score):
+    """Match the supplied app states: 52 is amber and 87 is green."""
+    return BAR_GREEN if score >= 80 else BAR_AMBER
+
+
+def clean_scan_footer(base):
+    """Remove clipped off-screen copy visible beneath the real tab bar."""
+    x0, y0, x1, y1 = REGIONS["footer_artifact"]
+    if base.width < x1 or base.height < y1:
+        return base
+    footer = base.crop((x0, y0, x1, y1)).filter(ImageFilter.GaussianBlur(18))
+    base.paste(footer, (x0, y0))
+    return base
+
+
 def composite_scan_result(template_path, face_path, score, out_path, patches=None):
     base = Image.open(template_path).convert("RGB")
     draw = ImageDraw.Draw(base)
@@ -233,7 +250,11 @@ def composite_scan_result(template_path, face_path, score, out_path, patches=Non
     draw.rounded_rectangle([bx0, by0, bx1, by1], radius=r, fill=BAR_TRACK)
     fill_w = int((bx1 - bx0) * max(0, min(100, score)) / 100)
     if fill_w > 2 * r:
-        draw.rounded_rectangle([bx0, by0, bx0 + fill_w, by1], radius=r, fill=BAR_GREEN)
+        draw.rounded_rectangle(
+            [bx0, by0, bx0 + fill_w, by1], radius=r,
+            fill=score_bar_color(score))
+
+    clean_scan_footer(base)
 
     for patch in patches or []:
         draw_text_patch(base, patch)

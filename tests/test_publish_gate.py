@@ -1,10 +1,11 @@
 import unittest
 from pathlib import Path
 
-from PIL import Image
+from PIL import Image, ImageDraw
 
 import content_job
 import publish
+import screenshot_factory
 import slideshow_maker
 from brand_loader import load_brand
 
@@ -80,6 +81,20 @@ class PublishGateTests(unittest.TestCase):
         self.assertEqual(device.getpixel((device.width // 2, device.height // 2))[:3],
                          screen_color)
         self.assertLess(max(device.getpixel((device.width // 2, 2))[:3]), 40)
+
+    def test_scan_score_bar_matches_supplied_app_states(self):
+        self.assertEqual(screenshot_factory.score_bar_color(54),
+                         screenshot_factory.BAR_AMBER)
+        self.assertEqual(screenshot_factory.score_bar_color(87),
+                         screenshot_factory.BAR_GREEN)
+
+    def test_scan_footer_cleanup_removes_clipped_copy(self):
+        image = Image.new("RGB", (722, 1568), (205, 194, 230))
+        draw = ImageDraw.Draw(image)
+        draw.text((180, 1540), "Your skin is looking healthy", fill=(10, 10, 10))
+        screenshot_factory.clean_scan_footer(image)
+        footer = image.crop(screenshot_factory.REGIONS["footer_artifact"])
+        self.assertGreater(min(channel for pixel in footer.getdata() for channel in pixel), 80)
 
     def test_missing_aigc_flag_is_a_non_overridable_block(self):
         post = synthetic_post()
