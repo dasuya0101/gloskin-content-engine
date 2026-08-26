@@ -16,6 +16,7 @@ runs/
 image_jobs/
 video_jobs/
 videos/
+workspace_data/
 
 # Generated review/output artifacts
 assets/

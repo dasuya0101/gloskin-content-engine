@@ -41,6 +41,86 @@
       "after_score": 89,
       "hook": "Teenage acne wrecked\r\nmy self-esteem.",
       "slug": "woman_late_teens_middle_eastern"
+    },
+    {
+      "slug": "fixture_woman_mst2",
+      "spec": "woman, 28, MST 2 skin tone",
+      "before_score": 54,
+      "after_score": 87,
+      "hook": "What would an AI skin scan\nnotice first?",
+      "source_type": "synthetic_fixture_set",
+      "fixture_set": {
+        "identity_family": "synthetic-A-r01",
+        "metadata": "assets/fixture_woman_mst2/fixture_set.json",
+        "default_before_severity": "moderate",
+        "default_scan_severity": "moderate",
+        "default_after_severity": "clear",
+        "not_longitudinal": true
+      }
+    },
+    {
+      "slug": "fixture_woman_mst4",
+      "spec": "woman, 28, MST 4 skin tone",
+      "before_score": 54,
+      "after_score": 87,
+      "hook": "What would an AI skin scan\nnotice first?",
+      "source_type": "synthetic_fixture_set",
+      "fixture_set": {
+        "identity_family": "synthetic-B-r01",
+        "metadata": "assets/fixture_woman_mst4/fixture_set.json",
+        "default_before_severity": "moderate",
+        "default_scan_severity": "moderate",
+        "default_after_severity": "clear",
+        "not_longitudinal": true
+      }
+    },
+    {
+      "slug": "fixture_woman_mst6",
+      "spec": "woman, 28, MST 6 skin tone",
+      "before_score": 54,
+      "after_score": 87,
+      "hook": "What would an AI skin scan\nnotice first?",
+      "source_type": "synthetic_fixture_set",
+      "fixture_set": {
+        "identity_family": "synthetic-C-r01",
+        "metadata": "assets/fixture_woman_mst6/fixture_set.json",
+        "default_before_severity": "moderate",
+        "default_scan_severity": "moderate",
+        "default_after_severity": "clear",
+        "not_longitudinal": true
+      }
+    },
+    {
+      "slug": "fixture_woman_mst8",
+      "spec": "woman, 28, MST 8 skin tone",
+      "before_score": 54,
+      "after_score": 87,
+      "hook": "What would an AI skin scan\nnotice first?",
+      "source_type": "synthetic_fixture_set",
+      "fixture_set": {
+        "identity_family": "synthetic-D-r01",
+        "metadata": "assets/fixture_woman_mst8/fixture_set.json",
+        "default_before_severity": "moderate",
+        "default_scan_severity": "moderate",
+        "default_after_severity": "clear",
+        "not_longitudinal": true
+      }
+    },
+    {
+      "slug": "fixture_woman_mst10",
+      "spec": "woman, 28, MST 10 skin tone",
+      "before_score": 54,
+      "after_score": 87,
+      "hook": "What would an AI skin scan\nnotice first?",
+      "source_type": "synthetic_fixture_set",
+      "fixture_set": {
+        "identity_family": "synthetic-E-r01",
+        "metadata": "assets/fixture_woman_mst10/fixture_set.json",
+        "default_before_severity": "moderate",
+        "default_scan_severity": "moderate",
+        "default_after_severity": "clear",
+        "not_longitudinal": true
+      }
     }
   ]
 }

@@ -24,16 +24,54 @@
   }
   *{box-sizing:border-box}
   body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14px}
-  header{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;padding:22px 28px 16px;border-bottom:1px solid var(--line);background:#101217}
+  header{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;padding:18px 28px 14px;border-bottom:1px solid var(--line);background:#101217}
+  .header-actions{display:flex;align-items:end;justify-content:flex-end;gap:18px}
+  .brand-switch{width:min(220px,34vw)}
+  .brand-switch label{margin-bottom:4px}
+  .brand-switch select{min-height:34px;padding:6px 9px}
+  .project-switch{width:min(260px,38vw)}
+  .switch-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px}
+  .switch-row button{min-height:34px;padding:5px 9px}
   h1{margin:0;font-size:22px;font-weight:700;letter-spacing:0}
   .sub{color:var(--dim);font-family:var(--mono);font-size:12px}
   .shell{padding:20px 28px 32px}
+  .workspace-nav{display:flex;gap:4px;align-items:center;margin-bottom:18px;border-bottom:1px solid var(--line);overflow-x:auto}
+  .workspace-nav{scrollbar-width:none}
+  .workspace-nav::-webkit-scrollbar{display:none}
+  .workspace-nav button{border:0;border-bottom:2px solid transparent;border-radius:0;background:transparent;color:var(--dim);padding:10px 14px;white-space:nowrap}
+  .workspace-nav button.on{color:var(--ink);border-bottom-color:var(--accent)}
+  .workspace[hidden]{display:none}
+  .workspace-heading{display:flex;justify-content:space-between;gap:16px;align-items:end;margin-bottom:14px}
+  .workspace-heading h2{margin:0;font-size:18px;letter-spacing:0}
   .toolbar{display:grid;grid-template-columns:minmax(440px,1.1fr) minmax(360px,.9fr);gap:16px;align-items:stretch;margin-bottom:18px}
   .lab{display:grid;grid-template-columns:minmax(480px,1fr) minmax(360px,.8fr);gap:16px;margin-bottom:18px}
   .ops{display:grid;grid-template-columns:minmax(440px,1fr) minmax(360px,1fr);gap:16px;margin-bottom:18px}
   .section{background:var(--band);border:1px solid var(--line);border-radius:8px;padding:16px}
   .section h2{margin:0 0 14px;font-size:13px;font-weight:700;color:var(--dim);font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em}
   .run-grid{display:grid;grid-template-columns:repeat(3,minmax(130px,1fr));gap:10px;align-items:end}
+  .section-rule{border-top:1px solid var(--line);margin-top:14px;padding-top:14px}
+  .section-rule-head{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:10px}
+  .section-rule-head h3{margin:0;font-size:13px}
+  .recipe-controls{display:grid;grid-template-columns:minmax(180px,1.3fr) minmax(180px,1fr) auto auto;gap:8px;align-items:end}
+  .recipe-result{margin-top:8px}
+  .slideshow-drafts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .slideshow-draft{display:grid;grid-template-columns:70px minmax(0,1fr);gap:9px;border:1px solid var(--line);border-radius:7px;background:var(--panel);padding:8px;min-width:0}
+  .slideshow-draft img,.slideshow-draft .matrix-portrait-empty{width:70px}
+  .slideshow-draft textarea{min-height:82px;resize:vertical;font-size:12px;line-height:1.35}
+  .variant-controls{display:grid;grid-template-columns:minmax(170px,1.2fr) minmax(150px,1fr) minmax(160px,1fr) auto;gap:8px;align-items:end}
+  .variant-assets{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:10px 0}
+  .variant-assets .checkline{height:28px}
+  .variant-gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}
+  .variant-row{border-top:1px solid var(--line);padding-top:10px;min-width:0}
+  .variant-row:first-child{border-top:0;padding-top:0}
+  .variant-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:7px}
+  .variant-head strong{overflow-wrap:anywhere}
+  .variant-strip{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px}
+  .variant-strip img,.variant-strip .matrix-portrait-empty{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:5px}
+  .variant-strip .matrix-portrait-empty{font-size:9px;padding:4px}
+  .project-paths{display:grid;gap:6px}
+  .project-path{display:grid;grid-template-columns:100px minmax(0,1fr);gap:10px;padding:7px 0;border-bottom:1px solid var(--line)}
+  .project-path:last-child{border-bottom:0}
   label{display:block;color:var(--dim);font-size:11px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
   input,select,button,textarea{font:inherit}
   input,select,textarea{width:100%;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:7px;padding:9px 10px;min-height:38px}
@@ -69,6 +107,14 @@
   .asset-preview.has-image img{display:block}
   .asset-preview.has-image .asset-empty{display:none}
   .asset-empty{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);font-family:var(--mono);font-size:11px}
+  .fixture-set{margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+  .fixture-set[hidden]{display:none}
+  .fixture-set-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:8px}
+  .fixture-set-head h3{margin:0;font-size:13px}
+  .fixture-levels{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+  .fixture-level{display:block;color:var(--ink);text-decoration:none;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--panel)}
+  .fixture-level img{display:block;width:100%;aspect-ratio:3/4;object-fit:cover;background:#0b0d11}
+  .fixture-level span{display:block;padding:6px 7px;font-size:11px;text-transform:capitalize}
   .character-asset input[type="file"]{min-height:36px;min-width:0;max-width:100%;padding:6px;font-size:11px;color:transparent}
   .character-asset input[type="file"]::file-selector-button{width:100%;background:var(--panel2);color:var(--ink);border:1px solid var(--line);border-radius:5px;padding:6px;cursor:pointer}
   .roster-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:12px}
@@ -83,13 +129,72 @@
   .mode-tabs{display:flex;gap:6px;margin-bottom:12px}
   .mode-tabs button{min-width:132px}
   .mode-panel[hidden]{display:none}
-  .batch-drafts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}
+  .batch-drafts{display:grid;grid-template-columns:1fr;gap:10px;margin-top:12px}
   .batch-draft{display:grid;grid-template-columns:72px minmax(0,1fr);gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:9px;min-width:0}
   .batch-draft>div{min-width:0}
   .batch-draft label{overflow-wrap:anywhere}
   .batch-draft img,.batch-portrait-empty{width:72px;aspect-ratio:9/16;object-fit:cover;border:1px solid var(--line);border-radius:5px;background:#0b0d11}
   .batch-portrait-empty{display:grid;place-items:center;color:var(--bad);font-family:var(--mono);font-size:9px;text-align:center;padding:4px}
   .batch-draft textarea{min-width:0;min-height:112px;resize:vertical;font-size:12px;line-height:1.35}
+  .character-picker{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:8px}
+  .character-choice{display:grid;grid-template-columns:auto 42px minmax(0,1fr);gap:8px;align-items:center;border:1px solid var(--line);border-radius:6px;padding:7px;background:var(--panel);cursor:pointer;min-width:0}
+  .character-choice input{margin:0}
+  .character-choice img,.choice-empty{width:42px;aspect-ratio:9/16;object-fit:cover;border:1px solid var(--line);border-radius:4px;background:#0b0d11}
+  .choice-empty{display:grid;place-items:center;color:var(--muted);font-family:var(--mono);font-size:8px}
+  .character-choice strong,.character-choice span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .character-choice span{color:var(--dim);font-size:11px}
+  .matrix-scroll{overflow-x:auto}
+  .character-matrix{display:grid;border:1px solid var(--line);border-radius:7px;overflow:hidden}
+  .matrix-row{display:grid;grid-template-columns:minmax(190px,1.4fr) repeat(5,minmax(70px,.65fr)) minmax(82px,.55fr);align-items:center;background:var(--panel);border-bottom:1px solid var(--line);min-width:760px}
+  .matrix-row:last-child{border-bottom:0}
+  .matrix-head{background:#151820;color:var(--dim);font-family:var(--mono);font-size:10px;text-transform:uppercase}
+  .matrix-cell{padding:8px;border-right:1px solid var(--line);min-width:0}
+  .matrix-cell:last-child{border-right:0}
+  .matrix-character{display:grid;grid-template-columns:auto 42px minmax(0,1fr);gap:8px;align-items:center}
+  .matrix-character input{margin:0}
+  .matrix-character>div{min-width:0}
+  .matrix-character strong{display:block;font-size:11px;overflow-wrap:anywhere;line-height:1.25}
+  .matrix-character img,.matrix-portrait-empty{width:42px;aspect-ratio:9/16;object-fit:cover;border-radius:4px;background:#0b0d11}
+  .matrix-portrait-empty{display:grid;place-items:center;color:var(--muted);font-size:8px}
+  .asset-state{display:flex;align-items:center;gap:6px;font-size:11px}
+  .asset-state .dot{flex:0 0 auto}
+  .asset-state.ready .dot{background:var(--good)}
+  .asset-state.optional .dot{background:var(--muted)}
+  .asset-state.missing .dot{background:var(--bad)}
+  .video-character-group{border:1px solid var(--line);border-radius:7px;background:var(--panel);padding:10px;min-width:0}
+  .video-character-head{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:9px}
+  .paired-clips{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+  .clip-draft{display:grid;grid-template-columns:66px minmax(0,1fr);gap:8px;min-width:0}
+  .clip-draft img,.clip-draft .batch-portrait-empty{width:66px}
+  .clip-draft textarea{min-height:112px;resize:vertical;font-size:12px;line-height:1.35}
+  .review-toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+  .review-toolbar .spacer{flex:1}
+  .batch-list{display:grid;gap:10px;margin-bottom:20px}
+  .batch-card{border:1px solid var(--line);border-radius:8px;background:var(--band);overflow:hidden}
+  .batch-card.legacy{border-style:dashed}
+  .batch-header{display:grid;grid-template-columns:minmax(180px,1fr) repeat(4,minmax(80px,.45fr)) auto;gap:10px;align-items:center;padding:11px 13px}
+  .batch-title{min-width:0}
+  .batch-title strong,.batch-title span{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .batch-title span{color:var(--dim);font-family:var(--mono);font-size:10px;margin-top:3px}
+  .batch-metric{font-family:var(--mono);font-size:11px;color:var(--dim)}
+  .batch-metric strong{display:block;color:var(--ink);font-size:14px;font-family:var(--sans)}
+  .batch-detail{border-top:1px solid var(--line);padding:12px;background:#14171d}
+  .review-character{display:grid;grid-template-columns:minmax(150px,.45fr) minmax(0,1.8fr);gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+  .review-character:last-child{border-bottom:0}
+  .review-character-id img{width:76px;aspect-ratio:9/16;object-fit:cover;border-radius:5px;background:#0b0d11;margin-bottom:7px}
+  .iteration-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:9px}
+  .iteration-panel[hidden]{display:none}
+  .slide-review{display:grid;grid-template-columns:minmax(170px,240px) minmax(0,1fr);gap:12px}
+  .slide-stage img{width:100%;aspect-ratio:9/16;object-fit:contain;background:#080a0e;border:1px solid var(--line);border-radius:6px}
+  .slide-filmstrip{display:grid;grid-template-columns:repeat(5,minmax(54px,1fr));gap:6px;margin-bottom:10px}
+  .slide-filmstrip button{padding:3px;min-height:0}
+  .slide-filmstrip img{display:block;width:100%;aspect-ratio:9/16;object-fit:cover;border-radius:3px}
+  .review-copy{white-space:pre-wrap;line-height:1.4;margin-bottom:10px}
+  .video-review-pair{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .video-review-clip{display:grid;grid-template-columns:100px minmax(0,1fr);gap:10px;border:1px solid var(--line);border-radius:7px;padding:9px;background:var(--panel)}
+  .video-review-clip video,.video-review-clip img{width:100px;height:auto;aspect-ratio:9/16;object-fit:cover}
+  .legacy-block{margin-top:18px}
+  .legacy-block summary{cursor:pointer;color:var(--dim);font-family:var(--mono);font-size:12px;margin-bottom:12px}
   .badge{font-family:var(--mono);font-size:10px;border:1px solid var(--line);border-radius:999px;padding:3px 7px;color:var(--dim)}
   .badge.ok{border-color:#477a52;color:var(--good)}
   .badge.missing{border-color:#7a4949;color:var(--bad)}
@@ -143,6 +248,8 @@
   .caption-box{white-space:pre-wrap;background:#0b0d11;border:1px solid var(--line);border-radius:7px;padding:10px;color:#d8dde6;line-height:1.35}
   a{color:var(--accent)}
   @media (max-width:980px){
+    header{align-items:flex-start}
+    .header-actions{align-items:flex-end}
     .toolbar{grid-template-columns:minmax(0,1fr)}
     .lab{grid-template-columns:minmax(0,1fr)}
     .ops{grid-template-columns:minmax(0,1fr)}
@@ -151,6 +258,8 @@
     .roster-head>div{min-width:0;width:100%}
     .prompt-grid{grid-template-columns:1fr}
     .prompt-grid.three{grid-template-columns:1fr}
+    .recipe-controls{grid-template-columns:1fr 1fr}
+    .variant-controls{grid-template-columns:1fr 1fr}
     .roster-meta{grid-template-columns:1fr 1fr}
     .character-assets{grid-template-columns:repeat(2,minmax(0,1fr))}
     .video-builder{grid-template-columns:1fr 1fr}
@@ -158,6 +267,11 @@
     .video-job{grid-template-columns:1fr}
     .video-job-actions{justify-content:flex-start}
     .batch-drafts{grid-template-columns:1fr}
+    .character-picker{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .batch-header{grid-template-columns:minmax(180px,1fr) repeat(2,minmax(70px,.4fr)) auto}
+    .batch-header .hide-mid{display:none}
+    .review-character{grid-template-columns:1fr}
+    .slide-review{grid-template-columns:minmax(140px,210px) minmax(0,1fr)}
     .metrics-grid{grid-template-columns:1fr}
     .pill-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
     .run-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -165,6 +279,24 @@
     .modal-body{grid-template-columns:1fr}
     table{font-size:12px}
     .hide-sm{display:none}
+  }
+  @media (max-width:640px){
+    header{padding:14px 16px;display:block}
+    .header-actions{margin-top:12px;display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:10px;align-items:end}
+    .brand-switch,.project-switch{width:100%;min-width:0}
+    #apiState{grid-column:1/-1}
+    .shell{padding:14px 12px 24px}
+    .workspace-heading{display:block}
+    .workspace-heading .sub{margin-top:5px}
+    .run-grid,.roster-meta,.video-builder{grid-template-columns:1fr}
+    .video-builder .wide{grid-column:span 1}
+    .character-assets,.character-picker{grid-template-columns:1fr}
+    .recipe-controls,.slideshow-drafts,.variant-controls,.variant-gallery{grid-template-columns:1fr}
+    .paired-clips,.video-review-pair{grid-template-columns:1fr}
+    .batch-header{grid-template-columns:minmax(0,1fr) auto}
+    .batch-header .batch-metric{display:none}
+    .slide-review{grid-template-columns:1fr}
+    .slide-stage{max-width:220px}
   }
 </style>
 </head>
@@ -174,24 +306,42 @@
     <h1>Content console</h1>
     <div class="sub" id="stamp">loading</div>
   </div>
-  <div class="sub" id="apiState">api pending</div>
+  <div class="header-actions">
+    <div class="brand-switch">
+      <label for="brand">Brand</label>
+      <select id="brand"></select>
+    </div>
+    <div class="brand-switch project-switch">
+      <label for="project">Project</label>
+      <div class="switch-row">
+        <select id="project"></select>
+        <button id="newProject" title="Create project">New</button>
+      </div>
+    </div>
+    <div class="sub" id="apiState">api pending</div>
+  </div>
 </header>
 
 <main class="shell">
+  <nav class="workspace-nav" aria-label="Content workflows">
+    <button class="on" data-workspace-button="slideshows">Slideshows</button>
+    <button data-workspace-button="videos">Videos</button>
+    <button data-workspace-button="characters">Characters</button>
+    <button data-workspace-button="review">Review</button>
+    <button data-workspace-button="settings">Settings</button>
+  </nav>
+
+  <section class="workspace" id="workspace-slideshows" data-workspace="slideshows">
+    <div class="workspace-heading">
+      <h2>Slideshow Studio</h2>
+      <div class="sub">character assets + app screens + five-slide packages</div>
+    </div>
   <div class="toolbar">
     <section class="section">
-      <h2>Batch Generator</h2>
+      <h2>Slideshow Batch</h2>
       <div class="run-grid">
         <div>
-          <label for="brand">Brand</label>
-          <select id="brand"></select>
-        </div>
-        <div>
-          <label for="runCharacter">Roster character</label>
-          <select id="runCharacter"><option value="">Roster order</option></select>
-        </div>
-        <div>
-          <label for="avatars">Avatars</label>
+          <label for="avatars">Quick-select characters</label>
           <input id="avatars" type="number" min="1" max="100" value="2">
         </div>
         <div>
@@ -208,10 +358,6 @@
           </select>
         </div>
         <div>
-          <label for="formats">Formats</label>
-          <input id="formats" value="slideshow">
-        </div>
-        <div>
           <label for="account">Account</label>
           <input id="account" value="">
         </div>
@@ -221,8 +367,58 @@
         </div>
         <div>
           <label>&nbsp;</label>
-          <button class="primary" id="startRun">Start batch</button>
+          <button class="primary" id="startRun">Generate slideshows</button>
         </div>
+      </div>
+      <input id="formats" type="hidden" value="slideshow">
+      <div class="section-rule">
+        <div class="section-rule-head">
+          <h3>Image variants</h3>
+          <span class="sub" id="variantResult">project library</span>
+        </div>
+        <div class="variant-controls">
+          <div><label for="variantSource">Source character</label><select id="variantSource"></select></div>
+          <div><label for="variantName">Variant name</label><input id="variantName" placeholder="New opening + after"></div>
+          <div><label for="variantProvider">Image source</label><select id="variantProvider"></select></div>
+          <button class="primary" id="createVariant">Create variant</button>
+        </div>
+        <div class="variant-assets" aria-label="Images to regenerate">
+          <label class="checkline"><input type="checkbox" data-variant-asset="before">Before</label>
+          <label class="checkline"><input type="checkbox" data-variant-asset="opening">Opening</label>
+          <label class="checkline"><input type="checkbox" data-variant-asset="scan">Scan</label>
+          <label class="checkline"><input type="checkbox" data-variant-asset="after" checked>After</label>
+          <label class="checkline"><input type="checkbox" data-variant-asset="product_prop">Product</label>
+        </div>
+        <div class="variant-gallery" id="variantGallery"></div>
+      </div>
+      <div class="section-rule">
+        <div class="section-rule-head">
+          <h3>Character preflight</h3>
+          <span class="sub" id="slideshowBatchSummary">0 selected</span>
+        </div>
+        <div class="matrix-scroll">
+          <div class="character-matrix" id="slideshowPreflight"></div>
+        </div>
+      </div>
+      <div class="section-rule">
+        <div class="section-rule-head">
+          <h3>Editable hooks</h3>
+          <span class="sub">blank uses the roster or brand fallback</span>
+        </div>
+        <div class="slideshow-drafts" id="slideshowDrafts"></div>
+      </div>
+      <div class="section-rule">
+        <div class="section-rule-head">
+          <h3>Creative recipe</h3>
+          <span class="sub">reload and remix without generating</span>
+        </div>
+        <div class="recipe-controls">
+          <div><label for="slideshowRecipe">Saved recipe</label><select id="slideshowRecipe"></select></div>
+          <div><label for="slideshowRecipeName">Recipe name</label><input id="slideshowRecipeName" placeholder="Acne hook winner remix"></div>
+          <button id="loadSlideshowRecipe">Load</button>
+          <button id="saveSlideshowRecipe">Save setup</button>
+        </div>
+        <div class="sub recipe-result" id="slideshowRecipeResult"></div>
       </div>
     </section>
 
@@ -231,13 +427,28 @@
       <div class="run-log" id="runLog">No runs yet.</div>
     </section>
   </div>
+  </section>
 
+  <section class="workspace" id="workspace-characters" data-workspace="characters" hidden>
+    <div class="workspace-heading">
+      <h2>Character Library</h2>
+      <div class="sub">one shared identity and asset set for every workflow</div>
+    </div>
   <section class="section roster-band">
     <h2>Character Roster &amp; Assets</h2>
     <div class="roster-head">
       <div>
         <label for="rosterCharacter">Character</label>
         <select id="rosterCharacter"></select>
+      </div>
+      <div>
+        <label for="characterProvider">Image generation</label>
+        <select id="characterProvider">
+          <option value="codex_local">codex subscription / local queue</option>
+          <option value="openai">openai</option>
+          <option value="dreamina">dreamina</option>
+          <option value="custom">custom</option>
+        </select>
       </div>
       <button id="newCharacter">New character</button>
     </div>
@@ -290,15 +501,28 @@
         <input id="asset-product_prop" type="file" accept="image/png,image/jpeg,image/webp">
       </div>
     </div>
+    <div class="fixture-set" id="fixtureSetPanel" hidden>
+      <div class="fixture-set-head">
+        <h3>Severity fixture set</h3>
+        <span class="sub" id="fixtureSetMeta"></span>
+      </div>
+      <div class="fixture-levels" id="fixtureLevels"></div>
+    </div>
     <div class="roster-actions">
       <button id="saveCharacter">Save character</button>
       <button class="primary" id="generateMissing">Queue missing images</button>
       <span class="sub" id="rosterResult"></span>
     </div>
   </section>
+  </section>
 
+  <section class="workspace" id="workspace-videos" data-workspace="videos" hidden>
+    <div class="workspace-heading">
+      <h2>Video Studio</h2>
+      <div class="sub">talking-head clips from saved character portraits</div>
+    </div>
   <section class="section roster-band">
-    <h2>HeyGen Talking Head</h2>
+    <h2>HeyGen Generation</h2>
     <div class="video-builder">
       <div>
         <label for="heygenAuthMode">Credit route</label>
@@ -323,6 +547,10 @@
     <div class="mode-panel" id="heygenSinglePanel" hidden>
       <div class="video-builder">
         <div>
+          <label for="heygenSingleCharacter">Character</label>
+          <select id="heygenSingleCharacter"></select>
+        </div>
+        <div>
           <label for="heygenSourceAsset">Portrait</label>
           <select id="heygenSourceAsset">
             <option value="after">After</option>
@@ -334,7 +562,7 @@
           <label for="heygenAvatarId">Existing avatar ID</label>
           <input id="heygenAvatarId" placeholder="optional">
         </div>
-        <div class="wide">
+        <div>
           <label for="heygenTitle">Video title</label>
           <input id="heygenTitle" placeholder="Character talking head">
         </div>
@@ -351,13 +579,14 @@
     <div class="mode-panel" id="heygenBatchPanel">
       <div class="video-builder">
         <div>
-          <label for="heygenBatchCount">Characters</label>
+          <label for="heygenBatchCount">Quick-select characters</label>
           <input id="heygenBatchCount" type="number" min="1" max="10" value="3">
         </div>
-        <div>
-          <label for="heygenBatchStart">Start at</label>
-          <select id="heygenBatchStart"></select>
+        <div class="wide">
+          <label>Selected roster</label>
+          <div class="sub" id="heygenSelectedSummary">0 characters selected</div>
         </div>
+        <div class="full character-picker" id="videoCharacterPicker"></div>
         <div class="wide">
           <label for="heygenBatchBeforeTemplate">Before clip script</label>
           <textarea class="video-script" id="heygenBatchBeforeTemplate">I was tired of guessing. {hook}</textarea>
@@ -376,6 +605,19 @@
       <div class="roster-actions">
         <button class="primary" id="queueHeygenBatch">Queue batch clips</button>
       </div>
+      <div class="section-rule">
+        <div class="section-rule-head">
+          <h3>Creative recipe</h3>
+          <span class="sub">scripts remain editable after loading</span>
+        </div>
+        <div class="recipe-controls">
+          <div><label for="videoRecipe">Saved recipe</label><select id="videoRecipe"></select></div>
+          <div><label for="videoRecipeName">Recipe name</label><input id="videoRecipeName" placeholder="Three-character before-after"></div>
+          <button id="loadVideoRecipe">Load</button>
+          <button id="saveVideoRecipe">Save setup</button>
+        </div>
+        <div class="sub recipe-result" id="videoRecipeResult"></div>
+      </div>
     </div>
     <div class="roster-actions">
       <button id="testHeygen">Test API connection</button>
@@ -383,11 +625,17 @@
     </div>
     <div class="video-jobs" id="heygenJobs"></div>
   </section>
+  </section>
 
+  <section class="workspace" id="workspace-settings" data-workspace="settings" hidden>
+    <div class="workspace-heading">
+      <h2>Settings &amp; Templates</h2>
+      <div class="sub">generation prompts, app screens, integrations, and metrics</div>
+    </div>
   <div class="lab">
     <section class="section">
       <h2>Prompt Lab</h2>
-      <div class="prompt-grid">
+      <div class="prompt-grid three">
         <div>
           <label for="promptSpec">Test spec</label>
           <input id="promptSpec" value="woman, early 20s, East Asian">
@@ -395,6 +643,15 @@
         <div>
           <label for="promptHook">Test hook</label>
           <input id="promptHook" value="I let AI score my skin. The number hurt.">
+        </div>
+        <div>
+          <label for="promptProvider">Prompt test image source</label>
+          <select id="promptProvider">
+            <option value="codex_local">codex subscription / local queue</option>
+            <option value="openai">openai</option>
+            <option value="dreamina">dreamina</option>
+            <option value="custom">custom</option>
+          </select>
         </div>
       </div>
       <div class="prompt-grid three">
@@ -476,6 +733,11 @@
 
   <div class="ops">
     <section class="section">
+      <h2>Project Storage</h2>
+      <div class="project-paths" id="projectPaths"></div>
+    </section>
+
+    <section class="section">
       <h2>Metrics Import</h2>
       <div class="metrics-grid">
         <div>
@@ -499,7 +761,25 @@
       <div class="pill-grid" id="integrationStatus"></div>
     </section>
   </div>
+  </section>
 
+  <section class="workspace" id="workspace-review" data-workspace="review" hidden>
+    <div class="workspace-heading">
+      <h2>Batch Review</h2>
+      <div class="sub">review complete character sets before anything leaves this PC</div>
+    </div>
+    <div class="review-toolbar">
+      <button class="on" data-review-workflow="all">All batches</button>
+      <button data-review-workflow="slideshow">Slideshows</button>
+      <button data-review-workflow="talking_head">Videos</button>
+      <div class="spacer"></div>
+      <span class="sub" id="batchRecipeStatus"></span>
+      <span class="sub" id="batchReviewCount"></span>
+    </div>
+    <div class="batch-list" id="batchReview"></div>
+
+  <details class="legacy-block">
+    <summary>Legacy and ungrouped output records</summary>
   <div class="stats" id="stats"></div>
 
   <div class="filters">
@@ -521,7 +801,39 @@
     </table>
   </div>
   <div class="empty" id="empty">No posts yet.</div>
+  </details>
+  </section>
 </main>
+
+<dialog id="projectDialog" style="width:min(460px,calc(100vw - 40px))">
+  <div class="modal-head">
+    <div><strong>New project</strong><div class="sub" id="projectDialogBrand"></div></div>
+    <button class="small" id="closeProjectDialog">Close</button>
+  </div>
+  <div style="padding:18px">
+    <label for="projectName">Project name</label>
+    <input id="projectName" placeholder="UGC experiments">
+    <div class="roster-actions">
+      <button class="primary" id="createProject">Create project</button>
+      <span class="sub" id="projectResult"></span>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="batchRecipeDialog" style="width:min(460px,calc(100vw - 40px))">
+  <div class="modal-head">
+    <div><strong>Save batch recipe</strong><div class="sub" id="batchRecipeSource"></div></div>
+    <button class="small" id="closeBatchRecipeDialog">Close</button>
+  </div>
+  <div style="padding:18px">
+    <label for="batchRecipeName">Recipe name</label>
+    <input id="batchRecipeName" placeholder="Winning creative">
+    <div class="roster-actions">
+      <button class="primary" id="confirmBatchRecipe">Save recipe</button>
+      <span class="sub" id="batchRecipeResult"></span>
+    </div>
+  </div>
+</dialog>
 
 <dialog id="detail">
   <div class="modal-head">
@@ -580,16 +892,31 @@ let filter = "all";
 let selectedPost = null;
 let configData = null;
 let selectedBrand = "";
+let selectedProject = "";
+let recipeRows = [];
 let assetRows = [];
 let openingPresets = {};
 let productPropPresets = {};
 let rosterData = {characters:[], can_generate:false};
 let selectedCharacterIndex = -1;
 let imageJobs = [];
+let imageVariants = [];
+let imageProviders = [];
 let videoJobs = [];
 let heygenStatus = {};
 let heygenMode = "batch";
 let heygenBatchDrafts = [];
+let batchSummaries = [];
+const batchDetails = new Map();
+let openBatchId = null;
+let pendingBatchRecipeId = null;
+let reviewWorkflow = "all";
+let activeWorkspace = "slideshows";
+let slideshowSelectedSlugs = new Set();
+let videoSelectedSlugs = new Set();
+let slideshowSelectionTouched = false;
+let videoSelectionTouched = false;
+let slideshowHookOverrides = {};
 
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -597,9 +924,14 @@ const clean = s => String(s ?? "").replace(/\n/g," / ");
 const metric = (p,k) => p.metrics && p.metrics[k] != null ? p.metrics[k] : null;
 const queue = p => p.publish_queue || {status:"draft",target_account:""};
 const brandParam = () => encodeURIComponent($("brand").value || selectedBrand || "");
+const projectParam = () => encodeURIComponent($("project").value || selectedProject || "");
 function activeBrandInfo(){
   const brands = configData && configData.brands ? configData.brands : [];
   return brands.find(b => b.brand_id === ($("brand").value || selectedBrand)) || (configData && configData.active_brand) || {};
+}
+function activeProjectInfo(){
+  const projects = configData && configData.projects ? configData.projects : [];
+  return projects.find(project => project.project_id === ($("project").value || selectedProject)) || {};
 }
 const pkg = p => p.package || {};
 function fileUrl(path){
@@ -620,12 +952,53 @@ function fillOptions(id, presets, labels, selected){
   select.innerHTML = keys.map(k => `<option value="${esc(k)}">${esc(labels[k] || k)}</option>`).join("");
   select.value = keys.includes(previous) ? previous : (keys.includes(selected) ? selected : (keys[0] || ""));
 }
+function renderImageProviderOptions(){
+  const preferred = (configData && configData.image_provider) || "codex_local";
+  ["provider","characterProvider","variantProvider","promptProvider"].forEach(id => {
+    const select = $(id);
+    if(!select) return;
+    const previous = select.value;
+    select.innerHTML = imageProviders.map(provider => `
+      <option value="${esc(provider.id)}" ${provider.configured ? "" : "disabled"}>
+        ${esc(provider.label)}${provider.configured ? "" : " / not configured"}
+      </option>
+    `).join("");
+    const enabled = imageProviders.filter(provider => provider.configured).map(provider => provider.id);
+    select.value = enabled.includes(previous)
+      ? previous
+      : (enabled.includes(preferred) ? preferred : (enabled[0] || ""));
+  });
+  updateImageActionLabel();
+}
 function populateBrands(config){
   const brands = config.brands || [];
   selectedBrand = selectedBrand || (config.active_brand && config.active_brand.brand_id) || config.default_brand || "";
   $("brand").innerHTML = brands.map(b => `<option value="${esc(b.brand_id)}">${esc(b.display_name)}</option>`).join("");
   $("brand").value = brands.some(b => b.brand_id === selectedBrand) ? selectedBrand : (brands[0] ? brands[0].brand_id : "");
   selectedBrand = $("brand").value;
+}
+function populateProjects(config, preferred=selectedProject){
+  const projects = (config.projects || []).filter(project => project.brand === ($("brand").value || selectedBrand));
+  const fallback = `${$("brand").value || selectedBrand}_main`;
+  const requested = preferred || fallback;
+  $("project").innerHTML = projects.map(project => `<option value="${esc(project.project_id)}">${esc(project.name)}</option>`).join("");
+  $("project").value = projects.some(project => project.project_id === requested)
+    ? requested
+    : (projects.find(project => project.project_id === fallback) || projects[0] || {}).project_id || "";
+  selectedProject = $("project").value;
+  renderProjectPaths();
+  renderRecipeOptions();
+}
+function updateContextStatus(){
+  if(!configData) return;
+  $("apiState").textContent = `${activeBrandInfo().display_name || "brand"} / ${activeProjectInfo().name || "project"} / ${configData.roster_count} characters`;
+}
+function renderProjectPaths(){
+  if(!$("projectPaths")) return;
+  const paths = activeProjectInfo().paths || {};
+  $("projectPaths").innerHTML = Object.entries(paths).map(([name,path]) => `
+    <div class="project-path"><strong>${esc(name)}</strong><span class="path" title="${esc(path)}">${esc(path)}</span></div>
+  `).join("") || '<div class="sub">Select a project.</div>';
 }
 function fmtNum(n){
   if(n == null) return "-";
@@ -669,30 +1042,42 @@ async function responseError(res){
 
 async function load(){
   try{
-    const [config, postRows, runRows, nextVideoJobs, nextHeygenStatus] = await Promise.all([
+    const [config, postRows, runRows, nextVideoJobs, nextHeygenStatus, nextBatches, nextRecipes, nextImageProviders] = await Promise.all([
       api("/api/config"),
       api("/api/posts"),
       api("/api/runs"),
       api("/api/heygen/jobs"),
-      api("/api/heygen/status")
+      api("/api/heygen/status"),
+      api("/api/batches"),
+      api("/api/recipes"),
+      api("/api/image-providers")
     ]);
     configData = config;
     videoJobs = nextVideoJobs;
     heygenStatus = nextHeygenStatus;
+    batchSummaries = nextBatches;
+    recipeRows = nextRecipes;
+    imageProviders = nextImageProviders;
     populateBrands(config);
+    populateProjects(config);
+    renderImageProviderOptions();
     posts = postRows;
     runs = runRows;
-    $("apiState").textContent = `${activeBrandInfo().display_name || "brand"} / ${config.roster_count} roster characters / ${config.image_provider}`;
-    $("provider").value = config.image_provider || "openai";
+    updateContextStatus();
     $("account").value = activeBrandInfo().default_account || config.default_account || "";
     $("formats").value = "slideshow";
     $("savePrompt").disabled = !activeBrandInfo().has_image_prompts;
-    [assetRows, rosterData, imageJobs] = await Promise.all([
+    [assetRows, rosterData, imageJobs, imageVariants] = await Promise.all([
       api(`/api/assets/status?brand=${brandParam()}`),
       api(`/api/roster?brand=${brandParam()}`),
-      api("/api/image-jobs")
+      api("/api/image-jobs"),
+      api(`/api/image-variants?brand=${brandParam()}&project_id=${projectParam()}`)
     ]);
     renderRosterSelectors();
+    renderVariantGallery();
+    renderSlideshowPreflight();
+    renderVideoCharacterPicker();
+    renderRecipeOptions();
     renderHeygen();
     setHeygenMode(heygenMode);
     updateImageActionLabel();
@@ -710,6 +1095,8 @@ async function load(){
   renderHead();
   render();
   renderRuns();
+  renderBatchReview();
+  setWorkspace(activeWorkspace);
 }
 
 function renderAssets(){
@@ -728,31 +1115,247 @@ function renderAssets(){
 }
 
 function characterLabel(character, index){
-  return `${index + 1}. ${character.slug || character.spec || "character"}`;
+  const suffix = character.variant_id ? ` / ${character.variant_name || "variant"}` : "";
+  return `${index + 1}. ${character.slug || character.spec || "character"}${suffix}`;
 }
 
 function renderRosterSelectors(preferredIndex=selectedCharacterIndex){
   const characters = rosterData.characters || [];
-  const runValue = $("runCharacter").value;
-  const batchStartValue = $("heygenBatchStart").value;
+  const singleValue = $("heygenSingleCharacter").value;
   $("rosterCharacter").innerHTML = `<option value="-1">New character</option>` + characters
     .map((character,index) => `<option value="${index}">${esc(characterLabel(character,index))}</option>`).join("");
-  $("runCharacter").innerHTML = `<option value="">Roster order</option>` + characters
-    .filter(character => character.slug)
-    .map(character => `<option value="${esc(character.slug)}">${esc(character.slug)}</option>`).join("");
-  if(Array.from($("runCharacter").options).some(option => option.value === runValue)){
-    $("runCharacter").value = runValue;
-  }
-  $("heygenBatchStart").innerHTML = characters
-    .map((character,index) => `<option value="${index}">${esc(characterLabel(character,index))}</option>`).join("");
-  if(Array.from($("heygenBatchStart").options).some(option => option.value === batchStartValue)){
-    $("heygenBatchStart").value = batchStartValue;
+  $("heygenSingleCharacter").innerHTML = characters
+    .map((character,index) => ({character,index}))
+    .filter(item => item.character.slug)
+    .map(item => `<option value="${item.index}">${esc(characterLabel(item.character,item.index))}</option>`).join("");
+  if(Array.from($("heygenSingleCharacter").options).some(option => option.value === singleValue)){
+    $("heygenSingleCharacter").value = singleValue;
   }
   const nextIndex = characters.length
     ? Math.max(0, Math.min(Number(preferredIndex) >= 0 ? Number(preferredIndex) : 0, characters.length - 1))
     : -1;
   $("rosterCharacter").value = String(nextIndex);
   selectRosterCharacter(nextIndex);
+  if(nextIndex >= 0 && !$("heygenSingleCharacter").value){
+    $("heygenSingleCharacter").value = String(nextIndex);
+  }
+  renderVariantSourceOptions();
+  syncWorkflowSelections();
+  renderSlideshowPreflight();
+  renderVideoCharacterPicker();
+}
+
+function savedCharacters(){
+  return (rosterData.characters || []).filter(character => character.slug);
+}
+
+function slideshowCharacters(){
+  return [
+    ...savedCharacters(),
+    ...imageVariants.map(variant => ({
+      ...(variant.character || {}),
+      slug:variant.asset_slug,
+      variant_id:variant.variant_id,
+      variant_name:variant.name,
+      variant_status:variant.status,
+      assets:variant.assets || (variant.character || {}).assets || {}
+    }))
+  ];
+}
+
+function selectableSlideshowCharacters(){
+  return slideshowCharacters().filter(
+    character => !character.variant_id || character.variant_status === "ready");
+}
+
+function renderVariantSourceOptions(){
+  if(!$("variantSource")) return;
+  const previous = $("variantSource").value;
+  const sources = slideshowCharacters().filter(character => !character.variant_id || character.variant_status === "ready");
+  $("variantSource").innerHTML = sources.map((character,index) => `
+    <option value="${esc(character.slug)}">${esc(character.variant_id ? `${character.variant_name} / ${character.slug}` : characterLabel(character,index))}</option>
+  `).join("");
+  if(sources.some(character => character.slug === previous)) $("variantSource").value = previous;
+}
+
+function selectVariantForBatch(slug){
+  slideshowSelectionTouched = true;
+  slideshowSelectedSlugs.add(slug);
+  $("avatars").value = Math.max(1,slideshowSelectedSlugs.size);
+  renderSlideshowPreflight();
+}
+
+function renderVariantGallery(){
+  if(!$("variantGallery")) return;
+  $("variantGallery").innerHTML = imageVariants.map(variant => {
+    const assets = variant.assets || {};
+    const selected = slideshowSelectedSlugs.has(variant.asset_slug);
+    return `<div class="variant-row">
+      <div class="variant-head">
+        <div><strong>${esc(variant.name)}</strong><div class="sub">${esc(variant.base_character_slug)} / ${esc(variant.status)} / ${esc(variant.provider)}</div></div>
+        <button class="small" ${variant.status === "ready" ? "" : "disabled"} onclick="selectVariantForBatch('${esc(variant.asset_slug)}')">${selected ? "Selected" : "Use"}</button>
+      </div>
+      <div class="variant-strip">${CHARACTER_ASSETS.map(name => {
+        const asset = assets[name];
+        return asset && asset.exists
+          ? `<img src="${fileUrl(asset.path)}" loading="lazy" alt="${esc(name)}" title="${esc(name)}">`
+          : `<div class="matrix-portrait-empty">${esc(name)}</div>`;
+      }).join("")}</div>
+    </div>`;
+  }).join("") || '<div class="sub">No image variants in this project.</div>';
+  renderVariantSourceOptions();
+}
+
+function syncWorkflowSelections(){
+  const characters = savedCharacters();
+  const slideshowRows = selectableSlideshowCharacters();
+  const slideshowValid = new Set(slideshowRows.map(character => character.slug));
+  const videoValid = new Set(characters.map(character => character.slug));
+  slideshowSelectedSlugs = new Set([...slideshowSelectedSlugs].filter(slug => slideshowValid.has(slug)));
+  videoSelectedSlugs = new Set([...videoSelectedSlugs].filter(slug => videoValid.has(slug)));
+  if(!slideshowSelectionTouched || !slideshowSelectedSlugs.size){
+    const count = Math.max(1, Math.min(slideshowRows.length, Number($("avatars").value || 2)));
+    slideshowSelectedSlugs = new Set(slideshowRows.slice(0,count).map(character => character.slug));
+  }
+  if(!videoSelectionTouched || !videoSelectedSlugs.size){
+    const count = Math.max(1, Math.min(10, characters.length, Number($("heygenBatchCount").value || 3)));
+    videoSelectedSlugs = new Set(characters.slice(0,count).map(character => character.slug));
+  }
+}
+
+function assetStatus(character, name, required){
+  const asset = character.assets && character.assets[name];
+  if(asset && asset.exists) return `<span class="asset-state ready"><span class="dot"></span>ready</span>`;
+  if(required) return `<span class="asset-state missing"><span class="dot"></span>missing</span>`;
+  return `<span class="asset-state optional"><span class="dot"></span>optional</span>`;
+}
+
+function toggleSlideshowCharacter(slug, checked){
+  slideshowSelectionTouched = true;
+  if(checked) slideshowSelectedSlugs.add(slug);
+  else slideshowSelectedSlugs.delete(slug);
+  $("avatars").value = Math.max(1, slideshowSelectedSlugs.size);
+  renderSlideshowPreflight();
+}
+
+function selectFirstSlideshowCharacters(){
+  const characters = selectableSlideshowCharacters();
+  const count = Math.max(1, Math.min(characters.length, Number($("avatars").value || 1)));
+  slideshowSelectionTouched = false;
+  slideshowSelectedSlugs = new Set(characters.slice(0,count).map(character => character.slug));
+  renderSlideshowPreflight();
+}
+
+function renderSlideshowPreflight(){
+  if(!$("slideshowPreflight")) return;
+  const characters = slideshowCharacters();
+  const openingRequired = $("openingStyle").value && $("openingStyle").value !== "selfie";
+  const productRequired = $("productStyle").value && $("productStyle").value !== "none";
+  const iterations = Math.max(1, Number($("postsPerAvatar").value || 1));
+  const selected = characters.filter(character => character.slug && slideshowSelectedSlugs.has(character.slug));
+  const requiredNames = ["before","scan","after", ...(openingRequired ? ["opening"] : []), ...(productRequired ? ["product_prop"] : [])];
+  const missing = selected.reduce((count,character) => count + requiredNames.filter(name => !(character.assets && character.assets[name] && character.assets[name].exists)).length, 0);
+  $("slideshowBatchSummary").textContent = `${selected.length} characters / ${selected.length * iterations} posts${missing ? ` / ${missing} missing assets` : " / assets ready"}`;
+  const header = `<div class="matrix-row matrix-head">
+    <div class="matrix-cell">Character</div><div class="matrix-cell">Before</div><div class="matrix-cell">Opening</div>
+    <div class="matrix-cell">Scan</div><div class="matrix-cell">After</div><div class="matrix-cell">Product</div><div class="matrix-cell">Posts</div>
+  </div>`;
+  const rows = characters.map(character => {
+    const selectable = Boolean(character.slug && (!character.variant_id || character.variant_status === "ready"));
+    const checked = Boolean(selectable && slideshowSelectedSlugs.has(character.slug));
+    const before = character.assets && character.assets.before;
+    return `<div class="matrix-row">
+      <div class="matrix-cell matrix-character">
+        <input type="checkbox" ${checked ? "checked" : ""} ${selectable ? "" : "disabled"} onchange="toggleSlideshowCharacter('${esc(character.slug || "")}',this.checked)">
+        ${before && before.exists ? `<img src="${fileUrl(before.path)}" alt="">` : '<div class="matrix-portrait-empty">no image</div>'}
+        <div><strong>${esc(character.variant_id ? character.variant_name : (character.slug || "unsaved"))}</strong><div class="spec">${esc(character.variant_id ? `${character.base_character_slug} / ${character.variant_status}` : (character.spec || ""))}</div></div>
+      </div>
+      <div class="matrix-cell">${assetStatus(character,"before",true)}</div>
+      <div class="matrix-cell">${assetStatus(character,"opening",openingRequired)}</div>
+      <div class="matrix-cell">${assetStatus(character,"scan",true)}</div>
+      <div class="matrix-cell">${assetStatus(character,"after",true)}</div>
+      <div class="matrix-cell">${assetStatus(character,"product_prop",productRequired)}</div>
+      <div class="matrix-cell num">${checked ? iterations : "-"}</div>
+    </div>`;
+  }).join("");
+  $("slideshowPreflight").innerHTML = header + (rows || '<div class="sub" style="padding:12px">No characters saved yet.</div>');
+  renderSlideshowDrafts();
+  renderVariantGallery();
+}
+
+function defaultSlideshowHook(character,index){
+  const iteration = (character.iterations || [])[index] || {};
+  if(iteration.hook) return iteration.hook;
+  if((character.hooks || [])[index]) return character.hooks[index];
+  if(index === 0 && character.hook) return character.hook;
+  return "";
+}
+
+function slideshowHookValue(character,index){
+  const saved = slideshowHookOverrides[character.slug];
+  if(saved && saved[index] !== undefined) return saved[index];
+  return defaultSlideshowHook(character,index);
+}
+
+function setSlideshowHook(slug,index,value){
+  const hooks = [...(slideshowHookOverrides[slug] || [])];
+  hooks[index] = value;
+  slideshowHookOverrides[slug] = hooks;
+}
+
+function renderSlideshowDrafts(){
+  if(!$("slideshowDrafts")) return;
+  const iterations = Math.max(1, Number($("postsPerAvatar").value || 1));
+  const selected = slideshowCharacters().filter(character => character.slug && slideshowSelectedSlugs.has(character.slug));
+  const drafts = selected.flatMap(character => Array.from({length:iterations},(_,index) => ({character,index})));
+  $("slideshowDrafts").innerHTML = drafts.map(({character,index}) => {
+    const before = character.assets && character.assets.before;
+    return `<div class="slideshow-draft">
+      ${before && before.exists ? `<img src="${fileUrl(before.path)}" alt="">` : '<div class="matrix-portrait-empty">no image</div>'}
+      <div><label>${esc(character.slug)} / post ${index + 1}</label><textarea data-slide-hook="${esc(character.slug)}" data-slide-iteration="${index}" placeholder="Use saved or brand fallback">${esc(slideshowHookValue(character,index))}</textarea></div>
+    </div>`;
+  }).join("") || '<div class="sub">Select a character to edit its hooks.</div>';
+  document.querySelectorAll("[data-slide-hook]").forEach(input => {
+    input.oninput = () => setSlideshowHook(input.dataset.slideHook, Number(input.dataset.slideIteration), input.value);
+  });
+}
+
+function toggleVideoCharacter(slug, checked){
+  videoSelectionTouched = true;
+  if(checked){
+    if(videoSelectedSlugs.size >= 10){
+      renderVideoCharacterPicker();
+      return;
+    }
+    videoSelectedSlugs.add(slug);
+  }else videoSelectedSlugs.delete(slug);
+  $("heygenBatchCount").value = Math.max(1, videoSelectedSlugs.size);
+  renderVideoCharacterPicker();
+  buildHeygenBatchPreview();
+}
+
+function selectFirstVideoCharacters(){
+  const characters = savedCharacters();
+  const count = Math.max(1, Math.min(10, characters.length, Number($("heygenBatchCount").value || 3)));
+  videoSelectionTouched = false;
+  videoSelectedSlugs = new Set(characters.slice(0,count).map(character => character.slug));
+  renderVideoCharacterPicker();
+  buildHeygenBatchPreview();
+}
+
+function renderVideoCharacterPicker(){
+  if(!$("videoCharacterPicker")) return;
+  const characters = savedCharacters();
+  $("heygenSelectedSummary").textContent = `${videoSelectedSlugs.size} characters selected / ${videoSelectedSlugs.size * 2} clips`;
+  $("videoCharacterPicker").innerHTML = characters.map(character => {
+    const before = character.assets && character.assets.before;
+    const after = character.assets && character.assets.after;
+    return `<label class="character-choice">
+      <input type="checkbox" ${videoSelectedSlugs.has(character.slug) ? "checked" : ""} onchange="toggleVideoCharacter('${esc(character.slug)}',this.checked)">
+      ${before && before.exists ? `<img src="${fileUrl(before.path)}" alt="">` : '<div class="choice-empty">missing</div>'}
+      <div><strong>${esc(character.slug)}</strong><span>${before && before.exists && after && after.exists ? "before + after ready" : "portrait missing"}</span></div>
+    </label>`;
+  }).join("") || '<div class="sub">No saved roster characters.</div>';
 }
 
 function clearAssetInput(name){
@@ -783,9 +1386,35 @@ function showAssetPreview(name, path="", objectUrl=""){
   }
 }
 
+function renderFixtureSet(character){
+  const panel = $("fixtureSetPanel");
+  const fixtureSet = character && character.fixture_set;
+  const levels = fixtureSet && fixtureSet.levels ? fixtureSet.levels : {};
+  const severityOrder = ["clear","mild","moderate","severe"];
+  const visible = severityOrder.filter(severity => levels[severity] && levels[severity].exists);
+  panel.hidden = !visible.length;
+  if(!visible.length){
+    $("fixtureLevels").innerHTML = "";
+    $("fixtureSetMeta").textContent = "";
+    return;
+  }
+  const tone = fixtureSet.skin_tone_mst ? `MST ${fixtureSet.skin_tone_mst} / ` : "";
+  $("fixtureSetMeta").textContent = `${tone}reference set, not a measured timeline`;
+  $("fixtureLevels").innerHTML = visible.map(severity => {
+    const level = levels[severity];
+    return `<a class="fixture-level" href="${fileUrl(level.path)}" target="_blank">
+      <img src="${fileUrl(level.path)}" loading="lazy" alt="${esc(severity)} acne fixture">
+      <span>${esc(severity)}</span>
+    </a>`;
+  }).join("");
+}
+
 function selectRosterCharacter(index){
   selectedCharacterIndex = Number(index);
   $("rosterCharacter").value = String(selectedCharacterIndex);
+  if(Array.from($("heygenSingleCharacter").options).some(option => option.value === String(selectedCharacterIndex))){
+    $("heygenSingleCharacter").value = String(selectedCharacterIndex);
+  }
   const character = (rosterData.characters || [])[selectedCharacterIndex] || null;
   CHARACTER_ASSETS.forEach(name => clearAssetInput(name));
   $("characterSlug").value = character ? (character.slug || "") : "";
@@ -798,6 +1427,7 @@ function selectRosterCharacter(index){
     const asset = character && character.assets ? character.assets[name] : null;
     showAssetPreview(name, asset && asset.exists ? asset.path : "");
   });
+  renderFixtureSet(character);
   $("generateMissing").disabled = !rosterData.can_generate;
   renderCharacterJobStatus(character);
   syncHeygenCharacter(character);
@@ -822,17 +1452,21 @@ function heygenStatusLabel(){
       ? "API wallet connected / generation spends API balance"
       : "API wallet not connected / add HEYGEN_API_KEY to .env";
   }
-  return "OAuth queue ready / HeyGen MCP connection still required in Codex";
+  return "OAuth queue ready / submit from a Codex task with HeyGen connected";
 }
 
 function renderHeygen(){
   if(!$('heygenJobs')) return;
   $('heygenConnection').textContent = heygenStatusLabel();
-  if(!videoJobs.length){
+  const brandJobs = videoJobs.filter(job =>
+    (job.brand || "gloskin") === ($("brand").value || selectedBrand)
+    && (job.project_id || `${job.brand || "gloskin"}_main`) === ($("project").value || selectedProject)
+  );
+  if(!brandJobs.length){
     $('heygenJobs').innerHTML = '<div class="sub">No video jobs yet.</div>';
     return;
   }
-  $('heygenJobs').innerHTML = videoJobs.slice(0,20).map(job => {
+  $('heygenJobs').innerHTML = brandJobs.slice(0,20).map(job => {
     const output = job.status === "completed" && job.output_path
       ? `<video src="${fileUrl(job.output_path)}" controls preload="metadata"></video>`
       : `<span class="badge ${job.status === "failed" ? "missing" : ""}">${esc(job.status)}</span>`;
@@ -873,11 +1507,9 @@ function batchScript(template, character){
 
 function buildHeygenBatchPreview(){
   const characters = rosterData.characters || [];
-  const start = Number($('heygenBatchStart').value || 0);
-  const count = Math.max(1, Math.min(10, Number($('heygenBatchCount').value || 3)));
-  const selected = characters.slice(start, start + count)
-    .map((character,offset) => ({character,index:start + offset}))
-    .filter(item => item.character.slug);
+  const selected = characters
+    .map((character,index) => ({character,index}))
+    .filter(item => item.character.slug && videoSelectedSlugs.has(item.character.slug));
   heygenBatchDrafts = selected.flatMap(({character,index:characterIndex}) => ["before","after"].map(source => {
     const asset = character.assets && character.assets[source];
     const template = source === "before" ? $('heygenBatchBeforeTemplate').value : $('heygenBatchAfterTemplate').value;
@@ -902,20 +1534,209 @@ function renderHeygenBatchDrafts(){
     $('heygenBatchDrafts').innerHTML = '<div class="sub">No saved roster characters in this range.</div>';
     return;
   }
-  $('heygenBatchDrafts').innerHTML = heygenBatchDrafts.map((draft,index) => `
-    <div class="batch-draft">
-      ${draft.portrait_path
-        ? `<img src="${fileUrl(draft.portrait_path)}" alt="${esc(draft.slug)} ${esc(draft.source_asset)} portrait">`
-        : '<div class="batch-portrait-empty">missing portrait</div>'}
-      <div>
-        <label>${esc(draft.slug)} / ${esc(draft.source_asset)}</label>
-        <textarea data-batch-script="${index}">${esc(draft.script)}</textarea>
+  const groups = [];
+  heygenBatchDrafts.forEach((draft,index) => {
+    let group = groups.find(item => item.character_index === draft.character_index);
+    if(!group){
+      group = {character_index:draft.character_index, slug:draft.slug, drafts:[]};
+      groups.push(group);
+    }
+    group.drafts.push({draft,index});
+  });
+  $('heygenBatchDrafts').innerHTML = groups.map(group => `
+    <div class="video-character-group">
+      <div class="video-character-head"><strong>${esc(group.slug)}</strong><span class="badge">2 clips</span></div>
+      <div class="paired-clips">
+        ${group.drafts.map(({draft,index}) => `<div class="clip-draft">
+          ${draft.portrait_path
+            ? `<img src="${fileUrl(draft.portrait_path)}" alt="${esc(draft.slug)} ${esc(draft.source_asset)} portrait">`
+            : '<div class="batch-portrait-empty">missing portrait</div>'}
+          <div><label>${esc(draft.source_asset)} clip</label><textarea data-batch-script="${index}">${esc(draft.script)}</textarea></div>
+        </div>`).join("")}
       </div>
     </div>
   `).join("");
   document.querySelectorAll('[data-batch-script]').forEach(input => {
     input.oninput = () => { heygenBatchDrafts[Number(input.dataset.batchScript)].script = input.value; };
   });
+}
+
+function currentPromptSnapshot(){
+  return {
+    before_template:$("beforeTemplate").value,
+    opening_style:$("openingStyle").value,
+    opening_prompt:$("openingPrompt").value,
+    scan_prompt:$("scanPrompt").value,
+    after_prompt:$("afterPrompt").value,
+    product_style:$("productStyle").value,
+    product_prop_prompt:$("productPropPrompt").value,
+    product_slide_caption:$("productCaption").value,
+  };
+}
+
+function renderRecipeOptions(){
+  if(!$("slideshowRecipe") || !$("videoRecipe")) return;
+  const brand = $("brand").value || selectedBrand;
+  [["slideshowRecipe","slideshow"],["videoRecipe","talking_head"]].forEach(([id,workflow]) => {
+    const select = $(id);
+    const previous = select.value;
+    const rows = recipeRows.filter(recipe => recipe.brand === brand && recipe.workflow === workflow);
+    select.innerHTML = '<option value="">Select saved recipe</option>' + rows.map(recipe => {
+      const project = (configData.projects || []).find(row => row.project_id === recipe.project_id);
+      return `<option value="${esc(recipe.recipe_id)}">${esc(recipe.name)} / ${esc(project ? project.name : recipe.project_id)}</option>`;
+    }).join("");
+    if(rows.some(recipe => recipe.recipe_id === previous)) select.value = previous;
+  });
+}
+
+function selectedRecipe(id,workflow){
+  const recipe = recipeRows.find(row => row.recipe_id === $(id).value);
+  if(!recipe) throw new Error("select a saved recipe");
+  if(recipe.brand !== ($("brand").value || selectedBrand) || recipe.workflow !== workflow){
+    throw new Error("this recipe is not compatible with the active brand and workflow");
+  }
+  return recipe;
+}
+
+function addRecipe(recipe,selectId){
+  recipeRows = [recipe, ...recipeRows.filter(row => row.recipe_id !== recipe.recipe_id)];
+  renderRecipeOptions();
+  $(selectId).value = recipe.recipe_id;
+}
+
+async function saveSlideshowRecipe(){
+  const result = $("slideshowRecipeResult");
+  try{
+    const name = $("slideshowRecipeName").value.trim();
+    if(!name) throw new Error("enter a recipe name");
+    const characterSlugs = slideshowCharacters().filter(character => slideshowSelectedSlugs.has(character.slug)).map(character => character.slug);
+    const iterations = Math.max(1, Number($("postsPerAvatar").value || 1));
+    const hooks = {};
+    characterSlugs.forEach(slug => {
+      const character = slideshowCharacters().find(row => row.slug === slug);
+      hooks[slug] = Array.from({length:iterations},(_,index) => slideshowHookValue(character,index));
+    });
+    const recipe = await api("/api/recipes", {
+      method:"POST",
+      body:JSON.stringify({
+        name,
+        brand:$("brand").value,
+        project_id:$("project").value,
+        workflow:"slideshow",
+        setup:{
+          character_slugs:characterSlugs,
+          posts_per_avatar:iterations,
+          provider:$("provider").value,
+          account:$("account").value,
+          placeholder:$("placeholder").checked,
+          opening_style:$("openingStyle").value,
+          product_style:$("productStyle").value,
+          product_slide_caption:$("productCaption").value,
+          hook_overrides:hooks,
+        },
+        prompt_snapshot:currentPromptSnapshot(),
+      })
+    });
+    addRecipe(recipe,"slideshowRecipe");
+    result.textContent = `saved ${recipe.name}`;
+  }catch(err){ result.textContent = err.message; }
+}
+
+async function loadSlideshowRecipe(){
+  const result = $("slideshowRecipeResult");
+  try{
+    const recipe = selectedRecipe("slideshowRecipe","slideshow");
+    const setup = recipe.setup || {};
+    const valid = new Set(slideshowCharacters().map(character => character.slug));
+    const slugs = (setup.character_slugs || []).filter(slug => valid.has(slug));
+    slideshowSelectionTouched = true;
+    slideshowSelectedSlugs = new Set(slugs);
+    slideshowHookOverrides = JSON.parse(JSON.stringify(setup.hook_overrides || {}));
+    $("avatars").value = Math.max(1,slugs.length);
+    if(setup.posts_per_avatar) $("postsPerAvatar").value = setup.posts_per_avatar;
+    if(setup.provider) $("provider").value = setup.provider;
+    if(setup.account) $("account").value = setup.account;
+    $("placeholder").checked = Boolean(setup.placeholder);
+    const prompt = recipe.prompt_snapshot || {};
+    if(prompt.before_template !== undefined) $("beforeTemplate").value = prompt.before_template;
+    if(prompt.opening_style) $("openingStyle").value = prompt.opening_style;
+    if(prompt.opening_prompt !== undefined) $("openingPrompt").value = prompt.opening_prompt;
+    if(prompt.scan_prompt !== undefined) $("scanPrompt").value = prompt.scan_prompt;
+    if(prompt.after_prompt !== undefined) $("afterPrompt").value = prompt.after_prompt;
+    if(prompt.product_style) $("productStyle").value = prompt.product_style;
+    if(prompt.product_prop_prompt !== undefined) $("productPropPrompt").value = prompt.product_prop_prompt;
+    if(prompt.product_slide_caption !== undefined) $("productCaption").value = prompt.product_slide_caption;
+    renderSlideshowPreflight();
+    await previewPrompt();
+    result.textContent = `loaded ${recipe.name} from ${recipe.project_id} into ${$("project").value}`;
+  }catch(err){ result.textContent = err.message; }
+}
+
+async function saveVideoRecipe(){
+  const result = $("videoRecipeResult");
+  try{
+    const name = $("videoRecipeName").value.trim();
+    if(!name) throw new Error("enter a recipe name");
+    if(!heygenBatchDrafts.length) buildHeygenBatchPreview();
+    const recipe = await api("/api/recipes", {
+      method:"POST",
+      body:JSON.stringify({
+        name,
+        brand:$("brand").value,
+        project_id:$("project").value,
+        workflow:"talking_head",
+        setup:{
+          auth_mode:$("heygenAuthMode").value,
+          voice_id:$("heygenVoiceId").value.trim(),
+          motion_prompt:$("heygenMotion").value.trim(),
+          before_template:$("heygenBatchBeforeTemplate").value,
+          after_template:$("heygenBatchAfterTemplate").value,
+          character_slugs:[...videoSelectedSlugs],
+          jobs:heygenBatchDrafts.map(({slug,source_asset,clip_role,script,title}) => ({slug,source_asset,clip_role,script,title})),
+        },
+      })
+    });
+    addRecipe(recipe,"videoRecipe");
+    result.textContent = `saved ${recipe.name}`;
+  }catch(err){ result.textContent = err.message; }
+}
+
+function loadVideoRecipe(){
+  const result = $("videoRecipeResult");
+  try{
+    const recipe = selectedRecipe("videoRecipe","talking_head");
+    const setup = recipe.setup || {};
+    const indexed = new Map((rosterData.characters || []).map((character,index) => [character.slug,{character,index}]));
+    const slugs = (setup.character_slugs || []).filter(slug => indexed.has(slug));
+    videoSelectionTouched = true;
+    videoSelectedSlugs = new Set(slugs);
+    $("heygenBatchCount").value = Math.max(1,slugs.length);
+    if(setup.auth_mode) $("heygenAuthMode").value = setup.auth_mode;
+    if(setup.voice_id !== undefined) $("heygenVoiceId").value = setup.voice_id;
+    if(setup.motion_prompt !== undefined) $("heygenMotion").value = setup.motion_prompt;
+    if(setup.before_template !== undefined) $("heygenBatchBeforeTemplate").value = setup.before_template;
+    if(setup.after_template !== undefined) $("heygenBatchAfterTemplate").value = setup.after_template;
+    const jobs = setup.jobs || [];
+    heygenBatchDrafts = jobs.map(job => {
+      const item = indexed.get(job.slug);
+      if(!item) return null;
+      const asset = item.character.assets && item.character.assets[job.source_asset];
+      return {
+        character_index:item.index,
+        slug:job.slug,
+        source_asset:job.source_asset,
+        clip_role:job.clip_role || job.source_asset,
+        portrait_path:asset && asset.exists ? asset.path : "",
+        script:job.script || "",
+        title:job.title || `${job.slug} ${job.source_asset} clip`,
+      };
+    }).filter(Boolean);
+    renderVideoCharacterPicker();
+    if(heygenBatchDrafts.length) renderHeygenBatchDrafts();
+    else buildHeygenBatchPreview();
+    renderHeygen();
+    result.textContent = `loaded ${recipe.name} from ${recipe.project_id} into ${$("project").value}`;
+  }catch(err){ result.textContent = err.message; }
 }
 
 async function queueHeygenBatch(){
@@ -928,6 +1749,7 @@ async function queueHeygenBatch(){
       method:'POST',
       body:JSON.stringify({
         brand:$('brand').value,
+        project_id:$('project').value,
         auth_mode:$('heygenAuthMode').value,
         voice_id:$('heygenVoiceId').value.trim(),
         motion_prompt:$('heygenMotion').value.trim(),
@@ -947,14 +1769,17 @@ async function queueHeygenBatch(){
 
 async function queueHeygenVideo(){
   $('queueHeygen').disabled = true;
-  $('heygenConnection').textContent = "saving character...";
+  $('heygenConnection').textContent = "queueing clip...";
   try{
-    const character = await saveCharacter(false);
+    const characterIndex = Number($('heygenSingleCharacter').value);
+    const character = (rosterData.characters || [])[characterIndex];
+    if(!character || !character.slug) throw new Error("select a saved character");
     const result = await api('/api/heygen/jobs', {
       method:'POST',
       body:JSON.stringify({
         brand:$('brand').value,
-        character_index:character.index,
+        project_id:$('project').value,
+        character_index:characterIndex,
         auth_mode:$('heygenAuthMode').value,
         source_asset:$('heygenSourceAsset').value,
         voice_id:$('heygenVoiceId').value.trim(),
@@ -1021,7 +1846,7 @@ function renderCharacterJobStatus(character){
 }
 
 function updateImageActionLabel(){
-  const local = $("provider").value === "codex_local";
+  const local = $("characterProvider").value === "codex_local";
   $("generateMissing").textContent = local ? "Queue missing images" : "Generate missing images";
 }
 
@@ -1065,14 +1890,14 @@ async function generateMissingImages(){
   $("rosterResult").textContent = "saving uploads...";
   try{
     const character = await saveCharacter(false);
-    const local = $("provider").value === "codex_local";
+    const local = $("characterProvider").value === "codex_local";
     $("rosterResult").textContent = local ? "queueing missing images..." : "generating missing images...";
     const endpoint = local ? "queue-missing" : "generate-missing";
     const result = await api(`/api/roster/characters/${character.index}/${endpoint}`, {
       method:"POST",
       body:JSON.stringify({
         brand:$("brand").value,
-        provider:$("provider").value,
+        provider:$("characterProvider").value,
         opening_style:$("openingStyle").value,
         product_style:$("productStyle").value
       })
@@ -1095,6 +1920,50 @@ async function generateMissingImages(){
     $("rosterResult").textContent = err.message;
   }finally{
     $("generateMissing").disabled = !rosterData.can_generate;
+  }
+}
+
+async function createImageVariant(){
+  $("createVariant").disabled = true;
+  $("variantResult").textContent = "preparing variant...";
+  try{
+    const source = $("variantSource").value;
+    if(!source) throw new Error("select a source character");
+    const selectedAssets = Array.from(document.querySelectorAll("[data-variant-asset]:checked"))
+      .map(input => input.dataset.variantAsset);
+    if(!selectedAssets.length) throw new Error("select at least one image to regenerate");
+    await previewPrompt();
+    const result = await api("/api/image-variants", {
+      method:"POST",
+      body:JSON.stringify({
+        brand:$("brand").value,
+        project_id:$("project").value,
+        source_asset_slug:source,
+        name:$("variantName").value.trim(),
+        provider:$("variantProvider").value,
+        selected_assets:selectedAssets,
+        opening_style:$("openingStyle").value,
+        product_style:$("productStyle").value,
+        prompt_snapshot:currentPromptSnapshot()
+      })
+    });
+    if(result.job){
+      imageJobs = [result.job,...imageJobs.filter(job => job.job_id !== result.job.job_id)];
+    }
+    imageVariants = await api(`/api/image-variants?brand=${brandParam()}&project_id=${projectParam()}`);
+    renderVariantGallery();
+    syncWorkflowSelections();
+    renderSlideshowPreflight();
+    const variant = result.variant;
+    $("variantResult").textContent = variant.status === "ready"
+      ? `ready / ${variant.name}`
+      : `${variant.status} / ${variant.job_id || variant.variant_id}`;
+  }catch(err){
+    $("variantResult").textContent = err.message;
+    imageVariants = await api(`/api/image-variants?brand=${brandParam()}&project_id=${projectParam()}`).catch(() => imageVariants);
+    renderVariantGallery();
+  }finally{
+    $("createVariant").disabled = false;
   }
 }
 
@@ -1131,6 +2000,7 @@ async function previewPrompt(){
   $("renderedAfterPrompt").value = data.rendered_after_prompt || data.after_prompt;
   $("renderedProductPrompt").value = data.rendered_product_prop_prompt || "";
   $("promptResult").textContent = `parsed: ${data.age} / ${data.gender} / ${data.ethnicity || "unspecified"}`;
+  renderSlideshowPreflight();
   return data;
 }
 
@@ -1169,13 +2039,17 @@ function renderIntegrations(){
 }
 
 function renderStats(){
+  const brandPosts = posts.filter(p =>
+    p.brand === ($("brand").value || selectedBrand)
+    && p.project_id === ($("project").value || selectedProject)
+  );
   const totals = {
-    posts: posts.length,
-    ready: posts.filter(p => queue(p).status === "ready_to_post").length,
-    posted: posts.filter(p => queue(p).status === "posted").length,
-    needs: posts.filter(p => queue(p).status === "needs_edit").length,
-    views: posts.reduce((a,p)=>a+(Number(metric(p,"views"))||0),0),
-    winners: posts.filter(p=>p.is_winner).length,
+    posts: brandPosts.length,
+    ready: brandPosts.filter(p => queue(p).status === "ready_to_post").length,
+    posted: brandPosts.filter(p => queue(p).status === "posted").length,
+    needs: brandPosts.filter(p => queue(p).status === "needs_edit").length,
+    views: brandPosts.reduce((a,p)=>a+(Number(metric(p,"views"))||0),0),
+    winners: brandPosts.filter(p=>p.is_winner).length,
   };
   const rows = [
     ["posts", totals.posts],
@@ -1189,17 +2063,233 @@ function renderStats(){
 }
 
 function renderRuns(){
-  if(!runs.length){
+  const selectedRuns = runs.filter(run => {
+    const cfg = run.config || {};
+    return cfg.brand === ($("brand").value || selectedBrand)
+      && (cfg.project_id || `${cfg.brand}_main`) === ($("project").value || selectedProject)
+      && (cfg.workflow === "slideshow" || String(cfg.formats || "").split(",").includes("slideshow"));
+  });
+  if(!selectedRuns.length){
     $("runLog").textContent = "No runs yet.";
     return;
   }
-  const r = runs[0];
+  const r = selectedRuns[0];
   const cfg = r.config || {};
   $("runLog").textContent =
     `${r.run_id} / ${r.status}\n` +
     `brand=${cfg.brand || "-"} formats=${cfg.formats || "slideshow"} avatars=${cfg.avatars} posts_per_avatar=${cfg.posts_per_avatar} provider=${cfg.provider} placeholder=${cfg.placeholder}\n` +
     `opening=${cfg.opening_style || "saved"} product=${cfg.product_style || "saved"}\n\n` +
     (r.tail || "");
+}
+
+function setWorkspace(name){
+  activeWorkspace = ["slideshows","videos","characters","review","settings"].includes(name) ? name : "slideshows";
+  document.querySelectorAll("[data-workspace]").forEach(section => {
+    section.hidden = section.dataset.workspace !== activeWorkspace;
+  });
+  document.querySelectorAll("[data-workspace-button]").forEach(button => {
+    button.classList.toggle("on", button.dataset.workspaceButton === activeWorkspace);
+  });
+  if(activeWorkspace === "review") renderBatchReview();
+}
+
+function setReviewWorkflow(workflow){
+  reviewWorkflow = workflow;
+  document.querySelectorAll("[data-review-workflow]").forEach(button => {
+    button.classList.toggle("on", button.dataset.reviewWorkflow === workflow);
+  });
+  renderBatchReview();
+}
+
+function batchWorkflowLabel(workflow){
+  if(workflow === "slideshow") return "Slideshow";
+  if(workflow === "talking_head") return "Talking head";
+  if(workflow === "text") return "Text formats";
+  return workflow || "Other";
+}
+
+function batchStatusBadge(status){
+  const good = ["completed","ready","posted","success"].includes(status);
+  const bad = ["failed","needs_review"].includes(status);
+  return `<span class="badge ${good ? "ok" : bad ? "missing" : ""}">${esc(status || "draft")}</span>`;
+}
+
+function visibleBatches(){
+  return batchSummaries.filter(batch => {
+    if(batch.brand !== ($("brand").value || selectedBrand)) return false;
+    if(batch.project_id !== ($("project").value || selectedProject)) return false;
+    return reviewWorkflow === "all" || batch.workflow === reviewWorkflow;
+  });
+}
+
+function renderBatchReview(){
+  if(!$("batchReview")) return;
+  const rows = visibleBatches();
+  $("batchReviewCount").textContent = `${rows.length} batch${rows.length === 1 ? "" : "es"}`;
+  if(!rows.length){
+    $("batchReview").innerHTML = '<div class="empty" style="display:block">No grouped batches for this workflow yet. Generate a new batch, or open legacy records below.</div>';
+    return;
+  }
+  $("batchReview").innerHTML = rows.map(batch => {
+    const expanded = openBatchId === batch.batch_id;
+    const detail = batchDetails.get(batch.batch_id);
+    return `<article class="batch-card ${batch.legacy ? "legacy" : ""}">
+      <div class="batch-header">
+        <div class="batch-title"><strong>${batch.legacy ? "Legacy " : ""}${esc(batchWorkflowLabel(batch.workflow))}</strong><span>${esc(batch.batch_id)}</span></div>
+        <div class="batch-metric"><strong>${esc(batch.character_count || 0)}</strong>characters</div>
+        <div class="batch-metric"><strong>${esc(batch.post_count || batch.clip_count || 0)}</strong>${batch.workflow === "talking_head" ? "clips" : "posts"}</div>
+        <div class="batch-metric hide-mid"><strong>${esc((configData.projects || []).find(project => project.project_id === batch.project_id)?.name || batch.project_id || "-")}</strong>project</div>
+        <div class="batch-metric hide-mid"><strong>${esc((batch.created_at || "").slice(0,10) || "-")}</strong>created</div>
+        <div class="actions">${batchStatusBadge(batch.status)}<button class="small" onclick="saveBatchRecipe('${esc(batch.batch_id)}')">Save recipe</button><button class="small" onclick="toggleBatchReview('${esc(batch.batch_id)}')">${expanded ? "Close" : "Review"}</button></div>
+      </div>
+      ${expanded ? `<div class="batch-detail">${detail ? renderBatchDetail(detail) : '<div class="sub">Loading batch...</div>'}</div>` : ""}
+    </article>`;
+  }).join("");
+}
+
+async function toggleBatchReview(batchId){
+  if(openBatchId === batchId){
+    openBatchId = null;
+    renderBatchReview();
+    return;
+  }
+  openBatchId = batchId;
+  renderBatchReview();
+  if(!batchDetails.has(batchId)){
+    try{
+      batchDetails.set(batchId, await api(`/api/batches/${encodeURIComponent(batchId)}`));
+    }catch(err){
+      batchDetails.set(batchId, {workflow:"error", error:err.message, posts:[], jobs:[]});
+    }
+  }
+  renderBatchReview();
+}
+
+async function saveBatchRecipe(batchId){
+  const batch = batchSummaries.find(row => row.batch_id === batchId);
+  pendingBatchRecipeId = batchId;
+  $("batchRecipeName").value = `${batchWorkflowLabel(batch && batch.workflow)} ${(batch && batch.created_at || "").slice(0,10)}`;
+  $("batchRecipeSource").textContent = batchId;
+  $("batchRecipeResult").textContent = "";
+  $("batchRecipeDialog").showModal();
+  $("batchRecipeName").focus();
+}
+
+async function confirmBatchRecipe(){
+  if(!pendingBatchRecipeId) return;
+  const name = $("batchRecipeName").value.trim();
+  if(!name){ $("batchRecipeResult").textContent = "enter a recipe name"; return; }
+  $("confirmBatchRecipe").disabled = true;
+  try{
+    const recipe = await api("/api/recipes", {
+      method:"POST",
+      body:JSON.stringify({source_batch_id:pendingBatchRecipeId,name})
+    });
+    addRecipe(recipe, recipe.workflow === "talking_head" ? "videoRecipe" : "slideshowRecipe");
+    $("batchRecipeStatus").textContent = `saved ${recipe.name}`;
+    $("batchRecipeDialog").close();
+    pendingBatchRecipeId = null;
+  }catch(err){ $("batchRecipeResult").textContent = err.message; }
+  finally{ $("confirmBatchRecipe").disabled = false; }
+}
+
+function domKey(value){
+  return String(value || "item").replace(/[^a-zA-Z0-9_-]/g,"_");
+}
+
+function renderBatchDetail(detail){
+  if(detail.error) return `<div class="sub">${esc(detail.error)}</div>`;
+  if(detail.workflow === "slideshow") return renderSlideshowBatchDetail(detail);
+  if(detail.workflow === "talking_head") return renderVideoBatchDetail(detail);
+  const postsInBatch = detail.posts || [];
+  return postsInBatch.length ? postsInBatch.map(post => `
+    <div class="review-character">
+      <div><strong>${esc(post.hook || post.post_id)}</strong><div class="spec">${esc(post.post_id)}</div></div>
+      <div class="actions">${complianceBadge(post)}<button class="small" onclick="showDetail('${esc(post.post_id)}')">View output</button></div>
+    </div>`).join("") : '<div class="sub">This batch has no outputs yet.</div>';
+}
+
+function renderSlideshowBatchDetail(detail){
+  const groups = [];
+  (detail.posts || []).forEach(post => {
+    const slug = (post.character || {}).slug || post.post_id;
+    let group = groups.find(item => item.slug === slug);
+    if(!group){
+      group = {slug, spec:(post.character || {}).spec || "", posts:[]};
+      groups.push(group);
+    }
+    group.posts.push(post);
+  });
+  if(!groups.length) return '<div class="sub">The slideshow run is still waiting for outputs.</div>';
+  return groups.map(group => {
+    const groupKey = domKey(`${detail.batch_id}_${group.slug}`);
+    const portraitPost = group.posts[0] || {};
+    const preview = portraitPost.preview || {};
+    const portrait = (preview.packaged_assets || {}).before || (preview.assets || {}).before;
+    return `<section class="review-character" data-review-character="${groupKey}">
+      <div class="review-character-id">
+        ${portrait ? `<img src="${fileUrl(portrait)}" alt="${esc(group.slug)}">` : ""}
+        <strong>${esc(group.slug)}</strong><div class="spec">${esc(group.spec)}</div>
+      </div>
+      <div>
+        <div class="iteration-tabs">${group.posts.map((post,index) => `<button class="small ${index === 0 ? "on" : ""}" onclick="selectBatchIteration('${groupKey}',${index},this)">Post ${index + 1}</button>`).join("")}</div>
+        ${group.posts.map((post,index) => renderSlideshowIteration(post,index)).join("")}
+      </div>
+    </section>`;
+  }).join("");
+}
+
+function renderSlideshowIteration(post,index){
+  const preview = post.preview || {};
+  const slides = preview.slides || [];
+  const mainId = `review-slide-${domKey(post.post_id)}`;
+  return `<div class="iteration-panel" data-iteration="${index}" ${index === 0 ? "" : "hidden"}>
+    <div class="slide-review">
+      <div class="slide-stage">${slides.length ? `<img id="${mainId}" src="${fileUrl(slides[0])}" alt="Active slide preview">` : '<div class="matrix-portrait-empty" style="width:100%;aspect-ratio:9/16">No rendered slides</div>'}</div>
+      <div>
+        <div class="slide-filmstrip">${slides.map((path,slideIndex) => `<button title="Slide ${slideIndex + 1}" onclick="setReviewSlide('${mainId}','${esc(path)}')"><img src="${fileUrl(path)}" alt="Slide ${slideIndex + 1}"></button>`).join("")}</div>
+        <div class="review-copy"><strong>${esc(clean(post.hook || ""))}</strong>\n${esc(preview.caption || post.caption || "")}</div>
+        <div class="actions">${complianceBadge(post)}${batchStatusBadge(queue(post).status)}<button class="small" onclick="showDetail('${esc(post.post_id)}')">Full preview</button><button class="small" onclick="setQueue('${esc(post.post_id)}','needs_edit')">Mark for edit</button><button class="small" onclick="openFolder('${esc(post.post_id)}')">Folder</button></div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function selectBatchIteration(groupKey,index,button){
+  const group = document.querySelector(`[data-review-character="${groupKey}"]`);
+  if(!group) return;
+  group.querySelectorAll(".iteration-panel").forEach(panel => { panel.hidden = Number(panel.dataset.iteration) !== index; });
+  group.querySelectorAll(".iteration-tabs button").forEach(item => item.classList.toggle("on", item === button));
+}
+
+function setReviewSlide(imageId,path){
+  const image = document.getElementById(imageId);
+  if(image) image.src = fileUrl(path);
+}
+
+function renderVideoBatchDetail(detail){
+  const groups = [];
+  (detail.jobs || []).forEach(job => {
+    let group = groups.find(item => item.slug === job.slug);
+    if(!group){ group = {slug:job.slug, spec:job.character_spec || "", jobs:[]}; groups.push(group); }
+    group.jobs.push(job);
+  });
+  if(!groups.length) return '<div class="sub">This video batch has no clips yet.</div>';
+  return groups.map(group => `<section class="review-character">
+    <div><strong>${esc(group.slug)}</strong><div class="spec">${esc(group.spec)}</div></div>
+    <div class="video-review-pair">${["before","after"].map(role => renderVideoReviewClip(group.jobs.find(job => job.clip_role === role || job.source_asset === role),role)).join("")}</div>
+  </section>`).join("");
+}
+
+function renderVideoReviewClip(job,role){
+  if(!job) return `<div class="video-review-clip"><div class="batch-portrait-empty">missing</div><div><strong>${esc(role)}</strong><div class="spec">No clip queued</div></div></div>`;
+  const media = job.status === "completed" && job.output_path
+    ? `<video src="${fileUrl(job.output_path)}" controls preload="metadata"></video>`
+    : job.portrait_path ? `<img src="${fileUrl(job.portrait_path)}" alt="${esc(role)} portrait">` : '<div class="batch-portrait-empty">missing</div>';
+  let action = "";
+  if(job.status === "queued" && job.auth_mode === "api_key") action = `<button class="small" onclick="runHeygenJob('${esc(job.job_id)}')">Start render</button>`;
+  if(job.status === "submitted") action = `<button class="small" onclick="refreshHeygenJob('${esc(job.job_id)}')">Refresh</button>`;
+  return `<div class="video-review-clip">${media}<div><strong>${esc(role)} clip</strong><div class="spec">${esc(job.status)} / ${esc(job.auth_mode)}</div><div class="review-copy">${esc(job.script || "")}</div><div class="actions">${action}${job.status === "completed" ? `<a href="${fileUrl(job.output_path)}" target="_blank">Open video</a>` : ""}</div></div></div>`;
 }
 
 function renderHead(){
@@ -1224,7 +2314,8 @@ function renderHead(){
 
 function filteredRows(){
   const q = $("search").value.trim().toLowerCase();
-  let rows = posts.slice();
+  let rows = posts.filter(p => p.brand === ($("brand").value || selectedBrand)
+    && p.project_id === ($("project").value || selectedProject) && p.legacy);
   if(filter === "ready") rows = rows.filter(p => queue(p).status === "ready_to_post");
   if(filter === "posted") rows = rows.filter(p => queue(p).status === "posted");
   if(filter === "needs") rows = rows.filter(p => queue(p).status === "needs_edit");
@@ -1302,16 +2393,23 @@ function render(){
 }
 
 async function refresh(){
-  const [postRows, runRows, nextImageJobs, nextVideoJobs, nextHeygenStatus] = await Promise.all([
+  const [postRows, runRows, nextImageJobs, nextVideoJobs, nextHeygenStatus, nextBatches, nextVariants] = await Promise.all([
     api("/api/posts"), api("/api/runs"), api("/api/image-jobs"),
-    api("/api/heygen/jobs"), api("/api/heygen/status")
+    api("/api/heygen/jobs"), api("/api/heygen/status"), api("/api/batches"),
+    api(`/api/image-variants?brand=${brandParam()}&project_id=${projectParam()}`)
   ]);
   const previousStatuses = new Map(imageJobs.map(job => [job.job_id, job.status]));
   posts = postRows;
   runs = runRows;
   imageJobs = nextImageJobs;
+  imageVariants = nextVariants;
   videoJobs = nextVideoJobs;
   heygenStatus = nextHeygenStatus;
+  batchSummaries = nextBatches;
+  if(openBatchId){
+    try{ batchDetails.set(openBatchId, await api(`/api/batches/${encodeURIComponent(openBatchId)}`)); }
+    catch(err){ batchDetails.delete(openBatchId); }
+  }
   const completedNow = imageJobs.some(job => job.status === "completed" && previousStatuses.get(job.job_id) && previousStatuses.get(job.job_id) !== "completed");
   if(completedNow){
     rosterData = await api(`/api/roster?brand=${brandParam()}`);
@@ -1324,50 +2422,118 @@ async function refresh(){
   render();
   renderRuns();
   renderHeygen();
+  renderSlideshowPreflight();
+  renderVariantGallery();
+  renderVideoCharacterPicker();
+  renderBatchReview();
   if(selectedPost) showDetail(selectedPost, false);
 }
 
 async function changeBrand(){
   selectedBrand = $("brand").value;
+  selectedProject = "";
+  slideshowSelectionTouched = false;
+  videoSelectionTouched = false;
+  slideshowSelectedSlugs.clear();
+  videoSelectedSlugs.clear();
+  openBatchId = null;
   const info = activeBrandInfo();
+  populateProjects(configData);
   $("account").value = info.default_account || "";
   $("formats").value = "slideshow";
   $("savePrompt").disabled = !info.has_image_prompts;
-  $("apiState").textContent = `${info.display_name || "brand"} / ${configData.roster_count} roster characters / ${configData.image_provider}`;
-  [assetRows, rosterData] = await Promise.all([
+  updateContextStatus();
+  [assetRows, rosterData, imageVariants] = await Promise.all([
     api(`/api/assets/status?brand=${brandParam()}`),
-    api(`/api/roster?brand=${brandParam()}`)
+    api(`/api/roster?brand=${brandParam()}`),
+    api(`/api/image-variants?brand=${brandParam()}&project_id=${projectParam()}`)
   ]);
   renderAssets();
   renderRosterSelectors();
+  renderVariantGallery();
   $("beforeTemplate").value = "";
   $("openingPrompt").value = "";
   $("scanPrompt").value = "";
   $("afterPrompt").value = "";
   $("productPropPrompt").value = "";
   await previewPrompt();
+  renderRuns();
+  renderStats();
+  render();
+  renderBatchReview();
+  renderHeygen();
+  renderRecipeOptions();
+}
+
+async function changeProject(){
+  selectedProject = $("project").value;
+  openBatchId = null;
+  imageVariants = await api(`/api/image-variants?brand=${brandParam()}&project_id=${projectParam()}`);
+  slideshowSelectionTouched = false;
+  slideshowSelectedSlugs.clear();
+  updateContextStatus();
+  renderProjectPaths();
+  syncWorkflowSelections();
+  renderVariantGallery();
+  renderSlideshowPreflight();
+  renderStats();
+  render();
+  renderRuns();
+  renderHeygen();
+  renderBatchReview();
+  renderRecipeOptions();
+}
+
+async function createLocalProject(){
+  $("createProject").disabled = true;
+  try{
+    const project = await api("/api/projects", {
+      method:"POST",
+      body:JSON.stringify({brand:$("brand").value,name:$("projectName").value.trim()})
+    });
+    configData.projects = [...(configData.projects || []).filter(row => row.project_id !== project.project_id), project];
+    populateProjects(configData,project.project_id);
+    await changeProject();
+    $("projectResult").textContent = `created ${project.project_id}`;
+    $("projectDialog").close();
+  }catch(err){ $("projectResult").textContent = err.message; }
+  finally{ $("createProject").disabled = false; }
 }
 
 async function startRun(){
   $("startRun").disabled = true;
   try{
-    if(activeBrandInfo().has_image_prompts) await savePrompt();
-    else await previewPrompt();
+    const characterSlugs = slideshowCharacters()
+      .filter(character => character.slug && slideshowSelectedSlugs.has(character.slug))
+      .map(character => character.slug);
+    if(!characterSlugs.length) throw new Error("select at least one saved character");
+    await previewPrompt();
+    const hookOverrides = {};
+    characterSlugs.forEach(slug => {
+      const character = slideshowCharacters().find(row => row.slug === slug);
+      hookOverrides[slug] = Array.from(
+        {length:Math.max(1,Number($("postsPerAvatar").value || 1))},
+        (_,index) => slideshowHookValue(character,index)
+      );
+    });
     await api("/api/runs", {
       method:"POST",
       body:JSON.stringify({
         brand:$("brand").value,
-        avatars:Number($("avatars").value || 1),
+        project_id:$("project").value,
+        avatars:characterSlugs.length,
         posts_per_avatar:Number($("postsPerAvatar").value || 1),
         provider:$("provider").value,
         account:$("account").value,
-        formats:$("formats").value,
+        formats:"slideshow",
         placeholder:$("placeholder").checked,
         hook:$("promptHook").value.trim(),
         opening_style:$("openingStyle").value,
         product_style:$("productStyle").value,
         product_slide_caption:$("productCaption").value,
-        character_slug:$("runCharacter").value
+        character_slugs:characterSlugs,
+        hook_overrides:hookOverrides,
+        prompt_snapshot:currentPromptSnapshot()
       })
     });
     await refresh();
@@ -1381,15 +2547,15 @@ async function startRun(){
 async function runPromptTest(){
   $("runPromptTest").disabled = true;
   try{
-    if(activeBrandInfo().has_image_prompts) await savePrompt();
-    else await previewPrompt();
+    await previewPrompt();
     await api("/api/runs", {
       method:"POST",
       body:JSON.stringify({
         brand:$("brand").value,
+        project_id:$("project").value,
         avatars:1,
         posts_per_avatar:1,
-        provider:$("provider").value,
+        provider:$("promptProvider").value,
         account:$("account").value,
         formats:$("formats").value,
         placeholder:$("promptPlaceholder").checked,
@@ -1399,7 +2565,8 @@ async function runPromptTest(){
         after_score:87,
         opening_style:$("openingStyle").value,
         product_style:$("productStyle").value,
-        product_slide_caption:$("productCaption").value
+        product_slide_caption:$("productCaption").value,
+        prompt_snapshot:currentPromptSnapshot()
       })
     });
     $("promptResult").textContent = "started 1-post prompt test";
@@ -1414,11 +2581,13 @@ async function runPromptTest(){
 function applyOpeningPreset(){
   $("openingPrompt").value = openingPresets[$("openingStyle").value] || "";
   previewPrompt();
+  renderSlideshowPreflight();
 }
 
 function applyProductPreset(){
   $("productPropPrompt").value = productPropPresets[$("productStyle").value] || "";
   previewPrompt();
+  renderSlideshowPreflight();
 }
 
 async function setQueue(postId,status){
@@ -1546,7 +2715,19 @@ function setFilter(f){
 
 $("startRun").onclick = startRun;
 $("brand").onchange = changeBrand;
-$("provider").onchange = updateImageActionLabel;
+$("project").onchange = changeProject;
+$("newProject").onclick = () => {
+  $("projectName").value = "";
+  $("projectResult").textContent = "";
+  $("projectDialogBrand").textContent = activeBrandInfo().display_name || $("brand").value;
+  $("projectDialog").showModal();
+  $("projectName").focus();
+};
+$("closeProjectDialog").onclick = () => $("projectDialog").close();
+$("createProject").onclick = createLocalProject;
+$("closeBatchRecipeDialog").onclick = () => $("batchRecipeDialog").close();
+$("confirmBatchRecipe").onclick = confirmBatchRecipe;
+$("characterProvider").onchange = updateImageActionLabel;
 $("rosterCharacter").onchange = event => selectRosterCharacter(event.target.value);
 $("newCharacter").onclick = () => selectRosterCharacter(-1);
 $("saveCharacter").onclick = async () => {
@@ -1554,11 +2735,16 @@ $("saveCharacter").onclick = async () => {
   catch(err){ $("rosterResult").textContent = err.message; }
 };
 $("generateMissing").onclick = generateMissingImages;
+$("createVariant").onclick = createImageVariant;
 $("queueHeygen").onclick = queueHeygenVideo;
 $("queueHeygenBatch").onclick = queueHeygenBatch;
 $("previewHeygenBatch").onclick = buildHeygenBatchPreview;
-$("heygenBatchCount").onchange = buildHeygenBatchPreview;
-$("heygenBatchStart").onchange = buildHeygenBatchPreview;
+$("saveSlideshowRecipe").onclick = saveSlideshowRecipe;
+$("loadSlideshowRecipe").onclick = loadSlideshowRecipe;
+$("saveVideoRecipe").onclick = saveVideoRecipe;
+$("loadVideoRecipe").onclick = loadVideoRecipe;
+$("heygenBatchCount").onchange = selectFirstVideoCharacters;
+$("heygenSingleCharacter").onchange = event => selectRosterCharacter(event.target.value);
 $("heygenModeSingle").onclick = () => setHeygenMode("single");
 $("heygenModeBatch").onclick = () => setHeygenMode("batch");
 $("testHeygen").onclick = testHeygenConnection;
@@ -1573,6 +2759,8 @@ $("runPromptTest").onclick = runPromptTest;
 $("promptSpec").onchange = previewPrompt;
 $("openingStyle").onchange = applyOpeningPreset;
 $("productStyle").onchange = applyProductPreset;
+$("avatars").onchange = selectFirstSlideshowCharacters;
+$("postsPerAvatar").onchange = renderSlideshowPreflight;
 $("importMetrics").onclick = importMetricsCsv;
 $("search").oninput = render;
 $("f-all").onclick = () => setFilter("all");
@@ -1581,6 +2769,12 @@ $("f-posted").onclick = () => setFilter("posted");
 $("f-needs").onclick = () => setFilter("needs");
 $("f-win").onclick = () => setFilter("win");
 $("f-pub").onclick = () => setFilter("pub");
+document.querySelectorAll("[data-workspace-button]").forEach(button => {
+  button.onclick = () => setWorkspace(button.dataset.workspaceButton);
+});
+document.querySelectorAll("[data-review-workflow]").forEach(button => {
+  button.onclick = () => setReviewWorkflow(button.dataset.reviewWorkflow);
+});
 load();
 setInterval(refresh, 5000);
 </script>

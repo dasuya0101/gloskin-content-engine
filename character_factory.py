@@ -374,7 +374,8 @@ def missing_asset_plan(spec, character_dir, opening_style=None, product_style=No
 
 
 def generate_missing_assets(spec, character_dir, opening_style=None, product_style=None,
-                            prompt_config_path=DEFAULT_PROMPT_CONFIG):
+                            prompt_config_path=DEFAULT_PROMPT_CONFIG, provider=None,
+                            allow_generate_fallback=True):
     """Fill absent character assets while preserving every uploaded/generated file."""
     import image_router
 
@@ -390,9 +391,15 @@ def generate_missing_assets(spec, character_dir, opening_style=None, product_sty
         if target["mode"] == "edit":
             reference = Path(target["reference_path"]).read_bytes()
             image_bytes = image_router.edit(
-                reference, target["prompt"], size=target["size"])
+                reference,
+                target["prompt"],
+                size=target["size"],
+                provider=provider,
+                allow_generate_fallback=allow_generate_fallback,
+            )
         else:
-            image_bytes = image_router.generate(target["prompt"], size=target["size"])
+            image_bytes = image_router.generate(
+                target["prompt"], size=target["size"], provider=provider)
         Path(target["target_path"]).write_bytes(image_bytes)
         generated.append(target["name"])
 

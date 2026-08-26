@@ -30,8 +30,14 @@ empty. Never use OPENAI_API_KEY and never overwrite an existing target.
 9. On an unrecoverable error, run
    `python image_queue.py fail --job <job_id> --reason "<short reason>"`.
 
-The dashboard polls job state and refreshes character previews after completion.
+The dashboard polls job state and refreshes character and project-variant
+previews after completion.
 Queued work is local runtime state and is intentionally excluded from git.
+
+`codex_local` is a stable manual or Codex-automation worker path, but it is not
+an in-process API: the Flask dashboard cannot invoke the signed-in Codex image
+tool itself. Use a direct provider when a batch must run unattended without a
+Codex task claiming the queue.
 
 ## Folder layout
 
@@ -48,7 +54,14 @@ assets/<character-slug>/
   scan.png
   after.png
   product_prop.png
+
+workspace_data/image_variants/<brand>/<project>/<variant-id>/
+  variant.json
+  prompt_config.json
 ```
 
-The queue generates only absent assets. `opening.png` and `product_prop.png` are
-included only when the corresponding Prompt Lab styles request them.
+Canonical-character jobs generate only absent assets. Project variants inherit
+unselected source images and queue the checked image slots plus any missing core
+assets. `opening.png` and `product_prop.png` are included only when the
+corresponding Prompt Lab styles request them. Variant jobs record their project,
+source asset slug, exact prompt snapshot, and target order.

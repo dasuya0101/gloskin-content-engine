@@ -131,7 +131,10 @@ class HeyGenApiTests(unittest.TestCase):
                     **payload, "consent_confirmed": True,
                 })
                 self.assertEqual(accepted.status_code, 202)
-                self.assertEqual(accepted.get_json()["job"]["auth_mode"], "oauth_mcp")
+                job = accepted.get_json()["job"]
+                self.assertEqual(job["auth_mode"], "oauth_mcp")
+                self.assertEqual(job["workflow"], "talking_head")
+                self.assertTrue(job["batch_id"].startswith("hgs_"))
 
     def test_batch_validates_every_portrait_before_queueing(self):
         with tempfile.TemporaryDirectory(dir=api_server.ROOT) as temp:

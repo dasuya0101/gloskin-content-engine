@@ -15,12 +15,29 @@ import uuid
 from pathlib import Path
 
 from brand_loader import DEFAULT_BRAND
+from project_store import default_project_id
 
 POSTS_FILE = "posts.json"
 
 
+def infer_workflow(record):
+    if record.get("workflow"):
+        return record["workflow"]
+    if record.get("format") == "text_native":
+        return "text"
+    outputs = record.get("outputs") or {}
+    package = record.get("package") or {}
+    if outputs.get("slides_dir") or package.get("slides_dir"):
+        return "slideshow"
+    return "other"
+
+
 def normalize_post(record):
     record.setdefault("brand", DEFAULT_BRAND)
+    record.setdefault("project_id", default_project_id(record["brand"]))
+    record.setdefault("batch_id", None)
+    record.setdefault("workflow", infer_workflow(record))
+    record.setdefault("legacy", not bool(record.get("batch_id")))
     record.setdefault("publish", {"platform": None, "account": None, "url": None, "posted_at": None})
     record.setdefault("publish_queue", {"status": "draft", "target_account": None,
                                         "notes": None, "updated_at": None})
@@ -47,7 +64,8 @@ def _save(records, path):
 def record_post(*, character, fmt, hook, slides, assets, outputs,
                 variant_of=None, tracking_code=None, caption=None,
                 package=None, publish_queue=None, brand=DEFAULT_BRAND,
-                compliance=None,
+                compliance=None, batch_id=None, workflow=None,
+                project_id=None,
                 path=POSTS_FILE):
     """Append a new post record. Returns the post_id."""
     records = _load(path)
@@ -55,6 +73,10 @@ def record_post(*, character, fmt, hook, slides, assets, outputs,
     records.append({
         "post_id": post_id,
         "brand": brand,
+        "project_id": project_id or default_project_id(brand),
+        "batch_id": batch_id,
+        "workflow": workflow or ("text" if fmt == "text_native" else "slideshow"),
+        "legacy": False,
         "created_at": time.strftime("%Y-%m-%dT%H:%M:%S"),
         "format": fmt,                      # e.g. testimonial_beforeafter / macro_faceless
         "character": character,             # {slug, spec, before_score, after_score}

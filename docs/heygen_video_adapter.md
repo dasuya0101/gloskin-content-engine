@@ -5,20 +5,31 @@
 The dashboard can create local talking-head jobs from a roster character, approved
 script, portrait source, voice ID, and optional existing HeyGen avatar ID. Jobs are
 stored under `video_jobs/` and completed MP4s are downloaded under
-`videos/<character_slug>/`. Both directories are local runtime data and gitignored.
+`videos/<brand>/<project_id>/<character_slug>/`. Both directories are local runtime
+data and gitignored.
 
 Generation is a separate action from queueing. It never publishes a video.
 
-The dashboard has two video modes:
+The dashboard's **Videos** workspace has two video modes:
 
 - **Single clip** queues one selected character portrait and one editable script.
 - **Batch before + after** defaults to three roster characters and previews two
-  editable clips per character. Both `before.png` and `after.png` must exist for
-  every selected character. The API validates the full set before writing any jobs.
+  editable clips in one grouped row per character. Characters can be checked or
+  unchecked independently. Both `before.png` and `after.png` must exist for every
+  selected character. The API validates the full set before writing any jobs.
+
+Every single request and multi-character request has a `batch_id` and
+`workflow: talking_head`, plus the selected `project_id`. The **Review** workspace uses these fields to keep paired
+clips, scripts, portraits, and completed videos together.
 
 Batch scripts support `{character}`, `{spec}`, `{hook}`, `{before_score}`, and
 `{after_score}` placeholders. Preview expands these values and each resulting clip
 can be edited independently before queueing.
+
+Use **Save setup** to snapshot the selected characters, shared motion/voice settings,
+and every edited before/after script. Loading that recipe restores the draft only;
+it does not queue or render clips. Recipes live in `workspace_data/recipes/` and can
+be loaded into another project for the same brand.
 
 ## Authentication routes
 
@@ -29,9 +40,11 @@ Choose **Subscription / OAuth** in the dashboard. The job is queued with
 that has HeyGen Remote MCP connected. The local Flask server cannot access or store
 the Codex OAuth session, and it will never fall back to API billing.
 
-This workspace does not currently expose `mcp__heygen__*` tools, so OAuth jobs can
-be queued but not submitted until the connection is added to Codex. Verify a future
-connection with HeyGen's `get_current_user` MCP tool before running a job.
+The HeyGen Codex plugin has been smoke-tested with `get_current_user`, private
+avatar listing, and voice listing without creating a video. Plugin availability
+is task-scoped, so verify `get_current_user` in the Codex task that will claim an
+OAuth job before spending credits. The local Flask server cannot inspect that
+OAuth session, which is why its status line only describes the queue handoff.
 
 ### API wallet: direct API key
 

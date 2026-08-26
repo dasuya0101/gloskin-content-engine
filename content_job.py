@@ -12,10 +12,11 @@ Examples:
 
 Defaults:
   - IMAGE_PROVIDER=openai unless --provider is passed
-  - packaged posts land in posts/<brand>/YYYY-MM-DD/<post_id>/
+  - packaged posts land in posts/<brand>/<project_id>/YYYY-MM-DD/<post_id>/
   - publish_queue.status is "ready_to_post"
 """
 import argparse
+import copy
 import json
 import os
 import shutil
@@ -28,6 +29,7 @@ import compliance_lint
 from brand_loader import DEFAULT_BRAND, load_brand, mechanism_claims_for
 from claim_packs import mechanism_claims as pack_mechanism_claims, relevant_claim_packs
 import manifest
+from project_store import default_project_id
 import screenshot_factory as sf
 import slideshow_maker as sm
 import text_formats as tf
@@ -84,6 +86,24 @@ def pick_hook(character, index, brand):
         "I stopped guessing.\nThen I made a plan.",
     ]
     return fill_template(fallbacks[(index - len(hooks)) % len(fallbacks)], character)
+
+
+def apply_hook_overrides(characters, hook_overrides):
+    for character in characters:
+        slug = character.get("slug")
+        overrides = hook_overrides.get(slug) if slug else None
+        if isinstance(overrides, str):
+            overrides = [overrides]
+        if not isinstance(overrides, list):
+            continue
+        iterations = list(character.get("iterations") or [])
+        while len(iterations) < len(overrides):
+            iterations.append({})
+        for index, hook in enumerate(overrides):
+            if str(hook or "").strip():
+                iterations[index] = {**iterations[index], "hook": str(hook).strip()}
+        character["iterations"] = iterations
+    return characters
 
 
 def pick_after_text(character, index, brand):
@@ -250,8 +270,9 @@ def caption_for(character, hook, tracking_code, brand):
     ]).strip()
 
 
-def copy_package(post_id, result, brief, caption, posts_dir, run_date, brand_id, assets=None):
-    package_dir = Path(posts_dir) / brand_id / run_date / post_id
+def copy_package(post_id, result, brief, caption, posts_dir, run_date, brand_id,
+                 project_id, assets=None):
+    package_dir = Path(posts_dir) / brand_id / project_id / run_date / post_id
     package_dir.mkdir(parents=True, exist_ok=True)
 
     slides_dest = package_dir / "slides"
@@ -384,6 +405,16 @@ def main():
                     help="number of roster characters to generate this run")
     ap.add_argument("--character-slug", default=None,
                     help="run one saved roster character by slug")
+    ap.add_argument("--character-slugs", default=None,
+                    help="comma-separated saved roster characters in batch order")
+    ap.add_argument("--batch-id", default=None,
+                    help="stable dashboard batch identifier")
+    ap.add_argument("--project-id", default=None,
+                    help="local project used to isolate generated result folders")
+    ap.add_argument("--run-input", default=None,
+                    help="JSON file containing per-run creative overrides")
+    ap.add_argument("--prompt-config", default=None,
+                    help="per-run image prompt config snapshot")
     ap.add_argument("--posts-per-avatar", type=int, default=1,
                     help="number of post iterations to render for each avatar")
     ap.add_argument("--out", default="output")
@@ -404,13 +435,18 @@ def main():
     args = ap.parse_args()
 
     brand = load_brand(args.brand)
+    project_id = args.project_id or default_project_id(brand.brand_id)
     formats = tf.parse_formats(args.formats, brand=brand, default=["slideshow"])
     wants_slideshow = "slideshow" in formats
     wants_text = bool(tf.text_format_names(formats))
     account = args.account or brand.default_account
-    prompt_config_path = brand.prompt_path("image_character")
+    prompt_config_path = Path(args.prompt_config) if args.prompt_config else brand.prompt_path("image_character")
     os.environ["IMAGE_PROVIDER"] = args.provider
     roster = json.loads(Path(args.roster).read_text(encoding="utf-8")) if Path(args.roster).exists() else {}
+    run_input = (
+        json.loads(Path(args.run_input).read_text(encoding="utf-8"))
+        if args.run_input and Path(args.run_input).exists() else {}
+    )
     template_key = roster.get("template", "scan_results")
     template = brand.template_path(template_key)
     if template and not template.exists():
@@ -427,8 +463,17 @@ def main():
             "product_slide_caption": args.product_slide_caption,
         }]
     else:
-        characters = roster.get("characters", [])
-        if args.character_slug:
+        characters = copy.deepcopy(roster.get("characters", []))
+        if args.character_slugs:
+            requested_slugs = [
+                slug.strip() for slug in args.character_slugs.split(",") if slug.strip()
+            ]
+            by_slug = {character.get("slug"): character for character in characters}
+            missing = [slug for slug in requested_slugs if slug not in by_slug]
+            if missing:
+                raise SystemExit("roster characters not found: " + ", ".join(missing))
+            characters = [by_slug[slug] for slug in requested_slugs]
+        elif args.character_slug:
             characters = [
                 character for character in characters
                 if character.get("slug") == args.character_slug
@@ -438,7 +483,9 @@ def main():
     if args.avatars is not None:
         characters = characters[:max(0, args.avatars)]
 
-    run_id = datetime.now().strftime("%Y%m%d%H%M%S")
+    apply_hook_overrides(characters, run_input.get("hook_overrides") or {})
+
+    run_id = args.batch_id or datetime.now().strftime("%Y%m%d%H%M%S")
     run_date = datetime.now().strftime("%Y-%m-%d")
     built = []
 
@@ -455,6 +502,9 @@ def main():
         outputs = {}
         post_id = manifest.record_post(
             brand=brand.brand_id,
+            project_id=project_id,
+            batch_id=run_id,
+            workflow="text",
             character={},
             fmt="text_native",
             hook=angle,
@@ -472,7 +522,8 @@ def main():
             path=args.manifest,
         )
         package, metadata_dest = copy_package(
-            post_id, None, brief, caption, args.posts_dir, run_date, brand.brand_id)
+            post_id, None, brief, caption, args.posts_dir, run_date, brand.brand_id,
+            project_id)
         manifest.set_package(post_id, package, caption, args.manifest)
         package, outputs = attach_text_formats(
             post_id, brief, brand, package, outputs, formats, args.placeholder,
@@ -484,7 +535,7 @@ def main():
         write_metadata(post_id, metadata_dest, args.manifest)
         built.append((post_id, package["dir"]))
         print(f"[post] {post_id} -> {package['dir']}")
-        print(f"\n{len(built)} posts packaged under {args.posts_dir}/{brand.brand_id}/{run_date}/")
+        print(f"\n{len(built)} posts packaged under {args.posts_dir}/{brand.brand_id}/{project_id}/{run_date}/")
         print(f"Manual queue status: {queue_status}")
         return
 
@@ -534,9 +585,16 @@ def main():
 
             post_id = manifest.record_post(
                 brand=brand.brand_id,
+                project_id=project_id,
+                batch_id=run_id,
+                workflow="slideshow",
                 character={
                     "slug": slug,
                     "spec": character["spec"],
+                    "variant_id": character.get("variant_id"),
+                    "variant_name": character.get("variant_name"),
+                    "base_character_slug": character.get("base_character_slug"),
+                    "source_asset_slug": character.get("source_asset_slug"),
                     "before_score": character.get("before_score"),
                     "after_score": character.get("after_score"),
                     "opening_style": character.get("opening_style") or cf.load_prompt_config(
@@ -580,7 +638,7 @@ def main():
             }
             package, metadata_dest = copy_package(
                 post_id, result, brief, caption, args.posts_dir, run_date,
-                brand.brand_id, package_assets)
+                brand.brand_id, project_id, package_assets)
             manifest.set_package(post_id, package, caption, args.manifest)
             package, outputs = attach_text_formats(
                 post_id, brief, brand, package, outputs, formats, args.placeholder,
@@ -595,7 +653,7 @@ def main():
             built.append((post_id, package["dir"]))
             print(f"[post] {post_id} -> {package['dir']}")
 
-    print(f"\n{len(built)} posts packaged under {args.posts_dir}/{brand.brand_id}/{run_date}/")
+    print(f"\n{len(built)} posts packaged under {args.posts_dir}/{brand.brand_id}/{project_id}/{run_date}/")
     print("Manual queue status is ready_to_post only for compliance=pass; review the manifest.")
 
 

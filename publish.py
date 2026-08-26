@@ -100,6 +100,8 @@ def payload_for(post):
     return {
         "post_id": post["post_id"],
         "brand": post.get("brand") or DEFAULT_BRAND,
+        "batch_id": post.get("batch_id"),
+        "workflow": post.get("workflow"),
         "format": post.get("format"),
         "target_account": queue(post).get("target_account"),
         "tracking_code": post.get("tracking_code"),

@@ -1,26 +1,13 @@
 #!/usr/bin/env python3
-"""
-image_router.py — pluggable image generation
-=============================================
-Abstracts face/image generation behind a provider registry so you can swap in
-whatever image API you want without touching character_factory. Returns raw PNG
-bytes from every provider.
+"""Pluggable image generation for direct HTTP/SDK providers.
 
-Select provider with env IMAGE_PROVIDER (default "openai"):
-  export IMAGE_PROVIDER=openai      # gpt-image-1 (generate + edit)
-  export IMAGE_PROVIDER=custom      # your own HTTP image API (template below)
-
-Add a new provider in one place:
-  image_router.register("myprovider", generate=my_gen, edit=my_edit)
-where my_gen(prompt, size, **kw) -> PNG bytes, and my_edit(image_bytes, prompt,
-size, **kw) -> PNG bytes (edit optional; omit if the API can't do it).
-
-NOTE: providers here are real HTTP/SDK APIs. Driving a consumer ChatGPT/Dreamina
-*subscription* via browser automation is out of scope by design.
+Codex subscription generation is deliberately handled by image_queue.py. A
+local Flask process cannot invoke the signed-in Codex image tool directly.
 """
 import base64
 import os
 from pathlib import Path
+
 
 _PROVIDERS = {}
 
@@ -44,84 +31,180 @@ def _load_dotenv():
             os.environ.setdefault(key, value)
 
 
-def register(name, generate=None, edit=None):
-    _PROVIDERS[name] = {"generate": generate, "edit": edit}
+def register(name, generate=None, edit=None, *, label=None, required_env=(),
+             edit_required_env=(), notes=""):
+    _PROVIDERS[name] = {
+        "generate": generate,
+        "edit": edit,
+        "label": label or name,
+        "required_env": tuple(required_env),
+        "edit_required_env": tuple(edit_required_env),
+        "notes": notes,
+    }
 
 
-def _active():
+def _active(provider=None):
     _load_dotenv()
-    name = os.environ.get("IMAGE_PROVIDER", "openai")
+    name = provider or os.environ.get("IMAGE_PROVIDER", "openai")
     if name not in _PROVIDERS:
-        raise ValueError(f"image provider '{name}' not registered. "
-                         f"Available: {list(_PROVIDERS)}")
+        raise ValueError(
+            f"image provider '{name}' not registered. Available: {list(_PROVIDERS)}")
     return name, _PROVIDERS[name]
 
 
-def generate(prompt, size="1024x1536", **kw):
-    name, p = _active()
-    if not p["generate"]:
+def list_providers():
+    """Return capabilities and missing env names without exposing secret values."""
+    _load_dotenv()
+    rows = []
+    for name, provider in _PROVIDERS.items():
+        missing = [key for key in provider["required_env"] if not os.environ.get(key)]
+        missing_edit = [
+            key for key in provider["edit_required_env"] if not os.environ.get(key)]
+        rows.append({
+            "id": name,
+            "label": provider["label"],
+            "mode": "api",
+            "can_generate": bool(provider["generate"]),
+            "can_edit": bool(provider["edit"]) and not missing_edit,
+            "configured": not missing,
+            "missing_env": missing,
+            "missing_edit_env": missing_edit,
+            "notes": provider["notes"],
+        })
+    return rows
+
+
+def generate(prompt, size="1024x1536", provider=None, **kwargs):
+    name, selected = _active(provider)
+    if not selected["generate"]:
         raise NotImplementedError(f"provider '{name}' has no generate()")
-    return p["generate"](prompt, size, **kw)
+    return selected["generate"](prompt, size, **kwargs)
 
 
-def edit(image_bytes, prompt, size="1024x1536", **kw):
-    """Edit an existing image (used for before->after consistency). Falls back to
-    generate() if the active provider can't edit."""
-    name, p = _active()
-    if p["edit"]:
-        return p["edit"](image_bytes, prompt, size, **kw)
-    # graceful fallback: regenerate from prompt (less consistent — provider warns)
-    return generate(prompt, size, **kw)
+def edit(image_bytes, prompt, size="1024x1536", provider=None,
+         allow_generate_fallback=True, **kwargs):
+    """Edit an image, optionally falling back to identity-unsafe generation."""
+    name, selected = _active(provider)
+    if selected["edit"]:
+        return selected["edit"](image_bytes, prompt, size, **kwargs)
+    if not allow_generate_fallback:
+        raise NotImplementedError(f"provider '{name}' cannot edit reference images")
+    return generate(prompt, size, provider=name, **kwargs)
 
 
-# ---------------------------------------------------------------------------
-# Built-in provider: OpenAI gpt-image-1
-# ---------------------------------------------------------------------------
-def _openai_generate(prompt, size, quality="high", **kw):
+def _openai_generate(prompt, size, quality="high", **kwargs):
     from openai import OpenAI
     client = OpenAI()
-    r = client.images.generate(model="gpt-image-1", prompt=prompt,
-                               size=size, quality=quality)
-    return base64.b64decode(r.data[0].b64_json)
+    response = client.images.generate(
+        model=os.environ.get("OPENAI_IMAGE_MODEL", "gpt-image-1"),
+        prompt=prompt,
+        size=size,
+        quality=quality,
+    )
+    return base64.b64decode(response.data[0].b64_json)
 
 
-def _openai_edit(image_bytes, prompt, size, **kw):
+def _openai_edit(image_bytes, prompt, size, **kwargs):
     import io
     from openai import OpenAI
     client = OpenAI()
-    buf = io.BytesIO(image_bytes)
-    buf.name = "in.png"
-    r = client.images.edit(model="gpt-image-1", image=buf, prompt=prompt, size=size)
-    return base64.b64decode(r.data[0].b64_json)
+    buffer = io.BytesIO(image_bytes)
+    buffer.name = "in.png"
+    response = client.images.edit(
+        model=os.environ.get("OPENAI_IMAGE_MODEL", "gpt-image-1"),
+        image=buffer,
+        prompt=prompt,
+        size=size,
+    )
+    return base64.b64decode(response.data[0].b64_json)
 
 
-register("openai", generate=_openai_generate, edit=_openai_edit)
+register(
+    "openai",
+    generate=_openai_generate,
+    edit=_openai_edit,
+    label="OpenAI GPT Image API",
+    required_env=("OPENAI_API_KEY",),
+    notes="Direct API billing; supports identity-preserving reference edits.",
+)
 
 
-# ---------------------------------------------------------------------------
-# Template provider: any HTTP image API  (copy + adapt, then IMAGE_PROVIDER=custom)
-# Fill in the endpoint/payload/response shape for your chosen API.
-# ---------------------------------------------------------------------------
-def _custom_generate(prompt, size, **kw):
-    import requests  # pip install requests
-    endpoint = os.environ["IMAGE_API_URL"]          # e.g. https://api.yourprovider.com/v1/images
+def _custom_headers():
     key = os.environ.get("IMAGE_API_KEY", "")
-    w, h = size.split("x")
-    resp = requests.post(
-        endpoint,
-        headers={"Authorization": f"Bearer {key}"},
-        json={"prompt": prompt, "width": int(w), "height": int(h)},  # adapt to your API
+    headers = {"Content-Type": "application/json"}
+    if key:
+        headers["Authorization"] = f"Bearer {key}"
+    return headers
+
+
+def _custom_response_bytes(response, requests):
+    response.raise_for_status()
+    if response.headers.get("content-type", "").startswith("image/"):
+        return response.content
+    data = response.json()
+    candidates = [data]
+    if isinstance(data.get("data"), list) and data["data"]:
+        candidates.append(data["data"][0])
+    if isinstance(data.get("output"), dict):
+        candidates.append(data["output"])
+    for candidate in candidates:
+        if not isinstance(candidate, dict):
+            continue
+        encoded = candidate.get("b64") or candidate.get("b64_json")
+        if encoded:
+            return base64.b64decode(encoded)
+        url = candidate.get("url") or candidate.get("image_url")
+        if url:
+            image_response = requests.get(url, timeout=60)
+            image_response.raise_for_status()
+            return image_response.content
+    raise ValueError("custom provider returned no b64 or image URL")
+
+
+def _custom_payload(prompt, size):
+    width, height = size.split("x")
+    payload = {"prompt": prompt, "width": int(width), "height": int(height)}
+    if os.environ.get("IMAGE_API_MODEL"):
+        payload["model"] = os.environ["IMAGE_API_MODEL"]
+    return payload
+
+
+def _custom_generate(prompt, size, **kwargs):
+    import requests
+    response = requests.post(
+        os.environ["IMAGE_API_URL"],
+        headers=_custom_headers(),
+        json=_custom_payload(prompt, size),
         timeout=120,
     )
-    resp.raise_for_status()
-    data = resp.json()
-    # adapt these two lines to your API's response shape:
-    if "b64" in data:
-        return base64.b64decode(data["b64"])
-    if "url" in data:
-        return requests.get(data["url"], timeout=60).content
-    raise ValueError("custom provider: unrecognized response shape — edit _custom_generate")
+    return _custom_response_bytes(response, requests)
 
 
-# edit omitted for the template -> image_router.edit() will fall back to generate()
-register("custom", generate=_custom_generate, edit=None)
+def _custom_edit(image_bytes, prompt, size, **kwargs):
+    import requests
+    endpoint = os.environ.get("IMAGE_API_EDIT_URL")
+    if not endpoint:
+        raise NotImplementedError("custom image edits require IMAGE_API_EDIT_URL")
+    payload = _custom_payload(prompt, size)
+    payload["image_b64"] = base64.b64encode(image_bytes).decode("ascii")
+    response = requests.post(
+        endpoint,
+        headers=_custom_headers(),
+        json=payload,
+        timeout=180,
+    )
+    return _custom_response_bytes(response, requests)
+
+
+register(
+    "custom",
+    generate=_custom_generate,
+    edit=_custom_edit,
+    label="Custom image API",
+    required_env=("IMAGE_API_URL",),
+    edit_required_env=("IMAGE_API_EDIT_URL",),
+    notes=(
+        "Generic synchronous JSON adapter. Configure IMAGE_API_EDIT_URL for reference edits; "
+        "Dreamina or Kling need a provider-specific adapter if their endpoint contract differs."
+    ),
+)
