@@ -385,6 +385,16 @@ or adjust `REGIONS` in `screenshot_factory.py` for a different size. For pixel-p
 score numbers, drop Apple's `SF-Pro-Display-Bold.otf` next to the script and point
 `SCORE_FONT` at it (DejaVu is the close-enough fallback).
 
+Capture notes:
+- A native screenshot from the current app build is preferred because it keeps text
+  and controls sharp. A paused QuickTime device recording is also usable if the frame
+  is exported to PNG without scaling or compression.
+- The Dynamic Island and status bar may remain when they are part of the real capture.
+  The renderer does not add a separate iPhone hardware shell.
+- Background color and glow come from the captured app screen. Replace the template
+  with a current screen if those visuals change; do not recolor an old screen into a
+  UI state the app does not actually use.
+
 Text patch schema for semi-personalized screens:
 ```json
 [
