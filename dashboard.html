@@ -58,6 +58,11 @@
   .slideshow-draft{display:grid;grid-template-columns:70px minmax(0,1fr);gap:9px;border:1px solid var(--line);border-radius:7px;background:var(--panel);padding:8px;min-width:0}
   .slideshow-draft img,.slideshow-draft .matrix-portrait-empty{width:70px}
   .slideshow-draft textarea{min-height:82px;resize:vertical;font-size:12px;line-height:1.35}
+  .slide-copy-fields{display:grid;grid-template-columns:1fr 1fr;gap:7px;min-width:0}
+  .slide-copy-fields>div{min-width:0}
+  .slide-copy-fields .hook-field{grid-column:1/-1}
+  .slide-copy-fields textarea{width:100%;min-height:50px}
+  .slide-copy-fields .hook-field textarea{min-height:68px}
   .variant-controls{display:grid;grid-template-columns:minmax(170px,1.2fr) minmax(150px,1fr) minmax(160px,1fr) auto;gap:8px;align-items:end}
   .variant-assets{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:10px 0}
   .variant-assets .checkline{height:28px}
@@ -402,8 +407,8 @@
       </div>
       <div class="section-rule">
         <div class="section-rule-head">
-          <h3>Editable hooks</h3>
-          <span class="sub">blank uses the roster or brand fallback</span>
+          <h3>Editable post copy</h3>
+          <span class="sub">preview and edit slide text before rendering</span>
         </div>
         <div class="slideshow-drafts" id="slideshowDrafts"></div>
       </div>
@@ -917,6 +922,7 @@ let videoSelectedSlugs = new Set();
 let slideshowSelectionTouched = false;
 let videoSelectionTouched = false;
 let slideshowHookOverrides = {};
+let slideshowCopyOverrides = {};
 
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -1303,6 +1309,38 @@ function setSlideshowHook(slug,index,value){
   slideshowHookOverrides[slug] = hooks;
 }
 
+const SLIDESHOW_COPY_FIELDS = [
+  ["scan_text","Slide 2 hero"],
+  ["result_text","Slide 3 hero"],
+  ["progress_text","Slide 4 hero"],
+  ["progress_subtext","Slide 4 sub-line"],
+];
+
+function defaultSlideshowCopy(character,index,field){
+  const iteration = (character.iterations || [])[index] || {};
+  if(iteration[field]) return iteration[field];
+  return ((activeBrandInfo().slideshow_copy || {})[field]) || "";
+}
+
+function slideshowCopyValue(character,index,field){
+  const saved = ((slideshowCopyOverrides[character.slug] || [])[index] || {});
+  if(saved[field] !== undefined) return saved[field];
+  return defaultSlideshowCopy(character,index,field);
+}
+
+function setSlideshowCopy(slug,index,field,value){
+  const iterations = [...(slideshowCopyOverrides[slug] || [])];
+  while(iterations.length <= index) iterations.push({});
+  iterations[index] = {...(iterations[index] || {}), [field]:value};
+  slideshowCopyOverrides[slug] = iterations;
+}
+
+function slideshowCopyRows(character,iterations){
+  return Array.from({length:iterations},(_,index) => Object.fromEntries(
+    SLIDESHOW_COPY_FIELDS.map(([field]) => [field,slideshowCopyValue(character,index,field)])
+  ));
+}
+
 function renderSlideshowDrafts(){
   if(!$("slideshowDrafts")) return;
   const iterations = Math.max(1, Number($("postsPerAvatar").value || 1));
@@ -1312,11 +1350,24 @@ function renderSlideshowDrafts(){
     const before = character.assets && character.assets.before;
     return `<div class="slideshow-draft">
       ${before && before.exists ? `<img src="${fileUrl(before.path)}" alt="">` : '<div class="matrix-portrait-empty">no image</div>'}
-      <div><label>${esc(character.slug)} / post ${index + 1}</label><textarea data-slide-hook="${esc(character.slug)}" data-slide-iteration="${index}" placeholder="Use saved or brand fallback">${esc(slideshowHookValue(character,index))}</textarea></div>
+      <div><label>${esc(character.slug)} / post ${index + 1}</label>
+        <div class="slide-copy-fields">
+          <div class="hook-field"><label>Slide 1 hook</label><textarea data-slide-hook="${esc(character.slug)}" data-slide-iteration="${index}" placeholder="Use saved or brand fallback">${esc(slideshowHookValue(character,index))}</textarea></div>
+          ${SLIDESHOW_COPY_FIELDS.map(([field,label]) => `<div><label>${esc(label)}</label><textarea data-slide-copy="${esc(character.slug)}" data-slide-iteration="${index}" data-slide-field="${field}">${esc(slideshowCopyValue(character,index,field))}</textarea></div>`).join("")}
+        </div>
+      </div>
     </div>`;
   }).join("") || '<div class="sub">Select a character to edit its hooks.</div>';
   document.querySelectorAll("[data-slide-hook]").forEach(input => {
     input.oninput = () => setSlideshowHook(input.dataset.slideHook, Number(input.dataset.slideIteration), input.value);
+  });
+  document.querySelectorAll("[data-slide-copy]").forEach(input => {
+    input.oninput = () => setSlideshowCopy(
+      input.dataset.slideCopy,
+      Number(input.dataset.slideIteration),
+      input.dataset.slideField,
+      input.value
+    );
   });
 }
 
@@ -1612,9 +1663,11 @@ async function saveSlideshowRecipe(){
     const characterSlugs = slideshowCharacters().filter(character => slideshowSelectedSlugs.has(character.slug)).map(character => character.slug);
     const iterations = Math.max(1, Number($("postsPerAvatar").value || 1));
     const hooks = {};
+    const slideCopy = {};
     characterSlugs.forEach(slug => {
       const character = slideshowCharacters().find(row => row.slug === slug);
       hooks[slug] = Array.from({length:iterations},(_,index) => slideshowHookValue(character,index));
+      slideCopy[slug] = slideshowCopyRows(character,iterations);
     });
     const recipe = await api("/api/recipes", {
       method:"POST",
@@ -1633,6 +1686,7 @@ async function saveSlideshowRecipe(){
           product_style:$("productStyle").value,
           product_slide_caption:$("productCaption").value,
           hook_overrides:hooks,
+          slide_copy_overrides:slideCopy,
         },
         prompt_snapshot:currentPromptSnapshot(),
       })
@@ -1652,6 +1706,7 @@ async function loadSlideshowRecipe(){
     slideshowSelectionTouched = true;
     slideshowSelectedSlugs = new Set(slugs);
     slideshowHookOverrides = JSON.parse(JSON.stringify(setup.hook_overrides || {}));
+    slideshowCopyOverrides = JSON.parse(JSON.stringify(setup.slide_copy_overrides || {}));
     $("avatars").value = Math.max(1,slugs.length);
     if(setup.posts_per_avatar) $("postsPerAvatar").value = setup.posts_per_avatar;
     if(setup.provider) $("provider").value = setup.provider;
@@ -2509,12 +2564,15 @@ async function startRun(){
     if(!characterSlugs.length) throw new Error("select at least one saved character");
     await previewPrompt();
     const hookOverrides = {};
+    const slideCopyOverrides = {};
     characterSlugs.forEach(slug => {
       const character = slideshowCharacters().find(row => row.slug === slug);
+      const iterations = Math.max(1,Number($("postsPerAvatar").value || 1));
       hookOverrides[slug] = Array.from(
-        {length:Math.max(1,Number($("postsPerAvatar").value || 1))},
+        {length:iterations},
         (_,index) => slideshowHookValue(character,index)
       );
+      slideCopyOverrides[slug] = slideshowCopyRows(character,iterations);
     });
     await api("/api/runs", {
       method:"POST",
@@ -2533,6 +2591,7 @@ async function startRun(){
         product_slide_caption:$("productCaption").value,
         character_slugs:characterSlugs,
         hook_overrides:hookOverrides,
+        slide_copy_overrides:slideCopyOverrides,
         prompt_snapshot:currentPromptSnapshot()
       })
     });

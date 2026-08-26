@@ -266,10 +266,16 @@ def render_image_top(slide, palette):
         rounded_chip(draw, 200, 220, label.upper(), load_font(FONT_BOLD, 46),
                      accent if label.lower() == "after" else (60, 60, 70))
 
-    panel_cy = img_h + (H - img_h) // 2
+    subtext = str(slide.get("subtext") or "").strip()
+    panel_cy = img_h + int((H - img_h) * (0.41 if subtext else 0.5))
     font = load_font(FONT_BOLD, 78)
-    draw_wrapped(draw, slide.get("text", ""), font, W - 180, W // 2, panel_cy,
-                 text_rgb, line_spacing=1.16)
+    hero_h = draw_wrapped(
+        draw, slide.get("text", ""), font, W - 180, W // 2, panel_cy,
+        text_rgb, line_spacing=1.16)
+    if subtext:
+        draw_wrapped(
+            draw, subtext, load_font(FONT_REG, 40), W - 220, W // 2,
+            int(panel_cy + hero_h / 2 + 56), text_rgb, line_spacing=1.08)
     return base.convert("RGB")
 
 

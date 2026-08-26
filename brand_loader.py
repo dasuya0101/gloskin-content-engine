@@ -223,6 +223,12 @@ def brand_summary(brand):
         "has_image_prompts": bool(brand.prompts.get("image_character")),
         "operational_status": brand.operational_status,
         "claim_lanes": brand.claim_lanes,
+        "slideshow_copy": {
+            "scan_text": brand.testimonial.get("synthetic_scan_text"),
+            "result_text": brand.testimonial.get("synthetic_result_text"),
+            "progress_text": brand.testimonial.get("synthetic_progress_text"),
+            "progress_subtext": brand.testimonial.get("synthetic_progress_subtext"),
+        },
     }
 
 

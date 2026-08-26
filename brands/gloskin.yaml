@@ -98,6 +98,10 @@ testimonial:
   cta_text: "What's your Glo Score?"
   cta_button: "Get GloSkin"
   cta_subtext: "Free on the App Store"
+  synthetic_scan_text: "Scan your face. Get your Glo Score in 30 seconds."
+  synthetic_result_text: "Know what's working — and what isn't."
+  synthetic_progress_text: "Progress you can actually measure."
+  synthetic_progress_subtext: "Results vary."
   fallback_hooks:
     - "I let AI score my skin.\nThe number hurt."
     - "My Glo Score was {before_score}.\nI needed a real routine."

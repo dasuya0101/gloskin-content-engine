@@ -1283,6 +1283,7 @@ def recipe_payload_from_batch(batch, name):
         setup.update({
             "character_slugs": slugs,
             "hook_overrides": hook_overrides,
+            "slide_copy_overrides": config.get("slide_copy_overrides") or {},
         })
         creative_snapshot = [
             {
@@ -1586,6 +1587,27 @@ def create_run():
         if not isinstance(hooks, list):
             abort(400, description=f"hook_overrides.{slug} must be a list")
         hook_overrides[str(slug)] = [str(hook or "").strip()[:2000] for hook in hooks]
+    raw_slide_copy_overrides = data.get("slide_copy_overrides") or {}
+    if not isinstance(raw_slide_copy_overrides, dict):
+        abort(400, description="slide_copy_overrides must be an object keyed by character slug")
+    slide_copy_fields = {
+        "scan_text", "result_text", "progress_text", "progress_subtext",
+    }
+    slide_copy_overrides = {}
+    for slug, iterations in raw_slide_copy_overrides.items():
+        if not isinstance(iterations, list):
+            abort(400, description=f"slide_copy_overrides.{slug} must be a list")
+        cleaned = []
+        for index, values in enumerate(iterations):
+            if not isinstance(values, dict):
+                abort(400, description=(
+                    f"slide_copy_overrides.{slug}[{index}] must be an object"))
+            cleaned.append({
+                key: str(values.get(key) or "").strip()[:2000]
+                for key in slide_copy_fields
+                if str(values.get(key) or "").strip()
+            })
+        slide_copy_overrides[str(slug)] = cleaned
     prompt_snapshot = data.get("prompt_snapshot") or {}
     if prompt_snapshot and not isinstance(prompt_snapshot, dict):
         abort(400, description="prompt_snapshot must be an object")
@@ -1699,9 +1721,12 @@ def create_run():
     ]
     support_dir = RUNS_DIR / "support"
     support_dir.mkdir(parents=True, exist_ok=True)
-    if hook_overrides:
+    if hook_overrides or slide_copy_overrides:
         input_path = run_support_path(run_id, "input")
-        write_json(input_path, {"hook_overrides": hook_overrides})
+        write_json(input_path, {
+            "hook_overrides": hook_overrides,
+            "slide_copy_overrides": slide_copy_overrides,
+        })
         cmd += ["--run-input", root_rel(input_path)]
     else:
         input_path = None
@@ -1760,6 +1785,7 @@ def create_run():
             "character_slug": character_slug or None,
             "character_slugs": character_slugs,
             "hook_overrides": hook_overrides,
+            "slide_copy_overrides": slide_copy_overrides,
             "run_input_path": root_rel(input_path) if input_path else None,
             "prompt_snapshot_path": root_rel(prompt_path) if prompt_path else None,
             "run_roster_path": root_rel(run_roster_path) if run_characters is not None else None,

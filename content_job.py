@@ -116,6 +116,33 @@ def apply_hook_overrides(characters, hook_overrides):
     return characters
 
 
+SLIDE_COPY_FIELDS = {
+    "scan_text", "result_text", "progress_text", "progress_subtext",
+}
+
+
+def apply_slide_copy_overrides(characters, slide_copy_overrides):
+    for character in characters:
+        slug = character.get("slug")
+        overrides = slide_copy_overrides.get(slug) if slug else None
+        if not isinstance(overrides, list):
+            continue
+        iterations = list(character.get("iterations") or [])
+        while len(iterations) < len(overrides):
+            iterations.append({})
+        for index, values in enumerate(overrides):
+            if not isinstance(values, dict):
+                continue
+            accepted = {
+                key: str(values.get(key) or "").strip()
+                for key in SLIDE_COPY_FIELDS
+                if str(values.get(key) or "").strip()
+            }
+            iterations[index] = {**iterations[index], **accepted}
+        character["iterations"] = iterations
+    return characters
+
+
 def pick_after_text(character, index, brand):
     iteration = pick_iteration(character, index)
     if iteration.get("after_text"):
@@ -213,6 +240,24 @@ def creative_metadata_for(character, slides, brand):
     }
 
 
+def synthetic_slide_copy(character, index, brand):
+    iteration = pick_iteration(character, index)
+    defaults = {
+        "scan_text": brand.testimonial.get("synthetic_scan_text")
+            or "Scan your face. Get your Glo Score.",
+        "result_text": brand.testimonial.get("synthetic_result_text")
+            or "See what your routine is doing.",
+        "progress_text": brand.testimonial.get("synthetic_progress_text")
+            or "Track your progress over time.",
+        "progress_subtext": brand.testimonial.get("synthetic_progress_subtext")
+            or "Results vary.",
+    }
+    return {
+        key: str(iteration.get(key) or value).strip()
+        for key, value in defaults.items()
+    }
+
+
 def prepare_screenshots(template, char_dir, slug, character, shots_dir):
     Path(shots_dir).mkdir(parents=True, exist_ok=True)
     shot_before = Path(shots_dir) / f"{slug}_before.png"
@@ -237,6 +282,7 @@ def prepare_screenshots(template, char_dir, slug, character, shots_dir):
 def build_testimonial_brief(render_slug, char_dir, shot_before, shot_after, character, index, brand):
     hook = pick_hook(character, index, brand)
     synthetic = is_synthetic_character(character)
+    slide_copy = synthetic_slide_copy(character, index, brand) if synthetic else {}
     disclosure = (
         str(brand.caption.get("illustrative_results") or "").strip()
         if synthetic and shot_before and shot_after else ""
@@ -261,7 +307,7 @@ def build_testimonial_brief(render_slug, char_dir, shot_before, shot_after, char
         })
     if shot_before and shot_after:
         scan_caption = (
-            "Illustrative scan example.\nGlo Score: {score}."
+            slide_copy["scan_text"]
             if synthetic else brand.testimonial.get("scan_caption") or "{score}"
         )
         slides += [
@@ -277,7 +323,7 @@ def build_testimonial_brief(render_slug, char_dir, shot_before, shot_after, char
                 "kind": "screenshot",
                 "image": str(shot_after),
                 "caption": (
-                    "Example clear-skin scan preview."
+                    slide_copy["result_text"]
                     if synthetic else pick_mid_text(character, index, brand)
                 ),
             },
@@ -289,12 +335,13 @@ def build_testimonial_brief(render_slug, char_dir, shot_before, shot_after, char
         {
             "kind": "body",
             "layout": "image_top",
-            "label": "example" if synthetic else "after",
+            "label": "progress" if synthetic else "after",
             "image": str(char_dir / "after.png"),
             "text": (
-                "Illustrative clear-skin variant.\nResults vary."
+                slide_copy["progress_text"]
                 if synthetic else pick_after_text(character, index, brand)
             ),
+            "subtext": slide_copy.get("progress_subtext") if synthetic else None,
         },
         {
             "kind": "cta",
@@ -565,6 +612,8 @@ def main():
         characters = characters[:max(0, args.avatars)]
 
     apply_hook_overrides(characters, run_input.get("hook_overrides") or {})
+    apply_slide_copy_overrides(
+        characters, run_input.get("slide_copy_overrides") or {})
 
     run_id = args.batch_id or datetime.now().strftime("%Y%m%d%H%M%S")
     run_date = datetime.now().strftime("%Y-%m-%d")
@@ -694,6 +743,7 @@ def main():
                 hook=hook,
                 slides=[{"kind": s["kind"],
                          "text": s.get("text") or s.get("caption", ""),
+                         "subtext": s.get("subtext"),
                          "disclosure": s.get("disclosure")}
                         for s in brief["slides"]],
                 assets={

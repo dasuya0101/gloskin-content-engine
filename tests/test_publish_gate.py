@@ -1,8 +1,10 @@
 import unittest
+from pathlib import Path
 
 import content_job
 import publish
 import slideshow_maker
+from brand_loader import load_brand
 
 
 DISCLOSURE = "Illustrative example. Not a real-user outcome."
@@ -31,6 +33,26 @@ def synthetic_post(**overrides):
 
 
 class PublishGateTests(unittest.TestCase):
+    def test_synthetic_slide_copy_uses_editable_iteration_fields(self):
+        character = {
+            "slug": "fixture_test",
+            "spec": "synthetic test person",
+            "source_type": "synthetic_fixture_set",
+            "iterations": [{
+                "scan_text": "Scan copy",
+                "result_text": "Result copy",
+                "progress_text": "Progress copy",
+                "progress_subtext": "Results vary.",
+            }],
+        }
+        brief = content_job.build_testimonial_brief(
+            "test", Path("assets/fixture_test"), Path("before.png"),
+            Path("after.png"), character, 0, load_brand("gloskin"))
+        self.assertEqual(brief["slides"][1]["caption"], "Scan copy")
+        self.assertEqual(brief["slides"][2]["caption"], "Result copy")
+        self.assertEqual(brief["slides"][3]["text"], "Progress copy")
+        self.assertEqual(brief["slides"][3]["subtext"], "Results vary.")
+
     def test_render_key_is_short_deterministic_and_unique(self):
         first = content_job.compact_render_key(
             {"variant_id": "var_20260826022945_b3745a83"}, "unused")

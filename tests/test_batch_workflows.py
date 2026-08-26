@@ -100,6 +100,14 @@ class BatchWorkflowTests(unittest.TestCase):
                     "placeholder": True,
                     "character_slugs": ["person_two", "person_one"],
                     "posts_per_avatar": 2,
+                    "slide_copy_overrides": {
+                        "person_two": [{
+                            "scan_text": "Scan copy",
+                            "result_text": "Result copy",
+                            "progress_text": "Progress copy",
+                            "progress_subtext": "Results vary.",
+                        }],
+                    },
                 })
                 self.assertEqual(response.status_code, 202)
                 result = response.get_json()
@@ -108,6 +116,17 @@ class BatchWorkflowTests(unittest.TestCase):
                 self.assertEqual(result["config"]["character_slugs"], ["person_two", "person_one"])
                 self.assertEqual(command[command.index("--batch-id") + 1], result["run_id"])
                 self.assertEqual(command[command.index("--character-slugs") + 1], "person_two,person_one")
+                self.assertEqual(
+                    result["config"]["slide_copy_overrides"]["person_two"][0]["scan_text"],
+                    "Scan copy",
+                )
+                run_input = json.loads(
+                    (api_server.ROOT / result["config"]["run_input_path"]).read_text(
+                        encoding="utf-8"))
+                self.assertEqual(
+                    run_input["slide_copy_overrides"]["person_two"][0]["progress_text"],
+                    "Progress copy",
+                )
                 thread_cls.return_value.start.assert_called_once()
                 batches = client.get("/api/batches?workflow=slideshow").get_json()
                 queued = next(batch for batch in batches if batch["batch_id"] == result["run_id"])
