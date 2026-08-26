@@ -22,10 +22,12 @@ from pathlib import Path
 
 from brand_loader import DEFAULT_BRAND, load_brand
 import manifest
+from text_formats import build_cta_url
 
 
 POSTS_FILE = "posts.json"
 VALID_QUEUE_STATUSES = {"draft", "ready_to_post", "posted", "skipped", "failed", "needs_edit"}
+PACKAGE_PLATFORMS = ("tiktok", "instagram")
 
 
 class PublishError(RuntimeError):
@@ -121,6 +123,53 @@ def caption_for(post):
     ]).strip()
 
 
+def platform_caption_for(post, platform):
+    brand = load_brand(post.get("brand") or DEFAULT_BRAND)
+    cta_text = str(brand.cta.get("text") or "").strip()
+    cta_url = build_cta_url(
+        brand.cta.get("url"), platform, post.get("tracking_code"))
+    blocks = [block.strip() for block in caption_for(post).split("\n\n") if block.strip()]
+    blocks = [block for block in blocks if block.casefold() != cta_text.casefold()]
+    if cta_text and cta_url:
+        blocks.append(f"{cta_text}: {cta_url}")
+    return "\n\n".join(blocks)
+
+
+def platform_payload_for(post, platform):
+    if platform not in PACKAGE_PLATFORMS:
+        raise PublishError(f"unsupported package platform: {platform}")
+    brand = load_brand(post.get("brand") or DEFAULT_BRAND)
+    pkg = package(post)
+    outputs = post.get("outputs") or {}
+    slides_dir = pkg.get("slides_dir")
+    if not slides_dir and outputs.get("slides_dir"):
+        slides_dir = str(
+            Path(outputs["slides_dir"]) / "slides_for_tiktok_photomode"
+        ).replace("\\", "/")
+    return {
+        "post_id": post["post_id"],
+        "platform": platform,
+        "target_account": brand.accounts.get(platform) or queue(post)["target_account"],
+        "tracking_code": post.get("tracking_code"),
+        "metadata": post.get("metadata") or {},
+        "caption": platform_caption_for(post, platform),
+        "cta": {
+            "text": brand.cta.get("text"),
+            "url": build_cta_url(
+                brand.cta.get("url"), platform, post.get("tracking_code")),
+        },
+        "slides": file_list(slides_dir),
+        "video": pkg.get("video") or outputs.get("video"),
+    }
+
+
+def platform_payloads_for(post):
+    return {
+        platform: platform_payload_for(post, platform)
+        for platform in PACKAGE_PLATFORMS
+    }
+
+
 def payload_for(post):
     pkg = package(post)
     outputs = post.get("outputs") or {}
@@ -143,6 +192,8 @@ def payload_for(post):
         "assets": post.get("assets") or {},
         "packaged_assets": pkg.get("assets") or {},
         "formats": pkg.get("formats") or (outputs.get("formats") if isinstance(outputs.get("formats"), dict) else {}),
+        "platform_payloads_file": pkg.get("platform_payloads"),
+        "platform_payloads": platform_payloads_for(post),
         "video": pkg.get("video") or outputs.get("video"),
         "slides": file_list(slides_dir),
         "publish": post.get("publish"),

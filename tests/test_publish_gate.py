@@ -66,6 +66,19 @@ class PublishGateTests(unittest.TestCase):
         publish.require_compliance(post)
         self.assertIs(publish.payload_for(post)["metadata"]["is_aigc"], True)
 
+    def test_platform_payloads_carry_one_utm_tracked_cta(self):
+        post = synthetic_post(
+            tracking_code="glo_batch_01",
+            caption=f"Test caption\n\nWhat's your Glo Score?\n\n{DISCLOSURE}",
+        )
+        payloads = publish.platform_payloads_for(post)
+        for platform in ("tiktok", "instagram"):
+            payload = payloads[platform]
+            self.assertIn(f"utm_source={platform}", payload["cta"]["url"])
+            self.assertIn("utm_campaign=glo_batch_01", payload["cta"]["url"])
+            self.assertEqual(payload["caption"].count("What's your Glo Score?"), 1)
+            self.assertIs(payload["metadata"]["is_aigc"], True)
+
     def test_non_synthetic_post_is_unchanged(self):
         post = synthetic_post(metadata={}, caption="Ordinary post", slides=[])
         publish.require_compliance(post)

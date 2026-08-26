@@ -394,6 +394,16 @@ def write_metadata(post_id, metadata_dest, manifest_path):
     metadata_dest.write_text(json.dumps(post, indent=2), encoding="utf-8")
 
 
+def write_platform_payloads(post_id, package, manifest_path):
+    post = manifest.get_post(post_id, manifest_path)
+    destination = Path(package["dir"]) / "platform_payloads.json"
+    destination.write_text(
+        json.dumps(publish.platform_payloads_for(post), indent=2), encoding="utf-8")
+    package = {**package, "platform_payloads": rel(destination)}
+    manifest.set_package(post_id, package, path=manifest_path)
+    return package
+
+
 def attach_text_formats(post_id, brief, brand, package, outputs, formats, placeholder,
                         tracking_code, manifest_path):
     text_names = tf.text_format_names(formats)
@@ -605,6 +615,7 @@ def main():
             post_id, compliance, account, args.manifest)
         manifest.set_publish_queue(
             post_id, queue_status, account, queue_note, path=args.manifest)
+        package = write_platform_payloads(post_id, package, args.manifest)
         write_metadata(post_id, metadata_dest, args.manifest)
         built.append((post_id, package["dir"]))
         print(f"[post] {post_id} -> {package['dir']}")
@@ -730,6 +741,7 @@ def main():
                 post_id, compliance, account, args.manifest)
             manifest.set_publish_queue(
                 post_id, queue_status, account, queue_note, path=args.manifest)
+            package = write_platform_payloads(post_id, package, args.manifest)
             write_metadata(post_id, metadata_dest, args.manifest)
 
             built.append((post_id, package["dir"]))
