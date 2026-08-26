@@ -30,6 +30,7 @@ from brand_loader import DEFAULT_BRAND, load_brand, mechanism_claims_for
 from claim_packs import mechanism_claims as pack_mechanism_claims, relevant_claim_packs
 import manifest
 from project_store import default_project_id
+import publish
 import screenshot_factory as sf
 import slideshow_maker as sm
 import text_formats as tf
@@ -173,6 +174,36 @@ def optional_asset(char_dir, name):
     return path if path.exists() else None
 
 
+def is_synthetic_character(character):
+    source_type = str(character.get("source_type") or "").strip().lower()
+    fixture_set = character.get("fixture_set") or {}
+    provenance = str(fixture_set.get("provenance") or "").strip().lower()
+    return source_type in {"synthetic_fixture_set", "ai_generated", "synthetic"} \
+        or provenance == "synthetic"
+
+
+def creative_metadata_for(character, slides, brand):
+    synthetic_person = is_synthetic_character(character)
+    composited_result = any(slide.get("kind") == "screenshot" for slide in (slides or []))
+    illustrative_results = synthetic_person and composited_result
+    disclosure = (
+        str(brand.caption.get("illustrative_results") or "").strip()
+        if illustrative_results else ""
+    )
+    if illustrative_results and not disclosure:
+        raise RuntimeError(
+            f"{brand.brand_id} must configure caption.illustrative_results for "
+            "synthetic composited creatives"
+        )
+    return {
+        "is_aigc": synthetic_person,
+        "synthetic_person": synthetic_person,
+        "composited_result": composited_result,
+        "illustrative_results": illustrative_results,
+        "illustrative_results_text": disclosure or None,
+    }
+
+
 def prepare_screenshots(template, char_dir, slug, character, shots_dir):
     Path(shots_dir).mkdir(parents=True, exist_ok=True)
     shot_before = Path(shots_dir) / f"{slug}_before.png"
@@ -196,11 +227,16 @@ def prepare_screenshots(template, char_dir, slug, character, shots_dir):
 
 def build_testimonial_brief(render_slug, char_dir, shot_before, shot_after, character, index, brand):
     hook = pick_hook(character, index, brand)
+    synthetic = is_synthetic_character(character)
+    disclosure = (
+        str(brand.caption.get("illustrative_results") or "").strip()
+        if synthetic and shot_before and shot_after else ""
+    )
     slides = [
         {
             "kind": "hook",
             "layout": "image_top",
-            "label": "before",
+            "label": "reference" if synthetic else "before",
             "image": str(face_asset(char_dir, "opening", "before")),
             "text": hook,
         },
@@ -215,7 +251,10 @@ def build_testimonial_brief(render_slug, char_dir, shot_before, shot_after, char
             "duration": 2.3,
         })
     if shot_before and shot_after:
-        scan_caption = brand.testimonial.get("scan_caption") or "{score}"
+        scan_caption = (
+            "Illustrative scan example.\nGlo Score: {score}."
+            if synthetic else brand.testimonial.get("scan_caption") or "{score}"
+        )
         slides += [
             {
                 "kind": "screenshot",
@@ -228,7 +267,10 @@ def build_testimonial_brief(render_slug, char_dir, shot_before, shot_after, char
             {
                 "kind": "screenshot",
                 "image": str(shot_after),
-                "caption": pick_mid_text(character, index, brand),
+                "caption": (
+                    "Example clear-skin scan preview."
+                    if synthetic else pick_mid_text(character, index, brand)
+                ),
             },
         ]
     else:
@@ -238,9 +280,12 @@ def build_testimonial_brief(render_slug, char_dir, shot_before, shot_after, char
         {
             "kind": "body",
             "layout": "image_top",
-            "label": "after",
+            "label": "example" if synthetic else "after",
             "image": str(char_dir / "after.png"),
-            "text": pick_after_text(character, index, brand),
+            "text": (
+                "Illustrative clear-skin variant.\nResults vary."
+                if synthetic else pick_after_text(character, index, brand)
+            ),
         },
         {
             "kind": "cta",
@@ -249,6 +294,9 @@ def build_testimonial_brief(render_slug, char_dir, shot_before, shot_after, char
             "subtext": brand.testimonial.get("cta_subtext") or brand.cta.get("subtext"),
         },
     ]
+    if disclosure:
+        for slide in slides:
+            slide["disclosure"] = disclosure
     return {
         "slug": render_slug,
         "brand": brand.brand_id,
@@ -256,18 +304,32 @@ def build_testimonial_brief(render_slug, char_dir, shot_before, shot_after, char
     }
 
 
-def caption_for(character, hook, tracking_code, brand):
+def caption_for(character, hook, tracking_code, brand, metadata=None):
     base = character.get("caption")
     if base:
         lead = base.strip()
     else:
         lead = clean_line(hook)
-    return "\n\n".join([
+    parts = [
         lead,
         brand.caption.get("secondary_cta") or brand.cta.get("text", ""),
         brand.caption.get("disclaimer", ""),
         f"Tracking: {tracking_code}",
-    ]).strip()
+    ]
+    if (metadata or {}).get("illustrative_results"):
+        parts.insert(2, metadata.get("illustrative_results_text") or "")
+    return "\n\n".join(item for item in parts if item).strip()
+
+
+def publish_queue_status(post_id, compliance, account, manifest_path):
+    if compliance.get("status") != "pass":
+        return "needs_edit", None
+    post = manifest.get_post(post_id, manifest_path)
+    try:
+        publish.require_compliance(post, posts_path=manifest_path)
+    except publish.PublishError as exc:
+        return "needs_edit", str(exc)
+    return "ready_to_post", None
 
 
 def copy_package(post_id, result, brief, caption, posts_dir, run_date, brand_id,
@@ -530,8 +592,10 @@ def main():
             tracking_code, args.manifest)
         compliance = run_compliance(
             post_id, brief, brand, package, caption, [], tracking_code, args.manifest)
-        queue_status = "ready_to_post" if compliance["status"] == "pass" else "needs_edit"
-        manifest.set_publish_queue(post_id, queue_status, account, path=args.manifest)
+        queue_status, queue_note = publish_queue_status(
+            post_id, compliance, account, args.manifest)
+        manifest.set_publish_queue(
+            post_id, queue_status, account, queue_note, path=args.manifest)
         write_metadata(post_id, metadata_dest, args.manifest)
         built.append((post_id, package["dir"]))
         print(f"[post] {post_id} -> {package['dir']}")
@@ -570,6 +634,7 @@ def main():
             brief = build_testimonial_brief(
                 render_slug, char_dir, shot_before, shot_after, character, post_index, brand)
             hook = pick_hook(character, post_index, brand)
+            creative_metadata = creative_metadata_for(character, brief["slides"], brand)
             brief["formats"] = formats
             brief.setdefault("factual_claims", [hook])
             brief.setdefault("claim_packs", relevant_claim_packs(hook))
@@ -577,7 +642,8 @@ def main():
             brief.setdefault("mechanism_claims", pack_mechanism_claims(brief))
             brief.setdefault("operational_status", brand.operational_status)
             result = sm.make_content(brief, args.out, brand=brand)
-            caption = caption_for(character, hook, tracking_code, brand)
+            caption = caption_for(
+                character, hook, tracking_code, brand, metadata=creative_metadata)
             outputs = {
                 "slides_dir": rel(result["dir"]),
                 "video": rel(result["video"]),
@@ -595,6 +661,7 @@ def main():
                     "variant_name": character.get("variant_name"),
                     "base_character_slug": character.get("base_character_slug"),
                     "source_asset_slug": character.get("source_asset_slug"),
+                    "source_type": character.get("source_type"),
                     "before_score": character.get("before_score"),
                     "after_score": character.get("after_score"),
                     "opening_style": character.get("opening_style") or cf.load_prompt_config(
@@ -604,7 +671,9 @@ def main():
                 },
                 fmt="testimonial_beforeafter",
                 hook=hook,
-                slides=[{"kind": s["kind"], "text": s.get("text") or s.get("caption", "")}
+                slides=[{"kind": s["kind"],
+                         "text": s.get("text") or s.get("caption", ""),
+                         "disclosure": s.get("disclosure")}
                         for s in brief["slides"]],
                 assets={
                     "opening": rel(face_asset(char_dir, "opening", "before")),
@@ -618,6 +687,7 @@ def main():
                 outputs=outputs,
                 tracking_code=tracking_code,
                 caption=caption,
+                metadata=creative_metadata,
                 publish_queue={
                     "status": "rendered",
                     "target_account": account,
@@ -646,8 +716,10 @@ def main():
             compliance = run_compliance(
                 post_id, brief, brand, package, caption, brief.get("slides") or [],
                 tracking_code, args.manifest)
-            queue_status = "ready_to_post" if compliance["status"] == "pass" else "needs_edit"
-            manifest.set_publish_queue(post_id, queue_status, account, path=args.manifest)
+            queue_status, queue_note = publish_queue_status(
+                post_id, compliance, account, args.manifest)
+            manifest.set_publish_queue(
+                post_id, queue_status, account, queue_note, path=args.manifest)
             write_metadata(post_id, metadata_dest, args.manifest)
 
             built.append((post_id, package["dir"]))

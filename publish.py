@@ -32,7 +32,38 @@ class PublishError(RuntimeError):
     pass
 
 
+def require_synthetic_disclosure(post):
+    metadata = post.get("metadata") or {}
+    if not (metadata.get("synthetic_person") and metadata.get("composited_result")):
+        return
+    if metadata.get("is_aigc") is not True:
+        raise PublishError(
+            f"post {post['post_id']} is a synthetic composited result without "
+            "metadata.is_aigc=true"
+        )
+    if metadata.get("illustrative_results") is not True:
+        raise PublishError(
+            f"post {post['post_id']} is a synthetic composited result without "
+            "illustrative-results metadata"
+        )
+
+    disclosure = str(metadata.get("illustrative_results_text") or "").strip()
+    if not disclosure or disclosure.casefold() not in caption_for(post).casefold():
+        raise PublishError(
+            f"post {post['post_id']} caption is missing its illustrative-results framing"
+        )
+    slides = post.get("slides") or []
+    if slides and any(
+            disclosure.casefold() not in str(slide.get("disclosure") or "").casefold()
+            for slide in slides):
+        raise PublishError(
+            f"post {post['post_id']} has an unlabeled synthetic carousel slide"
+        )
+
+
 def require_compliance(post, *, override=False, reason=None, posts_path=POSTS_FILE):
+    # Release metadata is a hard gate and cannot be bypassed by a compliance override.
+    require_synthetic_disclosure(post)
     status = (post.get("compliance") or {}).get("status")
     if status == "pass":
         return
@@ -105,6 +136,7 @@ def payload_for(post):
         "format": post.get("format"),
         "target_account": queue(post).get("target_account"),
         "tracking_code": post.get("tracking_code"),
+        "metadata": post.get("metadata") or {},
         "caption": caption_for(post),
         "package_dir": pkg.get("dir"),
         "package_assets_dir": pkg.get("assets_dir"),

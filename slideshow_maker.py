@@ -4,9 +4,10 @@ Slideshow Content Maker
 =======================
 
 Turns a JSON "brief" into ready-to-post short-form content:
-  1. A folder of 1080x1920 PNG slides  -> upload to TikTok Photo Mode (attach
+  1. A folder of 1080x1350 PNG slides  -> upload to TikTok Photo Mode or IG
+     carousel (attach
      trending audio in-app for max reach)
-  2. A 9:16 .mp4 with timed slides + subtle zoom + crossfades -> IG Reels,
+  2. A 4:5 .mp4 with timed slides + subtle zoom + crossfades -> IG Reels,
      YouTube Shorts, and paid ads (Meta / TikTok Ads Manager)
 
 Design goals:
@@ -56,7 +57,7 @@ from brand_loader import DEFAULT_BRAND, load_brand
 # ----------------------------------------------------------------------------
 # Constants / defaults
 # ----------------------------------------------------------------------------
-W, H = 1080, 1920                      # vertical 9:16
+W, H = 1080, 1350                      # portrait 4:5 carousel-safe canvas
 
 
 def _first_font(candidates):
@@ -135,7 +136,7 @@ def gradient_bg(c1, c2):
 
 
 def cover_image(path):
-    """Load an image and crop-fill to 1080x1920 (object-fit: cover)."""
+    """Load an image and crop-fill to the 1080x1350 canvas."""
     img = Image.open(path).convert("RGB")
     scale = max(W / img.width, H / img.height)
     nw, nh = int(img.width * scale), int(img.height * scale)
@@ -281,7 +282,7 @@ def render_screenshot_slide(slide, palette):
     shot = Image.open(slide["image"]).convert("RGB")
 
     caption = slide.get("caption")
-    target_h = 1400 if caption else 1560
+    target_h = int(H * (0.62 if caption else 0.82))
     scale = target_h / shot.height
     sw, sh = int(shot.width * scale), int(shot.height * scale)
     shot = shot.resize((sw, sh), Image.LANCZOS)
@@ -291,7 +292,7 @@ def render_screenshot_slide(slide, palette):
     mask = Image.new("L", (sw, sh), 0)
     ImageDraw.Draw(mask).rounded_rectangle([0, 0, sw, sh], radius=rad, fill=255)
     x = (W - sw) // 2
-    y = (H - sh) // 2 + (60 if caption else 0)
+    y = (H - sh) // 2 + (75 if caption else 0)
     shadow = Image.new("RGBA", (W, H), (0, 0, 0, 0))
     sd = ImageDraw.Draw(shadow)
     sd.rounded_rectangle([x, y + 18, x + sw, y + sh + 18], radius=rad,
@@ -302,8 +303,8 @@ def render_screenshot_slide(slide, palette):
 
     if caption:
         draw = ImageDraw.Draw(base)
-        draw_wrapped(draw, caption, load_font(FONT_BOLD, 70), W - 200, W // 2,
-                     int(H * 0.075), text_rgb, line_spacing=1.12, anchor_mid=False)
+        draw_wrapped(draw, caption, load_font(FONT_BOLD, 62), W - 200, W // 2,
+                     int(H * 0.10), text_rgb, line_spacing=1.12, anchor_mid=False)
     return base.convert("RGB")
 
 
@@ -334,6 +335,20 @@ def _draw_chrome(bg, palette, idx, total, brand, on_image=False):
                       start_x + i * gap + dot_r, 86 + dot_r], fill=col)
 
 
+def _draw_disclosure(bg, slide, palette, on_image=False):
+    disclosure = str(slide.get("disclosure") or "").strip()
+    if not disclosure:
+        return
+    draw = ImageDraw.Draw(bg)
+    font = load_font(FONT_REG, 27)
+    fill = (255, 255, 255) if on_image else hex_to_rgb(palette["text"])
+    draw_wrapped(
+        draw, disclosure, font, W - 140, W // 2, H - 70, fill,
+        stroke=(2, (0, 0, 0)) if on_image else None,
+        line_spacing=1.05,
+    )
+
+
 # ----------------------------------------------------------------------------
 # Slide rendering
 # ----------------------------------------------------------------------------
@@ -344,10 +359,12 @@ def render_slide(slide, palette, idx, total, brand):
     if slide.get("layout") == "image_top":
         bg = render_image_top(slide, palette)
         _draw_chrome(bg, palette, idx, total, brand, on_image=True)
+        _draw_disclosure(bg, slide, palette, on_image=False)
         return bg
     if kind == "screenshot":
         bg = render_screenshot_slide(slide, palette)
         _draw_chrome(bg, palette, idx, total, brand, on_image=False)
+        _draw_disclosure(bg, slide, palette, on_image=False)
         return bg
 
     accent = hex_to_rgb(palette["accent"])
@@ -389,14 +406,15 @@ def render_slide(slide, palette, idx, total, brand):
                      load_font(FONT_BOLD, 52), accent, pad_x=70, pad_y=34)
         sub = slide.get("subtext") or brand.cta.get("subtext", "")
         if sub:
-            draw.text((W // 2 - draw.textlength(sub, font=load_font(FONT_REG, 40)) / 2,
-                       int(H * 0.72)), sub, font=load_font(FONT_REG, 40),
-                      fill=body_fill)
+            draw_wrapped(draw, sub, load_font(FONT_REG, 40), W - 220,
+                         W // 2, int(H * 0.78), body_fill,
+                         line_spacing=1.08)
     else:  # body
         font = load_font(FONT_BOLD, 86)
         draw_wrapped(draw, text, font, max_w, W // 2, int(H * 0.48),
                      body_fill, stroke=body_stroke, line_spacing=1.18)
 
+    _draw_disclosure(bg, slide, palette, on_image=has_img)
     return bg.convert("RGB")
 
 
@@ -411,7 +429,7 @@ def build_video(slide_paths, durations, out_path):
         clip = tmp / f"clip_{i:02d}.mp4"
         frames = max(1, int(dur * FPS))
         # gentle ken-burns zoom (1.0 -> 1.06)
-        zoom = (f"scale=1350:-1,zoompan=z='min(zoom+0.0009,1.06)':"
+        zoom = (f"scale={int(W * 1.25)}:-1,zoompan=z='min(zoom+0.0009,1.06)':"
                 f"d={frames}:x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':"
                 f"s={W}x{H}:fps={FPS}")
         subprocess.run(

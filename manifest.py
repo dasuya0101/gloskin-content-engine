@@ -47,6 +47,7 @@ def normalize_post(record):
     record.setdefault("compliance", {
         "status": "needs_review", "violations": [], "checked_at": None,
     })
+    record.setdefault("metadata", {})
     return record
 
 
@@ -65,7 +66,7 @@ def record_post(*, character, fmt, hook, slides, assets, outputs,
                 variant_of=None, tracking_code=None, caption=None,
                 package=None, publish_queue=None, brand=DEFAULT_BRAND,
                 compliance=None, batch_id=None, workflow=None,
-                project_id=None,
+                project_id=None, metadata=None,
                 path=POSTS_FILE):
     """Append a new post record. Returns the post_id."""
     records = _load(path)
@@ -95,6 +96,7 @@ def record_post(*, character, fmt, hook, slides, assets, outputs,
         "compliance": compliance or {
             "status": "needs_review", "violations": [], "checked_at": None,
         },
+        "metadata": metadata or {},
         "metrics": {"views": None, "likes": None, "shares": None, "saves": None,
                     "ctr": None, "installs": None, "updated_at": None},
         "is_winner": None,                  # set by analyze_winners

@@ -113,6 +113,7 @@ testimonial:
 caption:
   secondary_cta: "What's your Glo Score?"
   disclaimer: "Results vary. Not medical advice."
+  illustrative_results: "Illustrative example. Not a real-user outcome."
 
 tracking:
   prefix: glo

@@ -3,7 +3,7 @@
 An automated pipeline that turns text angles into post-ready short-form content.
 One brief → two outputs:
 
-- **`slides_for_tiktok_photomode/`** — raw 1080×1920 PNGs. Upload these to
+- **`slides_for_tiktok_photomode/`** — raw 1080×1350 (4:5) PNGs. Upload these to
   **TikTok Photo Mode** (and IG carousel) and attach a *trending sound in-app*.
   Native photo posts get the most organic reach right now, and you pick the
   audio where the trends actually live.
