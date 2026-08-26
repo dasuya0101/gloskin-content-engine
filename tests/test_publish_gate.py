@@ -1,5 +1,6 @@
 import unittest
 
+import content_job
 import publish
 import slideshow_maker
 
@@ -30,6 +31,17 @@ def synthetic_post(**overrides):
 
 
 class PublishGateTests(unittest.TestCase):
+    def test_render_key_is_short_deterministic_and_unique(self):
+        first = content_job.compact_render_key(
+            {"variant_id": "var_20260826022945_b3745a83"}, "unused")
+        repeated = content_job.compact_render_key(
+            {"variant_id": "var_20260826022945_b3745a83"}, "unused")
+        other = content_job.compact_render_key(
+            {"variant_id": "var_20260826022945_8f10d5af"}, "unused")
+        self.assertEqual(first, repeated)
+        self.assertLessEqual(len(first), 24)
+        self.assertNotEqual(first, other)
+
     def test_carousel_canvas_is_four_by_five(self):
         self.assertEqual((slideshow_maker.W, slideshow_maker.H), (1080, 1350))
 

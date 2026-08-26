@@ -17,6 +17,7 @@ Defaults:
 """
 import argparse
 import copy
+import hashlib
 import json
 import os
 import shutil
@@ -49,6 +50,14 @@ def rel(path):
 
 def clean_line(text):
     return " ".join((text or "").replace("\n", " ").split())
+
+
+def compact_render_key(character, fallback, max_length=24):
+    raw = str(character.get("variant_id") or fallback)
+    if len(raw) <= max_length:
+        return raw
+    digest = hashlib.sha1(raw.encode("utf-8")).hexdigest()[:8]
+    return f"{raw[:max_length - 9]}_{digest}"
 
 
 def pick_iteration(character, index):
@@ -626,7 +635,8 @@ def main():
             shot_before, shot_after = None, None
 
         for post_index in range(max(1, args.posts_per_avatar)):
-            render_slug = f"testimonial_{slug}_p{post_index + 1:02d}_{run_id}"
+            render_key = compact_render_key(character, slug)
+            render_slug = f"testimonial_{render_key}_p{post_index + 1:02d}_{run_id}"
             tracking_code = (
                 f"{brand.tracking.get('prefix', brand.brand_id)}_"
                 f"{run_id}_{avatar_index:02d}_{post_index + 1:02d}"
