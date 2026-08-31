@@ -1,5 +1,6 @@
 import unittest
 from pathlib import Path
+import tempfile
 
 from PIL import Image, ImageDraw
 
@@ -19,8 +20,17 @@ def synthetic_post(**overrides):
         "brand": "gloskin",
         "caption": f"Test caption\n\n{DISCLOSURE}",
         "slides": [
-            {"kind": "hook", "text": "Test", "disclosure": DISCLOSURE},
-            {"kind": "cta", "text": "Test", "disclosure": DISCLOSURE},
+            {
+                "kind": "hook", "text": "Test", "disclosure": DISCLOSURE,
+                "disclosure_footer": DISCLOSURE,
+                "disclosure_chip": "Illustrative",
+                "requires_disclosure_chip": True,
+            },
+            {
+                "kind": "cta", "text": "Test", "disclosure": DISCLOSURE,
+                "disclosure_footer": DISCLOSURE,
+                "requires_disclosure_chip": False,
+            },
         ],
         "metadata": {
             "is_aigc": True,
@@ -28,6 +38,12 @@ def synthetic_post(**overrides):
             "composited_result": True,
             "illustrative_results": True,
             "illustrative_results_text": DISCLOSURE,
+            "disclosure_layers": {
+                "corner_chip": True,
+                "slide_footer": True,
+                "caption_line": True,
+                "platform_aigc_flag": True,
+            },
         },
         "compliance": {"status": "pass", "violations": []},
     }
@@ -109,7 +125,32 @@ class PublishGateTests(unittest.TestCase):
     def test_unlabeled_slide_blocks(self):
         post = synthetic_post()
         post["slides"][0]["disclosure"] = None
-        with self.assertRaisesRegex(publish.PublishError, "unlabeled synthetic"):
+        post["slides"][0]["disclosure_footer"] = None
+        with self.assertRaisesRegex(publish.PublishError, "disclosure footer"):
+            publish.require_compliance(post)
+
+    def test_missing_corner_chip_blocks(self):
+        post = synthetic_post()
+        post["slides"][0]["disclosure_chip"] = None
+        with self.assertRaisesRegex(publish.PublishError, "disclosure chip"):
+            publish.require_compliance(post)
+
+    def test_disclosure_in_headline_blocks(self):
+        post = synthetic_post()
+        post["slides"][0]["text"] = "Illustrative results from a scan"
+        with self.assertRaisesRegex(publish.PublishError, "headline"):
+            publish.require_compliance(post)
+
+    def test_synthetic_timeline_blocks(self):
+        post = synthetic_post()
+        post["slides"][0]["text"] = "Clearer-looking skin after 8 weeks"
+        with self.assertRaisesRegex(publish.PublishError, "timeline"):
+            publish.require_compliance(post)
+
+    def test_before_after_label_blocks(self):
+        post = synthetic_post()
+        post["slides"][0]["label"] = "Before"
+        with self.assertRaisesRegex(publish.PublishError, "before/after label"):
             publish.require_compliance(post)
 
     def test_complete_metadata_and_framing_pass_and_enter_payload(self):
@@ -133,6 +174,23 @@ class PublishGateTests(unittest.TestCase):
     def test_non_synthetic_post_is_unchanged(self):
         post = synthetic_post(metadata={}, caption="Ordinary post", slides=[])
         publish.require_compliance(post)
+
+    def test_platform_assets_make_instagram_jpegs(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            slides = root / "slides"
+            slides.mkdir()
+            for index in range(2):
+                Image.new("RGB", (1080, 1350), (40 + index, 80, 120)).save(
+                    slides / f"slide_{index}.png")
+            prepared = publish.prepare_platform_slide_assets(slides, root / "package")
+            instagram = publish.media_file_list(prepared["instagram"])
+            tiktok = publish.media_file_list(prepared["tiktok"])
+            self.assertEqual(len(instagram), 2)
+            self.assertTrue(all(Path(path).suffix == ".jpg" for path in instagram))
+            self.assertEqual(len(tiktok), 2)
+            publish.validate_carousel(instagram, "instagram")
+            publish.validate_carousel(tiktok, "tiktok")
 
 
 if __name__ == "__main__":

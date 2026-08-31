@@ -1,0 +1,75 @@
+schema_version: 1
+
+vendor:
+  name: unselected
+  api_url_env: POSTING_VENDOR_API_URL
+  api_key_env: POSTING_VENDOR_API_KEY
+  submission_enabled: false
+  scheduler_enabled: false
+  checkpoint_b_approved: false
+  checkpoint_c_approved: false
+
+scheduling:
+  daily_caps:
+    tiktok: 20
+    instagram: 50
+  jitter_minutes:
+    min: 7
+    max: 23
+
+accounts:
+  - account_id: gloskin_tiktok_flagship
+    brand: gloskin
+    platform: tiktok
+    handle: TODO
+    role: flagship
+    owning_entity: TODO
+    verification_status: unverified
+    vendor_account_ref_env: GLOSKIN_TIKTOK_FLAGSHIP_VENDOR_ACCOUNT_REF
+    enabled: false
+    test_account: false
+
+  - account_id: gloskin_tiktok_volume_01
+    brand: gloskin
+    platform: tiktok
+    handle: TODO
+    role: volume
+    owning_entity: TODO
+    verification_status: unverified
+    vendor_account_ref_env: GLOSKIN_TIKTOK_VOLUME_01_VENDOR_ACCOUNT_REF
+    enabled: false
+    test_account: false
+
+  - account_id: gloskin_instagram_flagship
+    brand: gloskin
+    platform: instagram
+    handle: TODO
+    role: flagship
+    owning_entity: TODO
+    verification_status: unverified
+    vendor_account_ref_env: GLOSKIN_INSTAGRAM_FLAGSHIP_VENDOR_ACCOUNT_REF
+    enabled: false
+    test_account: false
+
+  - account_id: vendrarx_tiktok_flagship
+    brand: vendrarx
+    platform: tiktok
+    handle: TODO
+    role: flagship
+    owning_entity: TODO
+    verification_status: unverified
+    vendor_account_ref_env: VENDRARX_TIKTOK_FLAGSHIP_VENDOR_ACCOUNT_REF
+    enabled: false
+    test_account: false
+
+  - account_id: vendrarx_instagram_flagship
+    brand: vendrarx
+    platform: instagram
+    handle: TODO
+    role: flagship
+    owning_entity: TODO
+    verification_status: unverified
+    vendor_account_ref_env: VENDRARX_INSTAGRAM_FLAGSHIP_VENDOR_ACCOUNT_REF
+    enabled: false
+    test_account: false
+

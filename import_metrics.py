@@ -92,7 +92,8 @@ def import_csv(csv_path, posts_path="posts.json", map_overrides=None):
             metrics = {k: num(row.get(colmap[k]))
                        for k in METRIC_FIELDS
                        if colmap[k] in row}
-            manifest.update_metrics(post["post_id"], metrics, posts_path)
+            manifest.update_metrics(
+                post["post_id"], metrics, posts_path, source_url=str(url or "").strip() or None)
             matched += 1
     return {"matched": matched, "unmatched": unmatched, "posts": posts_path}
 

@@ -393,13 +393,29 @@ def _draw_disclosure(bg, slide, palette, on_image=False):
     if not disclosure:
         return
     draw = ImageDraw.Draw(bg)
-    font = load_font(FONT_REG, 27)
+    font = load_font(FONT_REG, 30)
     fill = (255, 255, 255) if on_image else hex_to_rgb(palette["text"])
     draw_wrapped(
         draw, disclosure, font, W - 140, W // 2, H - 70, fill,
         stroke=(2, (0, 0, 0)) if on_image else None,
         line_spacing=1.05,
     )
+
+
+def _draw_disclosure_chip(bg, slide, palette, on_image=False):
+    label = str(slide.get("disclosure_chip") or "").strip().upper()
+    if not label:
+        return
+    draw = ImageDraw.Draw(bg)
+    font = load_font(FONT_BOLD, 28)
+    bbox = draw.textbbox((0, 0), label, font=font)
+    width = bbox[2] - bbox[0]
+    height = bbox[3] - bbox[1]
+    x, y = 70, 132
+    fill = (22, 19, 31) if on_image else hex_to_rgb(palette["text"])
+    draw.rounded_rectangle(
+        [x, y, x + width + 30, y + height + 20], radius=8, fill=fill)
+    draw.text((x + 15, y + 8 - bbox[1]), label, font=font, fill=(255, 255, 255))
 
 
 # ----------------------------------------------------------------------------
@@ -412,11 +428,13 @@ def render_slide(slide, palette, idx, total, brand):
     if slide.get("layout") == "image_top":
         bg = render_image_top(slide, palette)
         _draw_chrome(bg, palette, idx, total, brand, on_image=True)
+        _draw_disclosure_chip(bg, slide, palette, on_image=True)
         _draw_disclosure(bg, slide, palette, on_image=False)
         return bg
     if kind == "screenshot":
         bg = render_screenshot_slide(slide, palette)
         _draw_chrome(bg, palette, idx, total, brand, on_image=False)
+        _draw_disclosure_chip(bg, slide, palette, on_image=False)
         _draw_disclosure(bg, slide, palette, on_image=False)
         return bg
 
@@ -436,6 +454,7 @@ def render_slide(slide, palette, idx, total, brand):
 
     draw = ImageDraw.Draw(bg)
     _draw_chrome(bg, palette, idx, total, brand, on_image=has_img)
+    _draw_disclosure_chip(bg, slide, palette, on_image=has_img)
 
     text = slide.get("text", "")
     max_w = W - 200

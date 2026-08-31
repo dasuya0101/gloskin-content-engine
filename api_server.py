@@ -323,6 +323,7 @@ def normalize_post(post):
     if not p["publish_queue"].get("target_account"):
         p["publish_queue"]["target_account"] = default_account_for(p.get("brand"))
     p.setdefault("publish", {"platform": None, "account": None, "url": None, "posted_at": None})
+    p.setdefault("distribution", [])
     p.setdefault("metrics", {})
     p.setdefault("compliance", {
         "status": "needs_review", "violations": [], "checked_at": None,
@@ -516,9 +517,13 @@ def config():
         "heygen": heygen_adapter.connection_status(),
         "roster_count": len(roster.get("characters", [])),
         "publish_integrations": {
-            name: publish_bridge.api_plan(name)
-            for name in ["tiktok", "instagram", "facebook"]
+            "vendor": publish_bridge.vendor_plan(),
+            **{
+                name: publish_bridge.api_plan(name)
+                for name in ["tiktok", "instagram", "facebook"]
+            },
         },
+        "publish_accounts": publish_bridge.account_registry_payload(),
         "metrics_integrations": {
             name: metrics_refresh.api_plan(name)
             for name in sorted(metrics_refresh.API_PLANS)
@@ -1435,6 +1440,11 @@ def posts():
     return jsonify(rows)
 
 
+@app.get("/api/publish/accounts")
+def publish_accounts():
+    return jsonify(publish_bridge.account_registry_payload())
+
+
 @app.patch("/api/posts/<post_id>/winner")
 def winner(post_id):
     data = request.get_json(force=True, silent=True) or {}
@@ -1497,6 +1507,9 @@ def publish(post_id):
     if not post:
         abort(404)
     post = manifest.set_publish_queue(post_id, "posted", account, data.get("notes"), str(POSTS_FILE))
+    manifest.set_distribution(
+        post_id, platform, account, "posted", str(POSTS_FILE), url=url, mode="manual")
+    post = manifest.get_post(post_id, str(POSTS_FILE))
     return jsonify(normalize_post(post))
 
 
@@ -1506,6 +1519,29 @@ def post_payload(post_id):
     if not post:
         abort(404)
     return jsonify(publish_bridge.payload_for(post))
+
+
+@app.post("/api/posts/<post_id>/publish-dry-run")
+def publish_dry_run(post_id):
+    data = request.get_json(force=True, silent=True) or {}
+    post = manifest.get_post(post_id, str(POSTS_FILE))
+    if not post:
+        abort(404)
+    platform = str(data.get("platform") or "").strip()
+    account_id = str(data.get("account_id") or "").strip()
+    if not platform or not account_id:
+        abort(400, description="platform and account_id are required")
+    try:
+        result = publish_bridge.vendor_dry_run(
+            post,
+            platform,
+            account_id,
+            scheduled_for=data.get("scheduled_for"),
+            posts_path=str(POSTS_FILE),
+        )
+    except publish_bridge.PublishError as exc:
+        abort(409, description=str(exc))
+    return jsonify(result)
 
 
 @app.post("/api/metrics/import-csv")
@@ -1521,9 +1557,13 @@ def metrics_import_csv():
 def integrations():
     return jsonify({
         "publish": {
-            name: publish_bridge.api_plan(name)
-            for name in ["tiktok", "instagram", "facebook"]
+            "vendor": publish_bridge.vendor_plan(),
+            **{
+                name: publish_bridge.api_plan(name)
+                for name in ["tiktok", "instagram", "facebook"]
+            },
         },
+        "accounts": publish_bridge.account_registry_payload(),
         "metrics": {
             name: metrics_refresh.api_plan(name)
             for name in sorted(metrics_refresh.API_PLANS)

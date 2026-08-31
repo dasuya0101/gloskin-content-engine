@@ -18,6 +18,14 @@ from brand_loader import DEFAULT_BRAND
 from project_store import default_project_id
 
 POSTS_FILE = "posts.json"
+DISTRIBUTION_TRANSITIONS = {
+    None: {"packaged", "posted"},
+    "packaged": {"queued", "posted"},
+    "queued": {"posted", "failed"},
+    "failed": {"queued"},
+    "posted": {"metrics_matched"},
+    "metrics_matched": set(),
+}
 
 
 def infer_workflow(record):
@@ -39,6 +47,7 @@ def normalize_post(record):
     record.setdefault("workflow", infer_workflow(record))
     record.setdefault("legacy", not bool(record.get("batch_id")))
     record.setdefault("publish", {"platform": None, "account": None, "url": None, "posted_at": None})
+    record.setdefault("distribution", [])
     record.setdefault("publish_queue", {"status": "draft", "target_account": None,
                                         "notes": None, "updated_at": None})
     record.setdefault("metrics", {"views": None, "likes": None, "shares": None,
@@ -91,6 +100,7 @@ def record_post(*, character, fmt, hook, slides, assets, outputs,
         "variant_of": variant_of,           # post_id this was A/B-derived from
         "tracking_code": tracking_code,     # link UTM / bio-link code to match metrics back
         "publish": {"platform": None, "account": None, "url": None, "posted_at": None},
+        "distribution": [],
         "publish_queue": publish_queue or {"status": "draft", "target_account": None,
                                            "notes": None, "updated_at": None},
         "compliance": compliance or {
@@ -171,13 +181,57 @@ def set_winner(post_id, is_winner, path=POSTS_FILE):
     return update_post(post_id, {"is_winner": bool(is_winner)}, path)
 
 
-def update_metrics(post_id, metrics, path=POSTS_FILE):
+def set_distribution(post_id, platform, account_id, status, path=POSTS_FILE, **fields):
+    records = _load(path)
+    found = None
+    now = time.strftime("%Y-%m-%dT%H:%M:%S")
+    for post in records:
+        if post["post_id"] != post_id:
+            continue
+        rows = post.setdefault("distribution", [])
+        row = next(
+            (item for item in rows
+             if item.get("platform") == platform and item.get("account_id") == account_id),
+            None,
+        )
+        previous = row.get("status") if row else None
+        if status != previous and status not in DISTRIBUTION_TRANSITIONS.get(previous, set()):
+            raise ValueError(f"invalid distribution transition: {previous} -> {status}")
+        if row is None:
+            row = {"platform": platform, "account_id": account_id, "created_at": now}
+            rows.append(row)
+        row.update(fields)
+        row["status"] = status
+        row["updated_at"] = now
+        if status == "posted" and not row.get("posted_at"):
+            row["posted_at"] = now
+        if status == "metrics_matched" and not row.get("metrics_matched_at"):
+            row["metrics_matched_at"] = now
+        found = row
+        break
+    _save(records, path)
+    return found
+
+
+def update_metrics(post_id, metrics, path=POSTS_FILE, source_url=None):
     records = _load(path)
     for r in records:
         if r["post_id"] == post_id:
             r.setdefault("metrics", {})
             r["metrics"].update(metrics)
             r["metrics"]["updated_at"] = time.strftime("%Y-%m-%dT%H:%M:%S")
+            posted = [
+                row for row in r.get("distribution", [])
+                if row.get("status") == "posted"
+            ]
+            matches = (
+                [row for row in posted if row.get("url") == source_url]
+                if source_url else (posted if len(posted) == 1 else [])
+            )
+            for row in matches:
+                row["status"] = "metrics_matched"
+                row["metrics_matched_at"] = time.strftime("%Y-%m-%dT%H:%M:%S")
+                row["updated_at"] = row["metrics_matched_at"]
     _save(records, path)
 
 

@@ -4,7 +4,7 @@ An automated pipeline that turns text angles into post-ready short-form content.
 One brief → two outputs:
 
 - **`slides_for_tiktok_photomode/`** — raw 1080×1350 (4:5) PNGs. Upload these to
-  **TikTok Photo Mode** (and IG carousel) and attach a *trending sound in-app*.
+  **TikTok Photo Mode** and attach a *trending sound in-app*.
   Native photo posts get the most organic reach right now, and you pick the
   audio where the trends actually live.
 - **`<slug>_reel.mp4`** — a 9:16 video with subtle zoom + crossfades. Use for
@@ -60,7 +60,10 @@ folder, and marks it ready for manual posting.
 Default packaged-post folder (the dashboard supplies the project ID):
 ```
 posts/<brand>/<project_id>/YYYY-MM-DD/<post_id>/
-  slides/        # TikTok Photo Mode / IG carousel PNGs
+  slides/        # source 1080x1350 PNGs retained for review
+  platforms/
+    tiktok/slides/    # 1080x1350 TikTok carousel assets
+    instagram/slides/ # 1080x1350 JPEG carousel assets
   video.mp4      # Reel/Short/ads-ready render
   source_assets/ # before, scan, after, and composited app screenshots
   caption.txt    # includes compliance line + tracking code
@@ -265,21 +268,33 @@ individually. Each character appears as one grouped row with both portraits and
 editable scripts; the batch is rejected if any selected portrait is missing.
 
 ## Publishing and metrics integrations
-Manual publishing is the working first adapter. CLI helpers:
+Manual publishing remains the active path. A vendor-neutral dry-run layer now
+prepares TikTok photo carousels and Instagram carousels without submitting them.
+CLI helpers:
 ```
 python publish.py ready
 python publish.py payload --post-id <post_id>
 python publish.py mark --post-id <post_id> --platform tiktok --url https://...
 python publish.py queue --post-id <post_id> --status needs_edit
+python publish.py accounts
+python publish.py vendor-status
+python publish.py vendor-dry-run --post-id <post_id> --platform tiktok --account-id <account_id>
 ```
 
 Queue and publish actions require `compliance.status = "pass"`. A deliberate
 exception uses `--override --reason "..."`; the override is recorded in the
-manifest.
+manifest for manual handling. Vendor automation never accepts that override.
 
-`publish.py api-plan --platform tiktok|instagram|facebook` shows the credentials
-and payload shape for official API adapters. The adapters are intentionally not
-enabled until account/app permissions are approved.
+Account records and scheduler caps live in `distribution_accounts.yaml`; tokens
+remain in `.env`. TikTok automation also requires a verified account. Every
+synthetic/composited carousel must have the small disclosure chip, slide footer,
+caption line, and platform AIGC flag before a vendor dry run can pass.
+
+The vendor adapter is deliberately dry-run only. Select the audited posting
+vendor, configure a private/test account, and clear Checkpoint B before any
+adapter implementation is allowed to submit. Checkpoint C is a separately
+approved single live post; the scheduler remains disabled afterward until it is
+explicitly enabled. See `docs/distribution_publish_layer.md`.
 
 Metrics import works today from CSV exports or a manual sheet:
 ```

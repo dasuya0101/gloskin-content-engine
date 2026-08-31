@@ -221,7 +221,7 @@ def is_synthetic_character(character):
 def creative_metadata_for(character, slides, brand):
     synthetic_person = is_synthetic_character(character)
     composited_result = any(slide.get("kind") == "screenshot" for slide in (slides or []))
-    illustrative_results = synthetic_person and composited_result
+    illustrative_results = synthetic_person or composited_result
     disclosure = (
         str(brand.caption.get("illustrative_results") or "").strip()
         if illustrative_results else ""
@@ -237,6 +237,12 @@ def creative_metadata_for(character, slides, brand):
         "composited_result": composited_result,
         "illustrative_results": illustrative_results,
         "illustrative_results_text": disclosure or None,
+        "disclosure_layers": {
+            "corner_chip": True,
+            "slide_footer": True,
+            "caption_line": True,
+            "platform_aigc_flag": True,
+        } if illustrative_results else {},
     }
 
 
@@ -285,7 +291,7 @@ def build_testimonial_brief(render_slug, char_dir, shot_before, shot_after, char
     slide_copy = synthetic_slide_copy(character, index, brand) if synthetic else {}
     disclosure = (
         str(brand.caption.get("illustrative_results") or "").strip()
-        if synthetic and shot_before and shot_after else ""
+        if synthetic or (shot_before and shot_after) else ""
     )
     slides = [
         {
@@ -353,6 +359,9 @@ def build_testimonial_brief(render_slug, char_dir, shot_before, shot_after, char
     if disclosure:
         for slide in slides:
             slide["disclosure"] = disclosure
+            slide["disclosure_footer"] = disclosure
+            if slide.get("image") or slide.get("kind") == "screenshot":
+                slide["disclosure_chip"] = "Illustrative"
     return {
         "slug": render_slug,
         "brand": brand.brand_id,
@@ -422,6 +431,10 @@ def copy_package(post_id, result, brief, caption, posts_dir, run_date, brand_id,
             copied_assets[key] = rel(dst)
 
     metadata_dest = package_dir / "post.json"
+    platform_slides = (
+        publish.prepare_platform_slide_assets(slides_dest, package_dir)
+        if slides_dest.exists() else {}
+    )
     package = {
         "dir": rel(package_dir),
         "slides_dir": rel(slides_dest) if slides_dest.exists() else None,
@@ -432,6 +445,7 @@ def copy_package(post_id, result, brief, caption, posts_dir, run_date, brand_id,
         "assets": copied_assets,
         "metadata": rel(metadata_dest),
         "formats": {},
+        "platform_slides": platform_slides,
     }
     return package, metadata_dest
 
@@ -744,7 +758,12 @@ def main():
                 slides=[{"kind": s["kind"],
                          "text": s.get("text") or s.get("caption", ""),
                          "subtext": s.get("subtext"),
-                         "disclosure": s.get("disclosure")}
+                         "label": s.get("label"),
+                         "requires_disclosure_chip": bool(
+                             s.get("image") or s.get("kind") == "screenshot"),
+                         "disclosure": s.get("disclosure"),
+                         "disclosure_footer": s.get("disclosure_footer"),
+                         "disclosure_chip": s.get("disclosure_chip")}
                         for s in brief["slides"]],
                 assets={
                     "opening": rel(face_asset(char_dir, "opening", "before")),
