@@ -88,6 +88,17 @@ class PublishGateTests(unittest.TestCase):
     def test_carousel_canvas_is_four_by_five(self):
         self.assertEqual((slideshow_maker.W, slideshow_maker.H), (1080, 1350))
 
+    def test_screenshot_disclosure_chip_uses_lower_corner(self):
+        image = Image.new("RGB", (slideshow_maker.W, slideshow_maker.H), "white")
+        slideshow_maker._draw_disclosure_chip(
+            image,
+            {"disclosure_chip": "Illustrative"},
+            {"text": "#17131F"},
+            position="bottom_left",
+        )
+        self.assertEqual(image.getpixel((75, 140)), (255, 255, 255))
+        self.assertLess(max(image.getpixel((75, slideshow_maker.H - 155))), 40)
+
     def test_phone_mockup_adds_frame_without_recoloring_screen(self):
         screen_color = (119, 87, 151)
         screen = Image.new("RGB", (200, 430), screen_color)

@@ -402,7 +402,7 @@ def _draw_disclosure(bg, slide, palette, on_image=False):
     )
 
 
-def _draw_disclosure_chip(bg, slide, palette, on_image=False):
+def _draw_disclosure_chip(bg, slide, palette, on_image=False, position="top_left"):
     label = str(slide.get("disclosure_chip") or "").strip().upper()
     if not label:
         return
@@ -411,7 +411,8 @@ def _draw_disclosure_chip(bg, slide, palette, on_image=False):
     bbox = draw.textbbox((0, 0), label, font=font)
     width = bbox[2] - bbox[0]
     height = bbox[3] - bbox[1]
-    x, y = 70, 132
+    x = 70
+    y = H - 160 if position == "bottom_left" else 132
     fill = (22, 19, 31) if on_image else hex_to_rgb(palette["text"])
     draw.rounded_rectangle(
         [x, y, x + width + 30, y + height + 20], radius=8, fill=fill)
@@ -434,7 +435,8 @@ def render_slide(slide, palette, idx, total, brand):
     if kind == "screenshot":
         bg = render_screenshot_slide(slide, palette)
         _draw_chrome(bg, palette, idx, total, brand, on_image=False)
-        _draw_disclosure_chip(bg, slide, palette, on_image=False)
+        _draw_disclosure_chip(
+            bg, slide, palette, on_image=False, position="bottom_left")
         _draw_disclosure(bg, slide, palette, on_image=False)
         return bg
 
