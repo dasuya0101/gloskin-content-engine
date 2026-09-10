@@ -1,5 +1,11 @@
 # Distribution And Publish Layer
 
+GloSkin now also has a disabled-by-default native TikTok implementation alongside
+the vendor adapter. Its staged rollout, official-API constraints and setup are in
+[gloskin_tiktok_launch_plan.md](gloskin_tiktok_launch_plan.md). The vendor section
+below describes the preserved dry-run path; its vendor-selection requirement
+does not apply to the independent native GloSkin adapter. VendraRx remains paused.
+
 The current production path stops at manual upload. This layer prepares the
 same slideshow package for TikTok photo carousel and Instagram carousel, tracks
 each destination independently, and exposes a dry-run adapter boundary for the

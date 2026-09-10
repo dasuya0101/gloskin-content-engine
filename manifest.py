@@ -10,9 +10,14 @@ Storage: a single posts.json (list of records). Simple, diffable, no DB needed
 until volume demands one (the BUILD_SPEC notes when to migrate to SQLite).
 """
 import json
+import os
+import tempfile
+import inspect
+from functools import lru_cache, wraps
 import time
 import uuid
 from pathlib import Path
+from filelock import FileLock
 
 from brand_loader import DEFAULT_BRAND
 from project_store import default_project_id
@@ -60,6 +65,24 @@ def normalize_post(record):
     return record
 
 
+@lru_cache(maxsize=32)
+def _path_lock(path):
+    return FileLock(path + ".lock", timeout=10)
+
+
+def _locked(function):
+    """Keep read-modify-write atomic across the dashboard and native worker."""
+    signature = inspect.signature(function)
+
+    @wraps(function)
+    def wrapped(*args, **kwargs):
+        bound = signature.bind(*args, **kwargs)
+        path = str(Path(bound.arguments.get("path", POSTS_FILE)).resolve())
+        with _path_lock(path):
+            return function(*args, **kwargs)
+    return wrapped
+
+
 def _load(path):
     p = Path(path)
     if p.exists():
@@ -68,9 +91,23 @@ def _load(path):
 
 
 def _save(records, path):
-    Path(path).write_text(json.dumps(records, indent=2), encoding="utf-8")
+    target = Path(path)
+    # Readers see the entire old or new manifest, even if a process stops mid-write.
+    temp_path = None
+    try:
+        with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", dir=target.parent,
+                                         suffix=".tmp", delete=False) as stream:
+            temp_path = Path(stream.name)
+            stream.write(json.dumps(records, indent=2))
+            stream.flush()
+            os.fsync(stream.fileno())
+        os.replace(temp_path, target)
+    finally:
+        if temp_path and temp_path.exists():
+            temp_path.unlink()
 
 
+@_locked
 def record_post(*, character, fmt, hook, slides, assets, outputs,
                 variant_of=None, tracking_code=None, caption=None,
                 package=None, publish_queue=None, brand=DEFAULT_BRAND,
@@ -122,6 +159,7 @@ def get_post(post_id, path=POSTS_FILE):
     return None
 
 
+@_locked
 def update_post(post_id, updates, path=POSTS_FILE):
     records = _load(path)
     found = None
@@ -145,6 +183,7 @@ def set_compliance(post_id, compliance, path=POSTS_FILE):
     return update_post(post_id, {"compliance": compliance}, path)
 
 
+@_locked
 def record_compliance_override(post_id, reason, path=POSTS_FILE):
     record = get_post(post_id, path)
     if not record:
@@ -158,6 +197,7 @@ def record_compliance_override(post_id, reason, path=POSTS_FILE):
     return set_compliance(post_id, compliance, path)
 
 
+@_locked
 def set_publish_queue(post_id, status, target_account=None, notes=None, path=POSTS_FILE):
     records = _load(path)
     found = None
@@ -181,6 +221,7 @@ def set_winner(post_id, is_winner, path=POSTS_FILE):
     return update_post(post_id, {"is_winner": bool(is_winner)}, path)
 
 
+@_locked
 def set_distribution(post_id, platform, account_id, status, path=POSTS_FILE, **fields):
     records = _load(path)
     found = None
@@ -213,6 +254,7 @@ def set_distribution(post_id, platform, account_id, status, path=POSTS_FILE, **f
     return found
 
 
+@_locked
 def update_metrics(post_id, metrics, path=POSTS_FILE, source_url=None):
     records = _load(path)
     for r in records:
@@ -235,6 +277,7 @@ def update_metrics(post_id, metrics, path=POSTS_FILE, source_url=None):
     _save(records, path)
 
 
+@_locked
 def set_publish(post_id, platform, account, url, path=POSTS_FILE):
     records = _load(path)
     found = None

@@ -61,6 +61,9 @@ VARIANTS_DIR = WORKSPACE_DATA_DIR / "image_variants"
 app = Flask(__name__)
 app.config["MAX_CONTENT_LENGTH"] = 80 * 1024 * 1024
 
+import tiktok_dashboard
+tiktok_dashboard.register(app, lambda: POSTS_FILE)
+
 
 def now_iso():
     return time.strftime("%Y-%m-%dT%H:%M:%S")
@@ -498,7 +501,12 @@ def dashboard():
 
 @app.get("/files/<path:rel_path>")
 def files(rel_path):
-    return send_file(safe_path(rel_path))
+    target = safe_path(rel_path)
+    parts = [part.casefold() for part in target.relative_to(ROOT).parts]
+    if any(part.startswith(".env") for part in parts) or (
+            len(parts) >= 2 and parts[0] == "workspace_data" and parts[1] == "tiktok"):
+        abort(404)
+    return send_file(target)
 
 
 @app.get("/api/config")

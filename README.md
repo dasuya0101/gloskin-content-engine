@@ -268,6 +268,13 @@ individually. Each character appears as one grouped row with both portraits and
 editable scripts; the batch is rejected if any selected portrait is missing.
 
 ## Publishing and metrics integrations
+The GloSkin-only native TikTok adapter is now available alongside the unchanged
+vendor dry-run adapter. All accounts remain disabled/manual. See
+[`docs/gloskin_tiktok_launch_plan.md`](docs/gloskin_tiktok_launch_plan.md) for the
+approval blocker, OAuth/R2/VPS setup, dashboard consent flow, and native CLI
+commands. Native submissions require explicit rollout checkpoints and a separate
+per-post operator approval; no native publishing has been performed.
+
 Manual publishing remains the active path. A vendor-neutral dry-run layer now
 prepares TikTok photo carousels and Instagram carousels without submitting them.
 CLI helpers:

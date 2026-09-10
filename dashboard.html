@@ -849,12 +849,50 @@
   </div>
 </dialog>
 
+<dialog id="tiktokDialog" style="width:min(1000px,95vw)">
+  <h2>GloSkin · TikTok publishing</h2>
+  <p>Review this exact carousel before granting permission to upload and schedule it.</p>
+  <label>Operator access token <input id="ttToken" type="password" autocomplete="off"></label>
+  <button id="ttLoad">Load accounts</button>
+  <label>Account <select id="ttAccount"><option value="">Choose account</option></select></label>
+  <button id="ttCreator">Load creator &amp; settings</button>
+  <button id="ttConnect">Connect selected account with TikTok</button>
+  <p id="ttIdentity"></p>
+  <div id="ttForm" hidden>
+    <label>Title (90 UTF-16 units) <input id="ttTitle" type="text"></label>
+    <label>Privacy <select id="ttPrivacy"><option value="">Choose privacy</option></select></label>
+    <label><input id="ttComments" type="checkbox"> Allow comments</label>
+    <label><input id="ttMusic" type="checkbox"> Automatically add recommended music</label>
+    <label>Cover photo (1-based) <input id="ttCover" type="number" min="1" value="1"></label>
+    <label>Requested time (your local time; account jitter applies) <input id="ttWhen" type="datetime-local"></label>
+    <p id="ttDisclosure"></p>
+    <p id="ttDraftNotice" hidden>Draft upload sends an inbox notification. Privacy, comments, music and commercial disclosure must be finalized in TikTok. The privacy choice here records your intended setting.</p>
+    <label id="ttDraftLabel" hidden><input id="ttDraftAck" type="checkbox"> I will enable the own-brand commercial disclosure in TikTok before publishing this draft.</label>
+    <p>Caption (from the release-gated package):</p><pre id="ttCaption" style="white-space:pre-wrap"></pre>
+    <button id="ttPreview">Render final preview</button>
+  </div>
+  <div id="ttFinal" hidden>
+    <p id="ttSummary"></p>
+    <div id="ttImages" style="display:flex;gap:10px;overflow-x:auto"></div>
+    <label><input id="ttPreviewConfirmed" type="checkbox"> I reviewed every rendered slide, the account, caption, disclosures, and settings shown above.</label>
+    <p>By posting, you agree to <a href="https://www.tiktok.com/legal/page/global/music-usage-confirmation/en" target="_blank" rel="noopener noreferrer">TikTok's Music Usage Confirmation</a>.</p>
+    <label><input id="ttConsent" type="checkbox"> I expressly authorize uploading this content and publishing it at the shown time and settings (or delivering it to my inbox in draft mode).</label>
+    <button id="ttApprove" disabled>Approve &amp; Schedule</button>
+  </div>
+  <p id="ttResult" role="status"></p>
+  <label>Saved attempts <select id="ttAttempts"><option value="">Choose attempt</option></select></label>
+  <button id="ttRefresh">Refresh last attempt status</button>
+  <button id="ttCancel">Cancel unsubmitted schedule</button>
+  <button onclick="document.getElementById('tiktokDialog').close()">Close</button>
+</dialog>
+
 <dialog id="detail">
   <div class="modal-head">
     <div>
       <strong id="detailTitle">Post</strong>
       <div class="sub" id="detailSub"></div>
     </div>
+    <button class="small" id="detailTikTok" hidden>TikTok</button>
     <button class="small" onclick="detail.close()">Close</button>
   </div>
   <div class="modal-body">
@@ -2457,6 +2495,7 @@ function render(){
           <button class="small" onclick="copyCaption('${esc(p.post_id)}')">Caption</button>
           <button class="small" onclick="openFolder('${esc(p.post_id)}')">Folder</button>
           <button class="small" onclick="markPosted('${esc(p.post_id)}')">Posted</button>
+          ${p.brand === 'gloskin' ? `<button class="small" onclick="openTikTok('${esc(p.post_id)}')">TikTok</button>` : ''}
           <button class="icon" title="Toggle winner" onclick="toggleWinner('${esc(p.post_id)}')">${p.is_winner ? "★" : "☆"}</button>
         </div>
       </td>
@@ -2739,6 +2778,8 @@ async function showDetail(postId, open=true){
   selectedPost = postId;
   const p = posts.find(x => x.post_id === postId);
   if(!p) return;
+  $("detailTikTok").hidden = p.brand !== "gloskin";
+  $("detailTikTok").onclick = () => openTikTok(postId);
   let payload = {};
   try{
     payload = await api(`/api/posts/${postId}/payload`);
@@ -2854,5 +2895,6 @@ document.querySelectorAll("[data-review-workflow]").forEach(button => {
 load();
 setInterval(refresh, 5000);
 </script>
+<script src="/files/tiktok_dashboard.js"></script>
 </body>
 </html>

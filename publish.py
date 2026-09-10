@@ -351,9 +351,9 @@ def require_env(names):
 def api_plan(platform):
     plans = {
         "tiktok": {
-            "status": "vendor_adapter_pending_selection",
-            "requires": ["POSTING_VENDOR_API_URL", "POSTING_VENDOR_API_KEY"],
-            "notes": "TikTok photo carousels will use the selected audited vendor. Native API work is deferred.",
+            "status": "native_manual_default",
+            "requires": ["TIKTOK_CLIENT_KEY", "TIKTOK_CLIENT_SECRET", "TIKTOK_TOKEN_ENCRYPTION_KEY"],
+            "notes": "GloSkin native photo publishing requires configured accounts, rollout checkpoints, and dashboard consent. Vendor dry runs remain supported.",
         },
         "instagram": {
             "status": "vendor_adapter_pending_selection",
@@ -397,7 +397,7 @@ def distribution_records(posts):
     return [row for post in posts for row in (post.get("distribution") or [])]
 
 
-def require_automation_gates(post, account):
+def require_automation_gates(post, account, *, require_vendor_ref=True):
     require_synthetic_disclosure(post)
     compliance = post.get("compliance") or {}
     if compliance.get("status") != "pass":
@@ -414,7 +414,7 @@ def require_automation_gates(post, account):
             f"account {account.get('account_id')} belongs to {account.get('brand')}, "
             f"not {post.get('brand')}"
         )
-    blockers = distribution.account_blockers(account)
+    blockers = distribution.account_blockers(account, require_vendor_ref=require_vendor_ref)
     if blockers:
         raise PublishError(
             f"account {account.get('account_id')} is not automation-ready: " + "; ".join(blockers)
@@ -556,10 +556,17 @@ def main():
     vendor_dry.add_argument("--account-id", required=True)
     vendor_dry.add_argument("--scheduled-for")
 
+    import tiktok_cli
+    from tiktok_oauth import TikTokError
+    from tiktok_media import MediaError
+    tiktok_cli.add_commands(sub)
+
     args = ap.parse_args()
 
     try:
-        if args.cmd == "ready":
+        if args.cmd.startswith("tiktok-"):
+            print(json.dumps(tiktok_cli.run(args), indent=2))
+        elif args.cmd == "ready":
             list_ready(args.posts)
         elif args.cmd == "payload":
             print(json.dumps(payload_for(load_post(args.post_id, args.posts)), indent=2))
@@ -584,7 +591,7 @@ def main():
             print(json.dumps(vendor_dry_run(
                 load_post(args.post_id, args.posts), args.platform, args.account_id,
                 scheduled_for=args.scheduled_for, posts_path=args.posts), indent=2))
-    except PublishError as exc:
+    except (PublishError, TikTokError, MediaError, distribution.DistributionError) as exc:
         raise SystemExit(str(exc)) from exc
 
 

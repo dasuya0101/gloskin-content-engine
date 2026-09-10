@@ -24,6 +24,7 @@ output/
 posts/
 screenshots/
 posts.json
+posts.json.lock
 *.mp4
 
 # Metrics/import scratch files

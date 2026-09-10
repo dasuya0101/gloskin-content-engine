@@ -3,3 +3,6 @@ openai>=1.40        # gpt-image-1 faces + OpenRouter (OpenAI-compatible) routing
 anthropic>=0.34     # premium copy / analysis
 flask>=3            # local dashboard API and batch controls
 pyyaml>=6           # brand YAML config
+cryptography>=44    # encrypted owned-account TikTok token store
+boto3>=1.35         # S3-compatible R2 media hosting (imported lazily)
+filelock>=3.16      # serialize dashboard/worker manifest updates across processes

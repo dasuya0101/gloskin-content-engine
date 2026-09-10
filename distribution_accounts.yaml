@@ -9,6 +9,18 @@ vendor:
   checkpoint_b_approved: false
   checkpoint_c_approved: false
 
+native_tiktok:
+  submission_enabled: false
+  scheduler_enabled: false
+  developer_app_approved: false
+  intended_use_approved: false
+  intended_use_approval_reference: TODO
+  verified_media_prefix: TODO
+  manual_launch_complete: false
+  private_validation_approved: false
+  direct_checkpoint_approved: false
+  ugc_test_approved: false
+
 scheduling:
   daily_caps:
     tiktok: 20
@@ -26,6 +38,9 @@ accounts:
     owning_entity: TODO
     verification_status: unverified
     vendor_account_ref_env: GLOSKIN_TIKTOK_FLAGSHIP_VENDOR_ACCOUNT_REF
+    native_tiktok:
+      mode: manual
+      open_id_env: GLOSKIN_TIKTOK_FLAGSHIP_OPEN_ID
     enabled: false
     test_account: false
 
@@ -37,6 +52,10 @@ accounts:
     owning_entity: TODO
     verification_status: unverified
     vendor_account_ref_env: GLOSKIN_TIKTOK_VOLUME_01_VENDOR_ACCOUNT_REF
+    native_tiktok:
+      mode: manual
+      open_id_env: GLOSKIN_TIKTOK_VOLUME_01_OPEN_ID
+      ownership_disclosed: false
     enabled: false
     test_account: false
 

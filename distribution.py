@@ -38,6 +38,7 @@ def load_registry(path=DEFAULT_REGISTRY_PATH):
     registry = {
         "schema_version": raw.get("schema_version", 1),
         "vendor": dict(raw.get("vendor") or {}),
+        "native_tiktok": dict(raw.get("native_tiktok") or {}),
         "scheduling": dict(raw.get("scheduling") or {}),
         "accounts": list(raw.get("accounts") or []),
     }
